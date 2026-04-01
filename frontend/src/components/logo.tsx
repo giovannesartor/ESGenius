@@ -14,7 +14,7 @@ export function Logo({ className, size = "md", showText = true }: LogoProps) {
     md: { img: 54, text: "text-xl" },
     lg: { img: 56, text: "text-3xl" },
     xl: { img: 72, text: "text-4xl" },
-    "2xl": { img: 108, text: "text-5xl" },
+    "2xl": { img: 216, text: "text-5xl" },
   };
 
   const s = sizes[size];
