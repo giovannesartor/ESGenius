@@ -215,5 +215,46 @@ export const reportApi = {
     apiClient(`/companies/${companyId}/reports/${reportId}`, { token }),
 };
 
+// --- Admin API ---
+export const adminApi = {
+  getStats: (token: string) =>
+    apiClient("/admin/stats", { token }),
+
+  listUsers: (token: string, params?: { skip?: number; limit?: number; search?: string }) => {
+    const query = params ? "?" + new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
+    ).toString() : "";
+    return apiClient(`/admin/users${query}`, { token });
+  },
+
+  updateUser: (token: string, userId: string, data: Record<string, unknown>) =>
+    apiClient(`/admin/users/${userId}`, { method: "PATCH", body: data, token }),
+
+  deleteUser: (token: string, userId: string) =>
+    apiClient(`/admin/users/${userId}`, { method: "DELETE", token }),
+
+  listCompaniesAdmin: (token: string, params?: { skip?: number; limit?: number; search?: string }) => {
+    const query = params ? "?" + new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
+    ).toString() : "";
+    return apiClient(`/admin/companies${query}`, { token });
+  },
+
+  deleteCompany: (token: string, companyId: string) =>
+    apiClient(`/admin/companies/${companyId}`, { method: "DELETE", token }),
+
+  listFrameworksAdmin: (token: string) =>
+    apiClient("/admin/frameworks", { token }),
+
+  createFramework: (token: string, data: { name: string; code: string; version: string; description?: string }) =>
+    apiClient("/admin/frameworks", { method: "POST", body: data, token }),
+
+  updateFramework: (token: string, frameworkId: string, data: Record<string, unknown>) =>
+    apiClient(`/admin/frameworks/${frameworkId}`, { method: "PATCH", body: data, token }),
+
+  deleteFramework: (token: string, frameworkId: string) =>
+    apiClient(`/admin/frameworks/${frameworkId}`, { method: "DELETE", token }),
+};
+
 export { ApiError };
 export default apiClient;

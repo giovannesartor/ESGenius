@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "features": "Funcionalidades",
+    "pricing": "Precios",
+    "dashboard": "Panel",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "admin": "Administración"
+  },
+
+  "hero": {
+    "title": "Transforme sus datos ESG en ventaja estratégica",
+    "subtitle": "La plataforma impulsada por IA que automatiza la extracción, puntuación e informes de datos ESG en múltiples frameworks. Tome decisiones de sostenibilidad con confianza.",
+    "cta": "Comience Ahora",
+    "cta2": "Ver Planes"
+  },
+
+  "features": {
+    "title": "Todo lo que necesita para la gestión ESG",
+    "subtitle": "Un conjunto integral de herramientas diseñado para optimizar sus flujos de informes de sostenibilidad y cumplimiento.",
+    "ai": { "title": "Extracción con IA", "desc": "Extraiga y clasifique automáticamente puntos de datos ESG de documentos corporativos utilizando modelos avanzados de procesamiento de lenguaje natural." },
+    "frameworks": { "title": "Soporte Multi-Framework", "desc": "Reporte en GRI, SASB, TCFD, CDP, CSRD y otros marcos ESG principales desde una única plataforma." },
+    "scoring": { "title": "Puntuación ESG en Tiempo Real", "desc": "Reciba puntuaciones ESG continuas basadas en datos, con metodología transparente y desgloses granulares ambientales, sociales y de gobernanza." },
+    "reports": { "title": "Informes Listos para Auditoría", "desc": "Genere informes profesionales y conformes con la regulación, listos para auditores externos, inversores y organismos reguladores." },
+    "dashboard": { "title": "Paneles Interactivos", "desc": "Visualice tendencias de rendimiento, compare con pares del sector y monitoree el progreso hacia los objetivos de sostenibilidad en tiempo real." },
+    "security": { "title": "Seguridad Empresarial", "desc": "Proteja datos corporativos sensibles con cifrado de extremo a extremo, controles de acceso basados en roles y cumplimiento total con SOC 2." }
+  },
+
+  "cta": {
+    "title": "¿Listo para transformar sus informes ESG?",
+    "subtitle": "Únase a las organizaciones líderes que confían en ESGenius para optimizar su estrategia de sostenibilidad y cumplimiento regulatorio.",
+    "button": "Comience Hoy"
+  },
+
+  "footer": {
+    "desc": "Plataforma de gestión ESG impulsada por IA para extracción de datos, puntuación e informes regulatorios.",
+    "product": "Producto",
+    "company": "Empresa",
+    "legal": "Legal",
+    "features": "Funcionalidades",
+    "pricing": "Precios",
+    "docs": "Documentación",
+    "api": "Referencia de API",
+    "about": "Sobre Nosotros",
+    "blog": "Blog",
+    "careers": "Carreras",
+    "contact": "Contacto",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "cookies": "Política de Cookies",
+    "rights": "Todos los derechos reservados."
+  },
+
+  "pricing": {
+    "title": "Precios simples y transparentes",
+    "subtitle": "Elija el plan ideal para su organización. Sin tarifas ocultas, sin sorpresas.",
+    "badge": "Precios",
+    "popular": "Más Popular",
+    "professional": {
+      "name": "Profesional",
+      "price": "$999",
+      "period": "/año",
+      "desc": "Ideal para empresas medianas que inician su camino en informes ESG.",
+      "feature1": "Hasta 10 empresas",
+      "feature2": "Extracción de datos con IA",
+      "feature3": "Frameworks GRI y SASB",
+      "feature4": "Soporte básico de TCFD",
+      "feature5": "Puntuación ESG trimestral",
+      "feature6": "Informes estándar",
+      "feature7": "Soporte por correo electrónico",
+      "cta": "Empezar"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "$2,499",
+      "period": "/año",
+      "desc": "Para grandes organizaciones que requieren gestión ESG integral y soporte dedicado.",
+      "feature1": "Empresas ilimitadas",
+      "feature2": "IA avanzada con modelos personalizados",
+      "feature3": "Todos los frameworks (GRI, SASB, TCFD, CDP, CSRD)",
+      "feature4": "Puntuación ESG en tiempo real",
+      "feature5": "Informes personalizados listos para auditoría",
+      "feature6": "Acceso completo a la API",
+      "feature7": "SSO y seguridad avanzada",
+      "feature8": "Gerente de cuenta dedicado + SLA",
+      "cta": "Contactar Ventas"
+    }
+  },
+
+  "auth": {
+    "loginTitle": "Acceda a su cuenta",
+    "loginSubtitle": "Ingrese sus credenciales para acceder a su panel ESG.",
+    "registerTitle": "Cree su cuenta",
+    "registerSubtitle": "Comience a gestionar sus datos ESG con ESGenius.",
+    "email": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "name": "Nombre completo",
+    "loginButton": "Iniciar Sesión",
+    "registerButton": "Crear Cuenta",
+    "or": "o",
+    "forgot": "¿Olvidó su contraseña?",
+    "noAccount": "¿No tiene una cuenta?",
+    "hasAccount": "¿Ya tiene una cuenta?",
+    "register": "Crear una cuenta",
+    "login": "Iniciar sesión",
+    "loginError": "Correo electrónico o contraseña inválidos.",
+    "registerError": "Error en el registro. Por favor, inténtelo de nuevo."
+  },
+
+  "dashboard": {
+    "welcome": "Bienvenido de nuevo",
+    "subtitle": "Aquí tiene una visión general del rendimiento de su portafolio ESG.",
+    "newCompany": "Nueva Empresa",
+    "nav": {
+      "overview": "Visión General",
+      "companies": "Empresas",
+      "documents": "Documentos",
+      "reports": "Informes",
+      "upload": "Subir",
+      "settings": "Configuración"
+    },
+    "stats": {
+      "esgScore": "Puntuación ESG",
+      "companies": "Empresas",
+      "documents": "Documentos",
+      "reports": "Informes"
+    },
+    "pillarScores": "Puntuaciones por Pilar ESG",
+    "pillars": {
+      "environmental": "Ambiental",
+      "social": "Social",
+      "governance": "Gobernanza"
+    },
+    "overallScore": "Puntuación ESG General",
+    "recentActivity": "Actividad Reciente",
+    "quickUpload": "Subir Documento",
+    "quickReport": "Generar Informe",
+    "quickCompany": "Gestionar Empresas"
+  },
+
+  "admin": {
+    "title": "Administración",
+    "nav": {
+      "overview": "Visión General",
+      "frameworks": "Frameworks",
+      "companies": "Empresas",
+      "users": "Usuarios",
+      "aiLogs": "Registros de IA",
+      "settings": "Configuración"
+    }
+  },
+
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error. Por favor, inténtelo de nuevo.",
+    "success": "Operación completada exitosamente.",
+    "confirm": "Confirmar",
+    "back": "Volver"
+  },
+
+  "lang": {
+    "en": "English",
+    "pt": "Português",
+    "es": "Español",
+    "switch": "Idioma"
+  }
+}

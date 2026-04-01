@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "dashboard": "Dashboard",
+    "login": "Sign In",
+    "register": "Sign Up",
+    "logout": "Sign Out",
+    "admin": "Administration"
+  },
+
+  "hero": {
+    "title": "Transform your ESG data into strategic advantage",
+    "subtitle": "The AI-powered platform that automates ESG data extraction, scoring, and reporting across multiple frameworks. Make informed sustainability decisions with confidence.",
+    "cta": "Start Now",
+    "cta2": "View Plans"
+  },
+
+  "features": {
+    "title": "Everything you need for ESG management",
+    "subtitle": "A comprehensive suite of tools designed to streamline your sustainability reporting and compliance workflows.",
+    "ai": { "title": "AI-Powered Extraction", "desc": "Automatically extract and classify ESG data points from corporate documents using advanced natural language processing models." },
+    "frameworks": { "title": "Multi-Framework Support", "desc": "Seamlessly report across GRI, SASB, TCFD, CDP, CSRD, and other major ESG frameworks from a single platform." },
+    "scoring": { "title": "Real-time ESG Scoring", "desc": "Receive continuous, data-driven ESG scores with transparent methodology and granular environmental, social, and governance breakdowns." },
+    "reports": { "title": "Audit-Ready Reports", "desc": "Generate professional, regulation-compliant reports ready for external auditors, investors, and regulatory bodies." },
+    "dashboard": { "title": "Interactive Dashboards", "desc": "Visualize performance trends, benchmark against industry peers, and monitor progress toward sustainability targets in real time." },
+    "security": { "title": "Enterprise Security", "desc": "Protect sensitive corporate data with end-to-end encryption, role-based access controls, and full SOC 2 compliance." }
+  },
+
+  "cta": {
+    "title": "Ready to transform your ESG reporting?",
+    "subtitle": "Join leading organizations that trust ESGenius to streamline their sustainability strategy and regulatory compliance.",
+    "button": "Get Started Today"
+  },
+
+  "footer": {
+    "desc": "AI-powered ESG management platform for data extraction, scoring, and regulatory reporting.",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "features": "Features",
+    "pricing": "Pricing",
+    "docs": "Documentation",
+    "api": "API Reference",
+    "about": "About Us",
+    "blog": "Blog",
+    "careers": "Careers",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "rights": "All rights reserved."
+  },
+
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Choose the plan that fits your organization. No hidden fees, no surprises.",
+    "badge": "Pricing",
+    "popular": "Most Popular",
+    "professional": {
+      "name": "Professional",
+      "price": "$999",
+      "period": "/year",
+      "desc": "Ideal for mid-sized companies beginning their ESG reporting journey.",
+      "feature1": "Up to 10 companies",
+      "feature2": "AI-powered data extraction",
+      "feature3": "GRI and SASB frameworks",
+      "feature4": "TCFD basic support",
+      "feature5": "Quarterly ESG scoring",
+      "feature6": "Standard reports",
+      "feature7": "Email support",
+      "cta": "Get Started"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "$2,499",
+      "period": "/year",
+      "desc": "For large organizations requiring comprehensive ESG management and dedicated support.",
+      "feature1": "Unlimited companies",
+      "feature2": "Advanced AI with custom models",
+      "feature3": "All frameworks (GRI, SASB, TCFD, CDP, CSRD)",
+      "feature4": "Real-time ESG scoring",
+      "feature5": "Audit-ready custom reports",
+      "feature6": "Full API access",
+      "feature7": "SSO and advanced security",
+      "feature8": "Dedicated account manager + SLA",
+      "cta": "Contact Sales"
+    }
+  },
+
+  "auth": {
+    "loginTitle": "Sign in to your account",
+    "loginSubtitle": "Enter your credentials to access your ESG dashboard.",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "Start managing your ESG data with ESGenius.",
+    "email": "Email address",
+    "password": "Password",
+    "name": "Full name",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "or": "or",
+    "forgot": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "register": "Create an account",
+    "login": "Sign in",
+    "loginError": "Invalid email or password.",
+    "registerError": "Registration failed. Please try again."
+  },
+
+  "dashboard": {
+    "welcome": "Welcome back",
+    "subtitle": "Here's an overview of your ESG portfolio performance.",
+    "newCompany": "New Company",
+    "nav": {
+      "overview": "Overview",
+      "companies": "Companies",
+      "documents": "Documents",
+      "reports": "Reports",
+      "upload": "Upload",
+      "settings": "Settings"
+    },
+    "stats": {
+      "esgScore": "ESG Score",
+      "companies": "Companies",
+      "documents": "Documents",
+      "reports": "Reports"
+    },
+    "pillarScores": "ESG Pillar Scores",
+    "pillars": {
+      "environmental": "Environmental",
+      "social": "Social",
+      "governance": "Governance"
+    },
+    "overallScore": "Overall ESG Score",
+    "recentActivity": "Recent Activity",
+    "quickUpload": "Upload Document",
+    "quickReport": "Generate Report",
+    "quickCompany": "Manage Companies"
+  },
+
+  "admin": {
+    "title": "Administration",
+    "nav": {
+      "overview": "Overview",
+      "frameworks": "Frameworks",
+      "companies": "Companies",
+      "users": "Users",
+      "aiLogs": "AI Logs",
+      "settings": "Settings"
+    }
+  },
+
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again.",
+    "success": "Operation completed successfully.",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+
+  "lang": {
+    "en": "English",
+    "pt": "Português",
+    "es": "Español",
+    "switch": "Language"
+  }
+}
