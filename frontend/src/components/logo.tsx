@@ -4,21 +4,22 @@ import Image from "next/image";
 
 interface LogoProps {
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   showText?: boolean;
 }
 
 export function Logo({ className, size = "md", showText = true }: LogoProps) {
   const sizes = {
-    sm: { img: 28, text: "text-lg" },
-    md: { img: 36, text: "text-xl" },
-    lg: { img: 48, text: "text-3xl" },
+    sm: { img: 32, text: "text-lg" },
+    md: { img: 54, text: "text-xl" },
+    lg: { img: 56, text: "text-3xl" },
+    xl: { img: 72, text: "text-4xl" },
   };
 
   const s = sizes[size];
 
   return (
-    <span className={`inline-flex items-center gap-2 ${className ?? ""}`}>
+    <span className={`inline-flex items-center gap-2.5 ${className ?? ""}`}>
       <Image src="/logo-icon.png" alt="ESGenius" width={s.img} height={s.img} priority />
       {showText && (
         <span className={`font-bold tracking-tight ${s.text}`}>
