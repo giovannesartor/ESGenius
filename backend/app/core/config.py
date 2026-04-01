@@ -20,6 +20,16 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/esgenius"
     DATABASE_ECHO: bool = False
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_database_url(cls, v: str) -> str:
+        """Ensure DATABASE_URL uses the asyncpg driver."""
+        if v and v.startswith("postgresql://"):
+            v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        elif v and v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql+asyncpg://", 1)
+        return v
+
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"
 
