@@ -71,9 +71,10 @@ class CompanyService:
         return CompanyResponse.model_validate(company)
 
     async def update_company(
-        self, company_id: UUID, data: CompanyUpdate, user_id: UUID
+        self, company_id: UUID, data: CompanyUpdate, user_id: UUID, is_superadmin: bool = False
     ) -> CompanyResponse:
-        await self._require_role(company_id, user_id, [UserRole.ADMIN.value])
+        if not is_superadmin:
+            await self._require_role(company_id, user_id, [UserRole.ADMIN.value])
 
         company = await self.company_repo.get_by_id(company_id)
         if not company:
@@ -85,8 +86,13 @@ class CompanyService:
         company = await self.company_repo.update(company)
         return CompanyResponse.model_validate(company)
 
-    async def list_user_companies(self, user_id: UUID) -> list[CompanyResponse]:
-        companies = await self.company_repo.list_for_user(user_id)
+    async def list_user_companies(
+        self, user_id: UUID, is_superadmin: bool = False
+    ) -> list[CompanyResponse]:
+        if is_superadmin:
+            companies = await self.company_repo.list_all()
+        else:
+            companies = await self.company_repo.list_for_user(user_id)
         return [CompanyResponse.model_validate(c) for c in companies]
 
     async def add_member(
@@ -95,8 +101,10 @@ class CompanyService:
         email: str,
         role: str,
         inviter_id: UUID,
+        is_superadmin: bool = False,
     ) -> CompanyMemberResponse:
-        await self._require_role(company_id, inviter_id, [UserRole.ADMIN.value])
+        if not is_superadmin:
+            await self._require_role(company_id, inviter_id, [UserRole.ADMIN.value])
 
         user = await self.user_repo.get_by_email(email)
         if not user:
@@ -134,13 +142,14 @@ class CompanyService:
         )
 
     async def list_members(
-        self, company_id: UUID, user_id: UUID
+        self, company_id: UUID, user_id: UUID, is_superadmin: bool = False
     ) -> list[CompanyMemberResponse]:
-        await self._require_role(
-            company_id,
-            user_id,
-            [UserRole.ADMIN.value, UserRole.MANAGER.value, UserRole.VIEWER.value],
-        )
+        if not is_superadmin:
+            await self._require_role(
+                company_id,
+                user_id,
+                [UserRole.ADMIN.value, UserRole.MANAGER.value, UserRole.VIEWER.value],
+            )
 
         members = await self.company_repo.list_members(company_id)
         return [
@@ -162,8 +171,10 @@ class CompanyService:
         member_user_id: UUID,
         new_role: str,
         admin_id: UUID,
+        is_superadmin: bool = False,
     ) -> None:
-        await self._require_role(company_id, admin_id, [UserRole.ADMIN.value])
+        if not is_superadmin:
+            await self._require_role(company_id, admin_id, [UserRole.ADMIN.value])
 
         membership = await self.company_repo.get_membership(company_id, member_user_id)
         if not membership:
@@ -173,9 +184,10 @@ class CompanyService:
         await self.company_repo.add_member(membership)
 
     async def remove_member(
-        self, company_id: UUID, member_user_id: UUID, admin_id: UUID
+        self, company_id: UUID, member_user_id: UUID, admin_id: UUID, is_superadmin: bool = False
     ) -> None:
-        await self._require_role(company_id, admin_id, [UserRole.ADMIN.value])
+        if not is_superadmin:
+            await self._require_role(company_id, admin_id, [UserRole.ADMIN.value])
 
         membership = await self.company_repo.get_membership(company_id, member_user_id)
         if not membership:

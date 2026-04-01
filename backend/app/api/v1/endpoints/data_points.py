@@ -25,8 +25,10 @@ router = APIRouter(prefix="/companies/{company_id}/data-points", tags=["ESG Data
 
 
 async def _check_company_access(
-    company_id: UUID, user_id: UUID, db: AsyncSession
+    company_id: UUID, user_id: UUID, db: AsyncSession, is_superadmin: bool = False
 ) -> None:
+    if is_superadmin:
+        return
     service = CompanyService(db)
     role = await service.get_user_role(company_id, user_id)
     if not role:
@@ -41,7 +43,7 @@ async def create_data_point(
     db: AsyncSession = Depends(get_db),
 ):
     """Create a new ESG data point."""
-    await _check_company_access(company_id, current_user.id, db)
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
 
     repo = DataPointRepository(db)
     dp = DataPoint(
@@ -70,7 +72,7 @@ async def create_data_points_bulk(
     db: AsyncSession = Depends(get_db),
 ):
     """Create multiple ESG data points at once."""
-    await _check_company_access(company_id, current_user.id, db)
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
 
     repo = DataPointRepository(db)
     dps = [
@@ -108,7 +110,7 @@ async def list_data_points(
     db: AsyncSession = Depends(get_db),
 ):
     """List ESG data points with filters."""
-    await _check_company_access(company_id, current_user.id, db)
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
 
     repo = DataPointRepository(db)
     return [
@@ -127,7 +129,7 @@ async def get_data_point(
     db: AsyncSession = Depends(get_db),
 ):
     """Get a single data point."""
-    await _check_company_access(company_id, current_user.id, db)
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
 
     repo = DataPointRepository(db)
     dp = await repo.get_by_id(data_point_id)
@@ -145,7 +147,7 @@ async def update_data_point(
     db: AsyncSession = Depends(get_db),
 ):
     """Update a data point."""
-    await _check_company_access(company_id, current_user.id, db)
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
 
     repo = DataPointRepository(db)
     dp = await repo.get_by_id(data_point_id)
@@ -167,7 +169,7 @@ async def delete_data_point(
     db: AsyncSession = Depends(get_db),
 ):
     """Delete a data point."""
-    await _check_company_access(company_id, current_user.id, db)
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
 
     repo = DataPointRepository(db)
     dp = await repo.get_by_id(data_point_id)

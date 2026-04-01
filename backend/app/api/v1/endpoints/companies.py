@@ -38,9 +38,11 @@ async def list_companies(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """List all companies the current user belongs to."""
+    """List all companies the current user belongs to. Superadmin sees all."""
     service = CompanyService(db)
-    return await service.list_user_companies(current_user.id)
+    return await service.list_user_companies(
+        current_user.id, is_superadmin=current_user.is_superadmin
+    )
 
 
 @router.get("/{company_id}", response_model=CompanyResponse)
@@ -61,9 +63,11 @@ async def update_company(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Update company details. Admin only."""
+    """Update company details. Admin or superadmin."""
     service = CompanyService(db)
-    return await service.update_company(company_id, data, current_user.id)
+    return await service.update_company(
+        company_id, data, current_user.id, is_superadmin=current_user.is_superadmin
+    )
 
 
 # --- Members ---
@@ -74,13 +78,14 @@ async def add_member(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Add a member to the company. Admin only."""
+    """Add a member to the company. Admin or superadmin."""
     service = CompanyService(db)
     return await service.add_member(
         company_id=company_id,
         email=data.email,
         role=data.role,
         inviter_id=current_user.id,
+        is_superadmin=current_user.is_superadmin,
     )
 
 
@@ -92,7 +97,9 @@ async def list_members(
 ):
     """List all members of a company."""
     service = CompanyService(db)
-    return await service.list_members(company_id, current_user.id)
+    return await service.list_members(
+        company_id, current_user.id, is_superadmin=current_user.is_superadmin
+    )
 
 
 @router.patch("/{company_id}/members/{user_id}", response_model=MessageResponse)
@@ -103,13 +110,14 @@ async def update_member_role(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Update a member's role. Admin only."""
+    """Update a member's role. Admin or superadmin."""
     service = CompanyService(db)
     await service.update_member_role(
         company_id=company_id,
         member_user_id=user_id,
         new_role=data.role,
         admin_id=current_user.id,
+        is_superadmin=current_user.is_superadmin,
     )
     return MessageResponse(message="Role updated successfully")
 
@@ -121,11 +129,12 @@ async def remove_member(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Remove a member from the company. Admin only."""
+    """Remove a member from the company. Admin or superadmin."""
     service = CompanyService(db)
     await service.remove_member(
         company_id=company_id,
         member_user_id=user_id,
         admin_id=current_user.id,
+        is_superadmin=current_user.is_superadmin,
     )
     return MessageResponse(message="Member removed successfully")

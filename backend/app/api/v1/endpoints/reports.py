@@ -25,10 +25,11 @@ async def create_report(
     db: AsyncSession = Depends(get_db),
 ):
     """Generate a new ESG report."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if role not in ("admin", "manager"):
-        raise PermissionDeniedException("Only admins/managers can generate reports")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if role not in ("admin", "manager"):
+            raise PermissionDeniedException("Only admins/managers can generate reports")
 
     report_service = ReportService(db)
     report = await report_service.generate_report(
@@ -61,10 +62,11 @@ async def list_reports(
     db: AsyncSession = Depends(get_db),
 ):
     """List all reports for a company."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if not role:
+            raise PermissionDeniedException("No access to this company")
 
     repo = ReportRepository(db)
     reports = await repo.list_by_company(company_id, skip, limit)
@@ -82,10 +84,11 @@ async def get_report(
     db: AsyncSession = Depends(get_db),
 ):
     """Get a specific report."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if not role:
+            raise PermissionDeniedException("No access to this company")
 
     repo = ReportRepository(db)
     report = await repo.get_by_id(report_id)

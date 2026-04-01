@@ -25,6 +25,10 @@ asyncio.run(create_tables())
 " 2>&1 || echo "WARNING: Table creation had issues"
 
 echo ""
+echo "=== Seeding Default Admin ==="
+python seed_admin.py 2>&1 || echo "WARNING: Admin seeding had issues"
+
+echo ""
 echo "=== Testing App Import ==="
 python -c "
 try:

@@ -17,6 +17,18 @@ from app.services.audit_service import AuditService
 router = APIRouter(prefix="/companies/{company_id}/dashboard", tags=["Dashboard"])
 
 
+async def _check_company_access(
+    company_id: UUID, user: User, db: AsyncSession
+) -> None:
+    """Verify user has access to company. Superadmin bypasses."""
+    if user.is_superadmin:
+        return
+    service = CompanyService(db)
+    role = await service.get_user_role(company_id, user.id)
+    if not role:
+        raise PermissionDeniedException("No access to this company")
+
+
 @router.get("/scores")
 async def get_esg_scores(
     company_id: UUID,
@@ -25,10 +37,7 @@ async def get_esg_scores(
     db: AsyncSession = Depends(get_db),
 ):
     """Get ESG scores for the company dashboard."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    await _check_company_access(company_id, current_user, db)
 
     scoring = ScoringService(db)
     return await scoring.calculate_scores(company_id, year)
@@ -42,10 +51,7 @@ async def get_audit_results(
     db: AsyncSession = Depends(get_db),
 ):
     """Run audit and return results for dashboard."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    await _check_company_access(company_id, current_user, db)
 
     audit = AuditService(db)
     return await audit.run_full_audit(company_id, year)
@@ -60,10 +66,7 @@ async def get_framework_coverage(
     db: AsyncSession = Depends(get_db),
 ):
     """Get framework coverage stats for dashboard."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    await _check_company_access(company_id, current_user, db)
 
     scoring = ScoringService(db)
     return await scoring.calculate_framework_coverage(company_id, framework_id, year)

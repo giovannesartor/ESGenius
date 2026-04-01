@@ -44,10 +44,11 @@ async def upload_document(
     db: AsyncSession = Depends(get_db),
 ):
     """Upload a document for ESG data extraction."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if not role:
+            raise PermissionDeniedException("No access to this company")
 
     # Validate file extension
     ext = os.path.splitext(file.filename or "")[1].lower()
@@ -107,10 +108,11 @@ async def list_documents(
     db: AsyncSession = Depends(get_db),
 ):
     """List all documents for a company."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if not role:
+            raise PermissionDeniedException("No access to this company")
 
     repo = DocumentRepository(db)
     docs = await repo.list_by_company(company_id, skip, limit)
@@ -130,10 +132,11 @@ async def get_document(
     db: AsyncSession = Depends(get_db),
 ):
     """Get document details."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if not role:
-        raise PermissionDeniedException("No access to this company")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if not role:
+            raise PermissionDeniedException("No access to this company")
 
     repo = DocumentRepository(db)
     doc = await repo.get_by_id(document_id)
@@ -150,10 +153,11 @@ async def delete_document(
     db: AsyncSession = Depends(get_db),
 ):
     """Delete a document."""
-    service = CompanyService(db)
-    role = await service.get_user_role(company_id, current_user.id)
-    if role not in ("admin", "manager"):
-        raise PermissionDeniedException("Only admins and managers can delete documents")
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if role not in ("admin", "manager"):
+            raise PermissionDeniedException("Only admins and managers can delete documents")
 
     repo = DocumentRepository(db)
     doc = await repo.get_by_id(document_id)

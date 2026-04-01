@@ -53,6 +53,13 @@ class CompanyRepository:
         )
         return list(result.scalars().all())
 
+    async def list_all(self) -> list[Company]:
+        """Return all companies (for superadmin)."""
+        result = await self.db.execute(
+            select(Company).order_by(Company.created_at.desc())
+        )
+        return list(result.scalars().all())
+
     # --- CompanyUser ---
     async def get_membership(
         self, company_id: UUID, user_id: UUID
