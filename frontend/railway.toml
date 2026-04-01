@@ -4,8 +4,6 @@ builder = "nixpacks"
 [deploy]
 startCommand = "node server.js"
 healthcheckPath = "/"
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 3
 
 [service]
 rootDirectory = "frontend"
