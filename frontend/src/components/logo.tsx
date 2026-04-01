@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface LogoProps {
   className?: string;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl";
   showText?: boolean;
 }
 
@@ -14,6 +14,7 @@ export function Logo({ className, size = "md", showText = true }: LogoProps) {
     md: { img: 54, text: "text-xl" },
     lg: { img: 56, text: "text-3xl" },
     xl: { img: 72, text: "text-4xl" },
+    "2xl": { img: 108, text: "text-5xl" },
   };
 
   const s = sizes[size];
