@@ -23,9 +23,9 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
 
   const passwordChecks = [
-    { key: "length", check: password.length >= 8, label: "At least 8 characters" },
-    { key: "upper", check: /[A-Z]/.test(password), label: "One uppercase letter" },
-    { key: "number", check: /[0-9]/.test(password), label: "One number" },
+    { key: "length", check: password.length >= 8, label: t("auth.passwordLength") },
+    { key: "upper", check: /[A-Z]/.test(password), label: t("auth.passwordUpper") },
+    { key: "number", check: /[0-9]/.test(password), label: t("auth.passwordNumber") },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,7 +48,7 @@ export default function RegisterPage() {
       const data = await authApi.googleLogin();
       window.location.href = (data as { authorization_url: string }).authorization_url;
     } catch {
-      setError("Google login unavailable");
+      setError(t("auth.googleUnavailable"));
     }
   };
 
@@ -59,22 +59,16 @@ export default function RegisterPage() {
         <div className="max-w-md">
           <Logo size="lg" />
           <h2 className="mt-8 text-2xl font-bold text-foreground">
-            Start your ESG journey
+            {t("auth.registerHeading")}
           </h2>
           <p className="mt-3 text-muted-foreground leading-relaxed">
-            Join companies transforming their sustainability reporting with AI-powered automation.
+            {t("auth.registerBranding")}
           </p>
           <ul className="mt-8 space-y-4">
-            {[
-              "AI-powered data extraction and classification",
-              "Support for GRI, SASB, TCFD, CDP, and SDGs",
-              "Automated ESG scoring and benchmarking",
-              "Audit-ready report generation",
-              "14-day free trial, no credit card required",
-            ].map((item, i) => (
+            {(["feature1", "feature2", "feature3", "feature4", "feature5"] as const).map((key, i) => (
               <li key={i} className="flex items-start gap-3">
                 <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <span className="text-sm text-foreground">{item}</span>
+                <span className="text-sm text-foreground">{t(`auth.${key}`)}</span>
               </li>
             ))}
           </ul>
@@ -114,7 +108,7 @@ export default function RegisterPage() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
               </svg>
-              Continue with Google
+              {t("auth.googleButton")}
             </Button>
 
             <div className="relative my-6">
@@ -132,7 +126,7 @@ export default function RegisterPage() {
                   <Input
                     id="fullName"
                     type="text"
-                    placeholder="John Doe"
+                    placeholder={t("auth.namePlaceholder")}
                     className="pl-10 h-11"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
@@ -148,7 +142,7 @@ export default function RegisterPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="you@company.com"
+                    placeholder={t("auth.emailPlaceholder")}
                     className="pl-10 h-11"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -209,10 +203,10 @@ export default function RegisterPage() {
             </form>
 
             <p className="mt-4 text-center text-xs text-muted-foreground">
-              By creating an account you agree to our{" "}
-              <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>
-              {" "}and{" "}
-              <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+              {t("auth.termsText")}{" "}
+              <Link href="/terms" className="text-primary hover:underline">{t("auth.termsLink")}</Link>
+              {" "}{t("auth.termsAnd")}{" "}
+              <Link href="/privacy" className="text-primary hover:underline">{t("auth.privacyLink")}</Link>
             </p>
 
             <p className="mt-4 text-center text-sm text-muted-foreground">
