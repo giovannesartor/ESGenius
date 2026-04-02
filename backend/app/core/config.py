@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     ENVIRONMENT: str = "production"
     API_V1_PREFIX: str = "/api/v1"
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/esgenius"
@@ -64,12 +64,23 @@ class Settings(BaseSettings):
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
-    def assemble_cors_origins(cls, v: str | list[str]) -> list[str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, list):
-            return v
-        raise ValueError(v)
+    def assemble_cors_origins(cls, v: str | list[str]) -> str:
+        """Normalize CORS origins to a comma-separated string."""
+        if isinstance(v, list):
+            return ",".join(v)
+        if not v or (isinstance(v, str) and not v.strip()):
+            return "http://localhost:3000"
+        return str(v)
+
+    def get_cors_origins(self) -> list[str]:
+        """Parse CORS origins from comma-separated string or JSON array."""
+        import json as _json
+        val = self.BACKEND_CORS_ORIGINS.strip()
+        if not val:
+            return ["http://localhost:3000"]
+        if val.startswith("["):
+            return _json.loads(val)
+        return [i.strip() for i in val.split(",") if i.strip()]
 
     model_config = {
         "env_file": ".env",
