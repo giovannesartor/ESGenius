@@ -83,7 +83,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} ESGenius. {t("footer.rights")}
+            &copy; {new Date().getFullYear()} ESG360. {t("footer.rights")}
           </p>
         </div>
       </div>

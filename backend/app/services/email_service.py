@@ -25,10 +25,10 @@ class EmailService:
 
         await self._send_email(
             to=email,
-            subject="Verify your ESGenius account",
+            subject="Verify your ESG360 account",
             html=f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h1 style="color: #1a1a2e;">Welcome to ESGenius!</h1>
+                <h1 style="color: #1a1a2e;">Welcome to ESG360!</h1>
                 <p>Hi {name},</p>
                 <p>Thank you for creating your account. Please verify your email address by clicking the button below:</p>
                 <div style="text-align: center; margin: 30px 0;">
@@ -40,7 +40,7 @@ class EmailService:
                 <p style="color: #666;">This link expires in 24 hours.</p>
                 <p style="color: #666;">If you didn't create this account, please ignore this email.</p>
                 <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-                <p style="color: #999; font-size: 12px;">ESGenius — ESG Management Platform</p>
+                <p style="color: #999; font-size: 12px;">ESG360 — ESG Management Platform</p>
             </div>
             """,
         )
@@ -53,7 +53,7 @@ class EmailService:
 
         await self._send_email(
             to=email,
-            subject="Reset your ESGenius password",
+            subject="Reset your ESG360 password",
             html=f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h1 style="color: #1a1a2e;">Password Reset</h1>
@@ -68,7 +68,7 @@ class EmailService:
                 <p style="color: #666;">This link expires in 1 hour.</p>
                 <p style="color: #666;">If you didn't request this, please ignore this email.</p>
                 <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-                <p style="color: #999; font-size: 12px;">ESGenius — ESG Management Platform</p>
+                <p style="color: #999; font-size: 12px;">ESG360 — ESG Management Platform</p>
             </div>
             """,
         )
@@ -81,11 +81,11 @@ class EmailService:
 
         await self._send_email(
             to=email,
-            subject=f"You've been invited to {company_name} on ESGenius",
+            subject=f"You've been invited to {company_name} on ESG360",
             html=f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h1 style="color: #1a1a2e;">You've been invited!</h1>
-                <p>{inviter_name} has invited you to join <strong>{company_name}</strong> as a <strong>{role}</strong> on ESGenius.</p>
+                <p>{inviter_name} has invited you to join <strong>{company_name}</strong> as a <strong>{role}</strong> on ESG360.</p>
                 <div style="text-align: center; margin: 30px 0;">
                     <a href="{invite_url}"
                        style="background-color: #16a34a; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
@@ -93,7 +93,7 @@ class EmailService:
                     </a>
                 </div>
                 <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-                <p style="color: #999; font-size: 12px;">ESGenius — ESG Management Platform</p>
+                <p style="color: #999; font-size: 12px;">ESG360 — ESG Management Platform</p>
             </div>
             """,
         )
@@ -114,7 +114,7 @@ class EmailService:
 
         try:
             params: resend.Emails.SendParams = {
-                "from": from_email or f"ESGenius <{settings.EMAIL_FROM}>",
+                "from": from_email or f"ESG360 <{settings.EMAIL_FROM}>",
                 "to": [to],
                 "subject": subject,
                 "html": html,

@@ -4,15 +4,15 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: esgenius
-      POSTGRES_PASSWORD: esgenius_dev
-      POSTGRES_DB: esgenius
+      POSTGRES_USER: esg360
+      POSTGRES_PASSWORD: esg360_dev
+      POSTGRES_DB: esg360
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U esgenius"]
+      test: ["CMD-SHELL", "pg_isready -U esg360"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -36,7 +36,7 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      DATABASE_URL: postgresql+asyncpg://esgenius:esgenius_dev@postgres:5432/esgenius
+      DATABASE_URL: postgresql+asyncpg://esg360:esg360_dev@postgres:5432/esg360
       REDIS_URL: redis://redis:6379/0
       CELERY_BROKER_URL: redis://redis:6379/1
     depends_on:
@@ -53,7 +53,7 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      DATABASE_URL: postgresql+asyncpg://esgenius:esgenius_dev@postgres:5432/esgenius
+      DATABASE_URL: postgresql+asyncpg://esg360:esg360_dev@postgres:5432/esg360
       REDIS_URL: redis://redis:6379/0
       CELERY_BROKER_URL: redis://redis:6379/1
     depends_on:

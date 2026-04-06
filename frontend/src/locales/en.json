@@ -51,7 +51,7 @@
     "metricFaster": "Faster Reports",
     "metricIndicators": "ESG Indicators",
     "metricMonitoring": "Monitoring",
-    "whyLabel": "Why ESGenius",
+    "whyLabel": "Why ESG360",
     "whyTitle": "Built for ESG teams that take compliance seriously",
     "multiFrameworkTitle": "Multi-Framework Coverage",
     "multiFrameworkDesc": "GRI, SASB, TCFD, CDP, ISSB — all automatically mapped from a single dataset.",
@@ -82,7 +82,7 @@
 
   "cta": {
     "title": "Ready to transform your ESG reporting?",
-    "subtitle": "Join leading organizations that trust ESGenius to streamline their sustainability strategy and regulatory compliance.",
+    "subtitle": "Join leading organizations that trust ESG360 to streamline their sustainability strategy and regulatory compliance.",
     "button": "Get Started Today"
   },
 
@@ -145,7 +145,7 @@
     "loginTitle": "Sign in to your account",
     "loginSubtitle": "Enter your credentials to access your ESG dashboard.",
     "registerTitle": "Create your account",
-    "registerSubtitle": "Start managing your ESG data with ESGenius.",
+    "registerSubtitle": "Start managing your ESG data with ESG360.",
     "email": "Email address",
     "password": "Password",
     "name": "Full name",

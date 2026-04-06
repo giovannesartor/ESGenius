@@ -441,7 +441,7 @@ export default function HomePage() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            WHY ESGenius — Split section
+            WHY ESG360 — Split section
         ════════════════════════════════════════════════════════════════ */}
         <section className="py-24 sm:py-32 bg-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

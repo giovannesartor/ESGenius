@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== ESGenius Backend Startup ==="
+echo "=== ESG360 Backend Startup ==="
 echo "PORT=${PORT:-not set}"
 echo "DATABASE_URL is ${DATABASE_URL:+configured}"
 echo "REDIS_URL is ${REDIS_URL:+configured}"

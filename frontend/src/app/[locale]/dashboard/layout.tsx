@@ -234,7 +234,7 @@ export default function DashboardLayout({
             </button>
             {/* Breadcrumb / page title placeholder */}
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground">
-              <span className="font-medium text-foreground">ESGenius</span>
+              <span className="font-medium text-foreground">ESG360</span>
               <ChevronRight className="h-3 w-3" />
               <span>Dashboard</span>
             </div>

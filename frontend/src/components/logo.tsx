@@ -21,7 +21,7 @@ export function Logo({ className, size = "md", showText = true }: LogoProps) {
 
   return (
     <span className={`inline-flex items-center gap-2.5 ${className ?? ""}`}>
-      <Image src="/logo-icon.png" alt="ESGenius" width={s.img} height={s.img} priority />
+      <Image src="/logo-icon.png" alt="ESG360" width={s.img} height={s.img} priority />
       {showText && (
         <span className={`font-bold tracking-tight ${s.text}`}>
           <span className="text-brand-green">ESG</span>

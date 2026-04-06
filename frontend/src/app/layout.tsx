@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ESGenius — ESG Management Platform",
+  title: "ESG360 — ESG Management Platform",
   description: "AI-powered ESG data management, reporting, and compliance platform",
 };
 

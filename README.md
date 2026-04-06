@@ -1,4 +1,4 @@
-# ESGenius - ESG Intelligence Platform
+# ESG360 - ESG Intelligence Platform
 
 Production-grade ESG SaaS platform for environmental, social, and governance data management.
 

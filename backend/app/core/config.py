@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """Global application settings loaded from environment variables."""
 
     # App
-    APP_NAME: str = "ESGenius"
+    APP_NAME: str = "ESG360"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
     ENVIRONMENT: str = "production"
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/esgenius"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/esg360"
     DATABASE_ECHO: bool = False
 
     @field_validator("DATABASE_URL", mode="before")
@@ -46,7 +46,7 @@ class Settings(BaseSettings):
 
     # Email - Resend
     RESEND_API_KEY: Optional[str] = None
-    EMAIL_FROM: str = "noreply@esgenius.com"
+    EMAIL_FROM: str = "noreply@esg360.com"
     FRONTEND_URL: str = "http://localhost:3000"
 
     # AI - DeepSeek
