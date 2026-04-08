@@ -77,10 +77,18 @@ class Settings(BaseSettings):
         import json as _json
         val = self.BACKEND_CORS_ORIGINS.strip()
         if not val:
-            return ["http://localhost:3000"]
-        if val.startswith("["):
-            return _json.loads(val)
-        return [i.strip() for i in val.split(",") if i.strip()]
+            origins = ["http://localhost:3000"]
+        elif val.startswith("["):
+            origins = _json.loads(val)
+        else:
+            origins = [i.strip() for i in val.split(",") if i.strip()]
+
+        # Always ensure FRONTEND_URL is included in CORS origins
+        frontend = self.FRONTEND_URL.strip().rstrip("/")
+        if frontend and frontend not in origins:
+            origins.append(frontend)
+
+        return origins
 
     model_config = {
         "env_file": ".env",

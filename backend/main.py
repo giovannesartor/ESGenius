@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application startup and shutdown events."""
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    logger.info(f"CORS origins: {settings.get_cors_origins()}")
+    logger.info(f"FRONTEND_URL: {settings.FRONTEND_URL}")
     # Import models to register them with SQLAlchemy
     from app.domain.models import __all__  # noqa: F401
     yield
