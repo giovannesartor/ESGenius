@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     ENVIRONMENT: str = "production"
     API_V1_PREFIX: str = "/api/v1"
-    BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
+    BACKEND_CORS_ORIGINS: str = "http://localhost:3000,https://esg360.digital,https://www.esg360.digital"
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/esg360"
@@ -42,12 +42,12 @@ class Settings(BaseSettings):
     # Auth - Google OAuth
     GOOGLE_CLIENT_ID: Optional[str] = None
     GOOGLE_CLIENT_SECRET: Optional[str] = None
-    GOOGLE_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/google/callback"
+    GOOGLE_REDIRECT_URI: str = "https://api.esg360.digital/api/v1/auth/google/callback"
 
     # Email - Resend
     RESEND_API_KEY: Optional[str] = None
-    EMAIL_FROM: str = "noreply@esg360.com"
-    FRONTEND_URL: str = "http://localhost:3000"
+    EMAIL_FROM: str = "noreply@esg360.digital"
+    FRONTEND_URL: str = "https://esg360.digital"
 
     # AI - DeepSeek
     DEEPSEEK_API_KEY: Optional[str] = None

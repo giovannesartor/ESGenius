@@ -2,7 +2,7 @@
  * API client for ESG360 backend
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://esg360-production.up.railway.app/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.esg360.digital/api/v1";
 
 interface ApiOptions {
   method?: string;

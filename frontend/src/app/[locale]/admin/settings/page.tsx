@@ -106,7 +106,7 @@ export default function AdminSettingsPage() {
               <Label htmlFor="api-url" className="text-sm font-medium">
                 API Base URL
               </Label>
-              <Input id="api-url" defaultValue="https://api.esg360.io/v1" />
+              <Input id="api-url" defaultValue="https://api.esg360.digital/api/v1" />
               <p className="text-xs text-muted-foreground">Backend API endpoint</p>
             </div>
             <div className="space-y-2">
@@ -170,7 +170,7 @@ export default function AdminSettingsPage() {
               <Label htmlFor="smtp-sender" className="text-sm font-medium">
                 Sender Email
               </Label>
-              <Input id="smtp-sender" type="email" defaultValue="noreply@esg360.io" />
+              <Input id="smtp-sender" type="email" defaultValue="noreply@esg360.digital" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="smtp-name" className="text-sm font-medium">
