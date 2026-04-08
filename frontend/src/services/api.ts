@@ -256,5 +256,56 @@ export const adminApi = {
     apiClient(`/admin/frameworks/${frameworkId}`, { method: "DELETE", token }),
 };
 
+// --- Analytics API (ESG Engine) ---
+export const analyticsApi = {
+  /** Full ESG score with sub-indicator breakdown */
+  getScores: (token: string, companyId: string, year?: number) => {
+    const query = year ? `?year=${year}` : "";
+    return apiClient(`/analytics/scores/${companyId}${query}`, { token });
+  },
+
+  /** Industry benchmark comparison */
+  getBenchmark: (token: string, companyId: string, year?: number, sector?: string) => {
+    const params = new URLSearchParams();
+    if (year) params.set("year", String(year));
+    if (sector) params.set("sector", sector);
+    const query = params.toString() ? `?${params}` : "";
+    return apiClient(`/analytics/benchmark/${companyId}${query}`, { token });
+  },
+
+  /** Generated KPI recommendations */
+  getKPIs: (token: string, companyId: string, year?: number, maxKpis?: number) => {
+    const params = new URLSearchParams();
+    if (year) params.set("year", String(year));
+    if (maxKpis) params.set("max_kpis", String(maxKpis));
+    const query = params.toString() ? `?${params}` : "";
+    return apiClient(`/analytics/kpis/${companyId}${query}`, { token });
+  },
+
+  /** What-if simulation for specific actions */
+  simulate: (token: string, companyId: string, actions: Record<string, unknown>[], year?: number) => {
+    const query = year ? `?year=${year}` : "";
+    return apiClient(`/analytics/simulate/${companyId}${query}`, {
+      method: "POST",
+      body: { company_id: companyId, year: year || new Date().getFullYear(), actions },
+      token,
+    });
+  },
+
+  /** Multi-scenario projection (conservative/moderate/aggressive) */
+  getScenarios: (token: string, companyId: string, year?: number) => {
+    const query = year ? `?year=${year}` : "";
+    return apiClient(`/analytics/scenarios/${companyId}${query}`, { token });
+  },
+
+  /** Compare multiple companies */
+  compareCompanies: (token: string, companyIds: string[], year: number) =>
+    apiClient("/analytics/compare", {
+      method: "POST",
+      body: { company_ids: companyIds, year },
+      token,
+    }),
+};
+
 export { ApiError };
 export default apiClient;

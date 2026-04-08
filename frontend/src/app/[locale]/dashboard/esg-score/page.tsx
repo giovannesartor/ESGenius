@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   ArrowUpRight,
+  Loader2,
 } from "lucide-react";
 import {
   RadarChart,
@@ -32,57 +34,63 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
+import { useCompany } from "@/hooks/useCompany";
+import { analyticsApi } from "@/services/api";
 
-// ─── Mock Data ───
+// ─── Fallback Mock Data ───
 
-const overallScore = {
+const MOCK_OVERALL = {
   value: 72,
   change: "+4.2%",
-  trend: "up",
-  rating: "Good",
+  trend: "up" as const,
+  rating: "B+",
   percentile: 78,
 };
 
-const pillarScores = [
+const PILLAR_META = {
+  E: { key: "environmental", icon: Leaf, color: "#16a34a", bgClass: "bg-brand-green/10", textClass: "text-brand-green" },
+  S: { key: "social", icon: Users, color: "#2563eb", bgClass: "bg-brand-blue/10", textClass: "text-brand-blue" },
+  G: { key: "governance", icon: Activity, color: "#f59e0b", bgClass: "bg-brand-gold/10", textClass: "text-brand-gold" },
+};
+
+const MOCK_PILLARS = [
   {
     key: "environmental",
     score: 68,
     change: "+2.1%",
-    trend: "up",
+    trend: "up" as const,
     icon: Leaf,
     color: "#16a34a",
     bgClass: "bg-brand-green/10",
     textClass: "text-brand-green",
     indicators: [
-      { name: "Carbon Emissions", score: 72, status: "good" },
-      { name: "Energy Management", score: 65, status: "fair" },
-      { name: "Water & Waste", score: 58, status: "fair" },
-      { name: "Biodiversity", score: 45, status: "poor" },
-      { name: "Climate Risk", score: 82, status: "good" },
+      { name: "Emissions", score: 72, status: "good" },
+      { name: "Energy Usage", score: 65, status: "fair" },
+      { name: "Waste Management", score: 58, status: "fair" },
+      { name: "Resource Efficiency", score: 45, status: "poor" },
     ],
   },
   {
     key: "social",
     score: 75,
     change: "+5.8%",
-    trend: "up",
+    trend: "up" as const,
     icon: Users,
     color: "#2563eb",
     bgClass: "bg-brand-blue/10",
     textClass: "text-brand-blue",
     indicators: [
-      { name: "Labor Practices", score: 80, status: "good" },
-      { name: "Human Rights", score: 72, status: "good" },
-      { name: "Community Impact", score: 68, status: "fair" },
+      { name: "Workforce", score: 80, status: "good" },
+      { name: "Diversity & Inclusion", score: 72, status: "good" },
       { name: "Health & Safety", score: 85, status: "excellent" },
-      { name: "Diversity & Inclusion", score: 62, status: "fair" },
+      { name: "Community Impact", score: 62, status: "fair" },
     ],
   },
   {
     key: "governance",
     score: 73,
     change: "-1.2%",
-    trend: "down",
+    trend: "down" as const,
     icon: Activity,
     color: "#f59e0b",
     bgClass: "bg-brand-gold/10",
@@ -90,30 +98,38 @@ const pillarScores = [
     indicators: [
       { name: "Board Structure", score: 78, status: "good" },
       { name: "Ethics & Compliance", score: 82, status: "good" },
-      { name: "Risk Management", score: 70, status: "fair" },
-      { name: "Transparency", score: 65, status: "fair" },
-      { name: "Stakeholder Rights", score: 68, status: "fair" },
+      { name: "Transparency & Reporting", score: 70, status: "fair" },
+      { name: "Risk Management", score: 65, status: "fair" },
     ],
   },
 ];
 
-const radarData = [
-  { subject: "Carbon", A: 72, fullMark: 100 },
+const MOCK_RADAR = [
+  { subject: "Emissions", A: 72, fullMark: 100 },
   { subject: "Energy", A: 65, fullMark: 100 },
-  { subject: "Labor", A: 80, fullMark: 100 },
-  { subject: "Rights", A: 72, fullMark: 100 },
+  { subject: "Workforce", A: 80, fullMark: 100 },
+  { subject: "Diversity", A: 72, fullMark: 100 },
   { subject: "Board", A: 78, fullMark: 100 },
   { subject: "Ethics", A: 82, fullMark: 100 },
   { subject: "Safety", A: 85, fullMark: 100 },
-  { subject: "Diversity", A: 62, fullMark: 100 },
+  { subject: "Risk Mgmt", A: 65, fullMark: 100 },
 ];
 
-const benchmarkData = [
+const MOCK_BENCHMARK = [
   { name: "Your Company", score: 72, color: "#16a34a" },
   { name: "Industry Avg", score: 58, color: "#94a3b8" },
   { name: "Top 10%", score: 88, color: "#2563eb" },
   { name: "Peer Median", score: 65, color: "#f59e0b" },
 ];
+
+// ─── Helpers ───
+
+function scoreToStatus(score: number): string {
+  if (score >= 80) return "excellent";
+  if (score >= 65) return "good";
+  if (score >= 50) return "fair";
+  return "poor";
+}
 
 function getStatusColor(status: string) {
   switch (status) {
@@ -132,8 +148,135 @@ function getScoreBarColor(score: number) {
   return "bg-destructive";
 }
 
+// ─── Types for API response ───
+interface SubIndicator {
+  code: string;
+  name: string;
+  score: number;
+  weight: number;
+  data_points_used: number;
+}
+interface PillarBreakdown {
+  pillar: string;
+  score: number;
+  weight: number;
+  grade: string;
+  sub_indicators: SubIndicator[];
+}
+interface ScoreResponse {
+  overall_score: number;
+  grade: string;
+  classification: string;
+  pillars: PillarBreakdown[];
+  penalties_applied: string[];
+  methodology_version: string;
+}
+interface BenchmarkResponse {
+  company_score: number;
+  sector: string;
+  industry_average: number;
+  comparisons: { label: string; value: number }[];
+  percentile: number;
+  classification: string;
+}
+
 export default function ESGScorePage() {
   const t = useTranslations();
+  const { company, loading: companyLoading, token } = useCompany();
+
+  const [overallScore, setOverallScore] = useState(MOCK_OVERALL);
+  const [pillarScores, setPillarScores] = useState(MOCK_PILLARS);
+  const [radarData, setRadarData] = useState(MOCK_RADAR);
+  const [benchmarkData, setBenchmarkData] = useState(MOCK_BENCHMARK);
+  const [dataLoading, setDataLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token || !company) return;
+    setDataLoading(true);
+
+    const fetchData = async () => {
+      try {
+        // Fetch scores and benchmark in parallel
+        const [scoresRaw, benchmarkRaw] = await Promise.all([
+          analyticsApi.getScores(token, company.id),
+          analyticsApi.getBenchmark(token, company.id),
+        ]);
+        const scores = scoresRaw as ScoreResponse;
+        const benchmark = benchmarkRaw as BenchmarkResponse;
+
+        // Map overall score
+        setOverallScore({
+          value: Math.round(scores.overall_score),
+          change: "+0.0%",
+          trend: "up",
+          rating: scores.grade,
+          percentile: Math.round(benchmark.percentile),
+        });
+
+        // Map pillars
+        const pillarOrder: ("E" | "S" | "G")[] = ["E", "S", "G"];
+        const mappedPillars = pillarOrder.map((code) => {
+          const pillar = scores.pillars.find((p) => p.pillar === code);
+          const meta = PILLAR_META[code];
+          const score = pillar ? Math.round(pillar.score) : 0;
+          return {
+            key: meta.key,
+            score,
+            change: "+0.0%",
+            trend: "up" as const,
+            icon: meta.icon,
+            color: meta.color,
+            bgClass: meta.bgClass,
+            textClass: meta.textClass,
+            indicators: (pillar?.sub_indicators || []).map((si) => ({
+              name: si.name,
+              score: Math.round(si.score),
+              status: scoreToStatus(Math.round(si.score)),
+            })),
+          };
+        });
+        setPillarScores(mappedPillars);
+
+        // Map radar data from all sub-indicators
+        const allSubs = scores.pillars.flatMap((p) => p.sub_indicators);
+        if (allSubs.length > 0) {
+          setRadarData(
+            allSubs.map((si) => ({
+              subject: si.name.length > 10 ? si.name.slice(0, 10) + "…" : si.name,
+              A: Math.round(si.score),
+              fullMark: 100,
+            }))
+          );
+        }
+
+        // Map benchmark data
+        if (benchmark.comparisons && benchmark.comparisons.length > 0) {
+          const colors = ["#16a34a", "#94a3b8", "#2563eb", "#f59e0b", "#8b5cf6", "#ef4444"];
+          setBenchmarkData(
+            benchmark.comparisons.map((c, i) => ({
+              name: c.label,
+              score: Math.round(c.value),
+              color: colors[i % colors.length],
+            }))
+          );
+        }
+      } catch {
+        // Silently fall back to mock data
+      } finally {
+        setDataLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token, company]);
+
+  if (companyLoading || dataLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">

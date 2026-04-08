@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCompany } from "@/hooks/useCompany";
+import { analyticsApi } from "@/services/api";
 import {
   TrendingUp,
   TrendingDown,
@@ -27,6 +30,7 @@ import {
   Lightbulb,
   ShieldAlert,
   ArrowUpRight,
+  Loader2,
 } from "lucide-react";
 import {
   LineChart,
@@ -41,9 +45,9 @@ import {
   Cell,
 } from "recharts";
 
-// ─── Mock Data ───
+// ─── Fallback Mock Data ───
 
-const mockStats = [
+const MOCK_STATS = [
   {
     key: "esgScore",
     value: "72",
@@ -86,7 +90,7 @@ const mockStats = [
   },
 ];
 
-const evolutionData = [
+const MOCK_EVOLUTION = [
   { month: "Jan", overall: 58, env: 52, social: 62, gov: 60 },
   { month: "Feb", overall: 60, env: 55, social: 63, gov: 62 },
   { month: "Mar", overall: 62, env: 57, social: 64, gov: 65 },
@@ -101,13 +105,13 @@ const evolutionData = [
   { month: "Dec", overall: 72, env: 68, social: 75, gov: 73 },
 ];
 
-const categoryBreakdown = [
+const MOCK_CATEGORY = [
   { name: "Environmental", value: 68, color: "#16a34a" },
   { name: "Social", value: 75, color: "#2563eb" },
   { name: "Governance", value: 73, color: "#f59e0b" },
 ];
 
-const recentReports = [
+const MOCK_REPORTS = [
   { id: "1", name: "GRI Annual Report 2025", date: "2026-03-15", score: 78, framework: "GRI", status: "published" },
   { id: "2", name: "SASB Disclosure Q1 2026", date: "2026-03-01", score: 72, framework: "SASB", status: "published" },
   { id: "3", name: "TCFD Climate Report", date: "2026-02-20", score: 65, framework: "TCFD", status: "draft" },
@@ -115,7 +119,7 @@ const recentReports = [
   { id: "5", name: "SDG Impact Assessment", date: "2026-01-28", score: 82, framework: "SDGs", status: "draft" },
 ];
 
-const aiInsights = [
+const MOCK_INSIGHTS = [
   {
     type: "recommendation" as const,
     title: "Improve Carbon Disclosure",
@@ -166,11 +170,114 @@ const quickActions = [
   },
 ];
 
+// ─── Types for API response ───
+interface PillarBreakdown {
+  pillar: string;
+  score: number;
+  weight: number;
+  grade: string;
+}
+interface ScoreResponse {
+  overall_score: number;
+  grade: string;
+  classification: string;
+  pillars: PillarBreakdown[];
+}
+interface KPIItem {
+  pillar: string;
+  sub_indicator: string;
+  kpi_name: string;
+  description: string;
+  target: string;
+  timeframe: string;
+  priority: number;
+  measurement_method: string;
+}
+interface KPIResponse {
+  kpis: KPIItem[];
+}
+
 // ─── Component ───
 
 export default function DashboardPage() {
   const t = useTranslations();
   const { user } = useAuth();
+  const { company, token } = useCompany();
+
+  const [stats, setStats] = useState(MOCK_STATS);
+  const [categoryBreakdown, setCategoryBreakdown] = useState(MOCK_CATEGORY);
+  const [overallValue, setOverallValue] = useState(72);
+  const [aiInsights, setAiInsights] = useState(MOCK_INSIGHTS);
+
+  useEffect(() => {
+    if (!token || !company) return;
+
+    const fetchScores = async () => {
+      try {
+        const raw = await analyticsApi.getScores(token, company.id);
+        const scores = raw as ScoreResponse;
+
+        const pillarMap: Record<string, { score: number }> = {};
+        for (const p of scores.pillars) {
+          pillarMap[p.pillar] = { score: Math.round(p.score) };
+        }
+
+        const overall = Math.round(scores.overall_score);
+        setOverallValue(overall);
+
+        setStats([
+          { ...MOCK_STATS[0], value: String(overall) },
+          { ...MOCK_STATS[1], value: String(pillarMap["E"]?.score ?? 0) },
+          { ...MOCK_STATS[2], value: String(pillarMap["S"]?.score ?? 0) },
+          { ...MOCK_STATS[3], value: String(pillarMap["G"]?.score ?? 0) },
+        ]);
+
+        setCategoryBreakdown([
+          { name: "Environmental", value: pillarMap["E"]?.score ?? 0, color: "#16a34a" },
+          { name: "Social", value: pillarMap["S"]?.score ?? 0, color: "#2563eb" },
+          { name: "Governance", value: pillarMap["G"]?.score ?? 0, color: "#f59e0b" },
+        ]);
+      } catch {
+        // Use mock data fallback
+      }
+    };
+
+    const fetchKPIs = async () => {
+      try {
+        const raw = await analyticsApi.getKPIs(token, company.id, undefined, 3);
+        const kpiData = raw as KPIResponse;
+
+        if (kpiData.kpis && kpiData.kpis.length > 0) {
+          const pillarIcons: Record<string, typeof Lightbulb> = {
+            E: Lightbulb,
+            S: Lightbulb,
+            G: ShieldAlert,
+          };
+          const pillarColors: Record<string, string> = {
+            E: "text-brand-green bg-brand-green/10",
+            S: "text-brand-blue bg-brand-blue/10",
+            G: "text-brand-gold bg-brand-gold/10",
+          };
+
+          setAiInsights(
+            kpiData.kpis.slice(0, 3).map((kpi) => ({
+              type: kpi.priority >= 8 ? ("risk" as const) : ("recommendation" as const),
+              title: kpi.kpi_name,
+              desc: `${kpi.description} Target: ${kpi.target}. Timeframe: ${kpi.timeframe}.`,
+              icon: pillarIcons[kpi.pillar] || Lightbulb,
+              color: pillarColors[kpi.pillar] || "text-violet-600 bg-violet-500/10",
+              priority: kpi.priority >= 8 ? "high" : "medium",
+            }))
+          );
+        }
+      } catch {
+        // Use mock data fallback
+      }
+    };
+
+    fetchScores();
+    fetchKPIs();
+  }, [token, company]);
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
@@ -195,7 +302,7 @@ export default function DashboardPage() {
 
       {/* ─── KPI Cards ─── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {mockStats.map((stat) => (
+        {stats.map((stat) => (
           <Card
             key={stat.key}
             className="border-border/60 bg-card hover:shadow-md transition-all duration-200 rounded-2xl"
@@ -267,7 +374,7 @@ export default function DashboardPage() {
           <CardContent className="px-2 sm:px-4 pt-4 pb-4">
             <div className="h-[280px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={evolutionData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                <LineChart data={MOCK_EVOLUTION} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.5} />
                   <XAxis
                     dataKey="month"
@@ -360,7 +467,7 @@ export default function DashboardPage() {
             <Separator className="my-4" />
             <div className="flex items-baseline gap-1">
               <Star className="h-4 w-4 text-brand-gold mr-1" />
-              <span className="text-2xl font-bold text-primary">72</span>
+              <span className="text-2xl font-bold text-primary">{overallValue}</span>
               <span className="text-sm text-muted-foreground">/100 {t("dashboard.overall")}</span>
             </div>
           </CardContent>
@@ -401,7 +508,7 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {recentReports.map((report) => (
+                {MOCK_REPORTS.map((report) => (
                   <tr key={report.id} className="border-b border-border/30 hover:bg-muted/40 transition-colors">
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">

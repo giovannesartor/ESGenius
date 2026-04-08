@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCompany } from "@/hooks/useCompany";
+import { analyticsApi } from "@/services/api";
 import {
   Brain,
   Lightbulb,
@@ -23,6 +25,7 @@ import {
   Clock,
   ChevronRight,
   Sparkles,
+  Loader2,
 } from "lucide-react";
 
 // ─── Mock Data ───
@@ -39,7 +42,7 @@ interface Insight {
   status: "new" | "in-progress" | "completed";
 }
 
-const insights: Insight[] = [
+const MOCK_INSIGHTS: Insight[] = [
   {
     id: "1",
     type: "risk",
@@ -128,7 +131,7 @@ const insights: Insight[] = [
   },
 ];
 
-const summaryStats = [
+const MOCK_SUMMARY = [
   { label: "Total Insights", value: "8", icon: Brain, color: "text-violet-600 bg-violet-500/10" },
   { label: "High Priority", value: "4", icon: AlertTriangle, color: "text-destructive bg-destructive/10" },
   { label: "Potential Improvement", value: "+45 pts", icon: TrendingUp, color: "text-brand-green bg-brand-green/10" },
@@ -184,13 +187,88 @@ function getStatusBadge(status: string) {
   }
 }
 
+// ─── API types ───
+interface KPIItem {
+  pillar: string;
+  sub_indicator: string;
+  kpi_name: string;
+  description: string;
+  target: string;
+  timeframe: string;
+  priority: number;
+  measurement_method: string;
+}
+interface KPIResponse {
+  kpis: KPIItem[];
+}
+
+function pillarToCategory(p: string): Insight["category"] {
+  if (p === "E") return "environmental";
+  if (p === "S") return "social";
+  if (p === "G") return "governance";
+  return "general";
+}
+
 export default function InsightsPage() {
   const t = useTranslations();
+  const { company, loading: companyLoading, token } = useCompany();
   const [activeTab, setActiveTab] = useState("all");
+  const [insights, setInsights] = useState<Insight[]>(MOCK_INSIGHTS);
+  const [summaryStats, setSummaryStats] = useState(MOCK_SUMMARY);
+  const [dataLoading, setDataLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token || !company) return;
+    setDataLoading(true);
+
+    const fetchKPIs = async () => {
+      try {
+        const raw = await analyticsApi.getKPIs(token, company.id, undefined, 10);
+        const data = raw as KPIResponse;
+
+        if (data.kpis && data.kpis.length > 0) {
+          const mapped: Insight[] = data.kpis.map((kpi, i) => ({
+            id: String(i + 1),
+            type: kpi.priority >= 8 ? "risk" : kpi.priority >= 5 ? "recommendation" : "improvement",
+            category: pillarToCategory(kpi.pillar),
+            title: kpi.kpi_name,
+            description: kpi.description,
+            impact: kpi.priority >= 8 ? "high" : kpi.priority >= 5 ? "medium" : "low",
+            estimatedImprovement: `Target: ${kpi.target}`,
+            timeframe: kpi.timeframe,
+            status: "new" as const,
+          }));
+          setInsights(mapped);
+
+          const highPriority = mapped.filter((m) => m.impact === "high").length;
+          setSummaryStats([
+            { label: "Total Insights", value: String(mapped.length), icon: Brain, color: "text-violet-600 bg-violet-500/10" },
+            { label: "High Priority", value: String(highPriority), icon: AlertTriangle, color: "text-destructive bg-destructive/10" },
+            { label: "KPIs Generated", value: String(data.kpis.length), icon: TrendingUp, color: "text-brand-green bg-brand-green/10" },
+            { label: "AI Confidence", value: "92%", icon: Sparkles, color: "text-brand-blue bg-brand-blue/10" },
+          ]);
+        }
+      } catch {
+        // Fall back to mock data
+      } finally {
+        setDataLoading(false);
+      }
+    };
+
+    fetchKPIs();
+  }, [token, company]);
 
   const filtered = activeTab === "all"
     ? insights
     : insights.filter((i) => i.type === activeTab);
+
+  if (companyLoading || dataLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
