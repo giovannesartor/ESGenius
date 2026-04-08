@@ -249,6 +249,48 @@
     "back": "Volver"
   },
 
+  "terms": {
+    "title": "Términos de Servicio",
+    "lastUpdated": "Última actualización: 8 de abril de 2026",
+    "s1Title": "1. Aceptación de los Términos",
+    "s1Text": "Al acceder o utilizar la plataforma ESG360 (\"Servicio\"), usted acepta quedar vinculado por estos Términos de Servicio. Si no está de acuerdo con estos términos, no podrá utilizar el Servicio. ESG360 se reserva el derecho de modificar estos términos en cualquier momento, y el uso continuado del Servicio constituye la aceptación de cualquier cambio.",
+    "s2Title": "2. Descripción del Servicio",
+    "s2Text": "ESG360 es una plataforma SaaS que proporciona gestión de datos ESG (Ambiental, Social y Gobernanza), generación automatizada de informes, análisis de documentos con IA y herramientas de cumplimiento en sostenibilidad. El acceso se proporciona por suscripción según el plan seleccionado.",
+    "s3Title": "3. Cuentas de Usuario",
+    "s3Text": "Debe proporcionar información precisa y completa al crear una cuenta. Usted es responsable de mantener la confidencialidad de sus credenciales y de todas las actividades que ocurran bajo su cuenta. Debe notificar a ESG360 inmediatamente sobre cualquier uso no autorizado.",
+    "s4Title": "4. Propiedad y Uso de Datos",
+    "s4Text": "Usted retiene todos los derechos sobre los datos que carga en ESG360. No vendemos, compartimos ni usamos sus datos para fines distintos a proporcionar el Servicio. ESG360 puede usar datos anonimizados y agregados para la mejora de la plataforma y análisis.",
+    "s5Title": "5. Uso Aceptable",
+    "s5Text": "Usted acepta no: (a) usar el Servicio para cualquier propósito ilegal; (b) intentar obtener acceso no autorizado a cualquier parte del Servicio; (c) interferir o interrumpir el Servicio; (d) cargar código malicioso o contenido dañino; (e) realizar ingeniería inversa de cualquier parte de la plataforma.",
+    "s6Title": "6. Limitación de Responsabilidad",
+    "s6Text": "ESG360 se proporciona \"tal cual\" sin garantías de ningún tipo. En la máxima medida permitida por la ley, ESG360 no será responsable de ningún daño indirecto, incidental, especial o consecuente derivado del uso o la incapacidad de uso del Servicio.",
+    "s7Title": "7. Terminación",
+    "s7Text": "Cualquiera de las partes puede terminar el Servicio en cualquier momento. Tras la terminación, puede solicitar una exportación de sus datos dentro de los 30 días. Después de este período, sus datos podrán ser eliminados permanentemente de nuestros sistemas.",
+    "contactTitle": "¿Preguntas?",
+    "contactText": "Si tiene alguna pregunta sobre estos Términos, contáctenos en contact@esg360.digital."
+  },
+
+  "privacy": {
+    "title": "Política de Privacidad",
+    "lastUpdated": "Última actualización: 8 de abril de 2026",
+    "s1Title": "1. Información que Recopilamos",
+    "s1Text": "Recopilamos información que usted proporciona directamente: nombre, dirección de correo electrónico, información de la empresa y datos ESG que carga. También recopilamos automáticamente datos de uso como dirección IP, tipo de navegador, páginas visitadas y patrones de interacción para mejorar nuestro Servicio.",
+    "s2Title": "2. Cómo Usamos Su Información",
+    "s2Text": "Usamos su información para: (a) proporcionar y mantener el Servicio; (b) procesar documentos y generar informes ESG; (c) enviar notificaciones importantes sobre su cuenta; (d) mejorar y personalizar su experiencia; (e) garantizar la seguridad y prevenir fraudes.",
+    "s3Title": "3. Almacenamiento y Seguridad de Datos",
+    "s3Text": "Sus datos se almacenan en servidores seguros con cifrado en reposo y en tránsito. Implementamos medidas de seguridad estándar de la industria, incluidos controles de acceso, auditorías regulares y procedimientos de respuesta a incidentes. Retenemos sus datos mientras su cuenta esté activa.",
+    "s4Title": "4. Compartición de Datos",
+    "s4Text": "No vendemos sus datos personales. Podemos compartir información con: (a) proveedores de servicios que ayudan a operar la plataforma (alojamiento, análisis); (b) autoridades legales cuando lo exija la ley; (c) socios comerciales solo con su consentimiento explícito.",
+    "s5Title": "5. Sus Derechos",
+    "s5Text": "Tiene derecho a: acceder a sus datos personales; solicitar la corrección de datos inexactos; solicitar la eliminación de sus datos; exportar sus datos en un formato estándar; retirar el consentimiento para el procesamiento de datos; presentar una queja ante una autoridad de protección de datos.",
+    "s6Title": "6. Cookies y Seguimiento",
+    "s6Text": "Usamos cookies esenciales para operar la plataforma y cookies analíticas para comprender patrones de uso. Puede gestionar las preferencias de cookies a través de la configuración de su navegador. Deshabilitar las cookies esenciales puede afectar la funcionalidad del Servicio.",
+    "s7Title": "7. Transferencias Internacionales de Datos",
+    "s7Text": "Sus datos pueden ser transferidos y procesados en países distintos al suyo. Garantizamos que se implementen las salvaguardas apropiadas, incluidas las cláusulas contractuales estándar, para proteger sus datos durante las transferencias internacionales.",
+    "contactTitle": "Contacto de Protección de Datos",
+    "contactText": "Para consultas relacionadas con la privacidad o para ejercer sus derechos, contáctenos en privacy@esg360.digital."
+  },
+
   "lang": {
     "en": "English",
     "pt": "Português",
