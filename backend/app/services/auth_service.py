@@ -158,6 +158,11 @@ class AuthService:
         if not user:
             raise NotFoundException("User not found")
 
+        if not user.hashed_password:
+            raise BadRequestException(
+                "This account uses Google login. Please set a password via password reset."
+            )
+
         if not verify_password(current_password, user.hashed_password):
             raise BadRequestException("Current password is incorrect")
 

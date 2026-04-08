@@ -2,12 +2,12 @@
 
 from uuid import UUID
 
-from fastapi import Depends, Header
+from fastapi import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.exceptions import CredentialsException
+from app.core.exceptions import CredentialsException, PermissionDeniedException
 from app.core.security import decode_token
 from app.domain.models.user import User
 from app.repositories.user_repository import UserRepository
@@ -53,5 +53,5 @@ async def get_current_superadmin(
 ) -> User:
     """Dependency: ensures user is a superadmin."""
     if not current_user.is_superadmin:
-        raise CredentialsException("Superadmin access required")
+        raise PermissionDeniedException("Superadmin access required")
     return current_user

@@ -31,8 +31,6 @@ import {
   Loader2,
 } from "lucide-react";
 
-const ADMIN_EMAIL = "giovannesartor@gmail.com";
-
 const navItems = [
   { key: "overview", href: "/dashboard", icon: LayoutDashboard },
   { key: "reports", href: "/dashboard/reports", icon: BarChart3 },
@@ -61,7 +59,7 @@ export default function DashboardLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const isAdmin = user?.is_superadmin === true;
 
   // Auth guard: redirect to login if not authenticated
   useEffect(() => {

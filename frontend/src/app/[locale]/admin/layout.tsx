@@ -26,8 +26,6 @@ import {
   Loader2,
 } from "lucide-react";
 
-const ADMIN_EMAIL = "giovannesartor@gmail.com";
-
 const adminNavItems = [
   { key: "overview", href: "/admin", icon: LayoutDashboard },
   { key: "frameworks", href: "/admin/frameworks", icon: Layers },
@@ -48,7 +46,7 @@ export default function AdminLayout({
   const { user, logout, isLoading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const isAdmin = user?.is_superadmin === true;
 
   // Auth + Admin guard
   useEffect(() => {

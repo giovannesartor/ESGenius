@@ -11,7 +11,7 @@ interface ApiOptions {
   token?: string;
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   status: number;
   data: unknown;
 
@@ -307,5 +307,4 @@ export const analyticsApi = {
     }),
 };
 
-export { ApiError };
 export default apiClient;

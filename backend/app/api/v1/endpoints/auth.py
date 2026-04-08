@@ -1,11 +1,15 @@
 """Auth API endpoints."""
 
+from urllib.parse import urlencode
+
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import httpx
 
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.exceptions import BadRequestException
 from app.api.dependencies import get_current_user
 from app.domain.models.user import User
 from app.domain.schemas.auth import (
@@ -134,43 +138,64 @@ async def google_login():
         "access_type": "offline",
         "prompt": "consent",
     }
-    url = "https://accounts.google.com/o/oauth2/v2/auth?" + "&".join(
-        f"{k}={v}" for k, v in params.items()
-    )
+    url = "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode(params)
     return {"authorization_url": url}
 
 
-@router.get("/google/callback", response_model=TokenResponse)
+@router.get("/google/callback")
 async def google_callback(
     code: str,
     db: AsyncSession = Depends(get_db),
 ):
-    """Handle Google OAuth callback."""
-    # Exchange code for tokens
-    async with httpx.AsyncClient() as client:
-        token_response = await client.post(
-            "https://oauth2.googleapis.com/token",
-            data={
-                "client_id": settings.GOOGLE_CLIENT_ID,
-                "client_secret": settings.GOOGLE_CLIENT_SECRET,
-                "code": code,
-                "grant_type": "authorization_code",
-                "redirect_uri": settings.GOOGLE_REDIRECT_URI,
-            },
-        )
-        token_data = token_response.json()
+    """Handle Google OAuth callback — redirects to frontend with tokens."""
+    frontend_base = settings.FRONTEND_URL.rstrip("/")
+    try:
+        # Exchange code for tokens
+        async with httpx.AsyncClient() as client:
+            token_response = await client.post(
+                "https://oauth2.googleapis.com/token",
+                data={
+                    "client_id": settings.GOOGLE_CLIENT_ID,
+                    "client_secret": settings.GOOGLE_CLIENT_SECRET,
+                    "code": code,
+                    "grant_type": "authorization_code",
+                    "redirect_uri": settings.GOOGLE_REDIRECT_URI,
+                },
+            )
+            token_data = token_response.json()
 
-        # Get user info
-        userinfo_response = await client.get(
-            "https://www.googleapis.com/oauth2/v2/userinfo",
-            headers={"Authorization": f"Bearer {token_data['access_token']}"},
-        )
-        userinfo = userinfo_response.json()
+            if "error" in token_data or "access_token" not in token_data:
+                error_msg = token_data.get("error_description", token_data.get("error", "unknown"))
+                return RedirectResponse(
+                    url=f"{frontend_base}/login?error={urlencode({'e': error_msg})}"
+                )
 
-    service = AuthService(db)
-    return await service.google_auth(
-        google_id=userinfo["id"],
-        email=userinfo["email"],
-        full_name=userinfo.get("name", userinfo["email"]),
-        avatar_url=userinfo.get("picture"),
-    )
+            # Get user info
+            userinfo_response = await client.get(
+                "https://www.googleapis.com/oauth2/v2/userinfo",
+                headers={"Authorization": f"Bearer {token_data['access_token']}"},
+            )
+            userinfo = userinfo_response.json()
+
+            if "error" in userinfo or "email" not in userinfo:
+                return RedirectResponse(
+                    url=f"{frontend_base}/login?error=google_userinfo_failed"
+                )
+
+        service = AuthService(db)
+        tokens = await service.google_auth(
+            google_id=userinfo["id"],
+            email=userinfo["email"],
+            full_name=userinfo.get("name", userinfo["email"]),
+            avatar_url=userinfo.get("picture"),
+        )
+
+        # Redirect to frontend callback page with tokens in hash fragment (not exposed to server logs)
+        params = urlencode({
+            "access_token": tokens.access_token,
+            "refresh_token": tokens.refresh_token,
+        })
+        return RedirectResponse(url=f"{frontend_base}/auth/callback#{params}")
+
+    except Exception:
+        return RedirectResponse(url=f"{frontend_base}/login?error=google_auth_failed")

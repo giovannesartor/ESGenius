@@ -1,6 +1,6 @@
 """Dashboard API endpoints."""
 
-from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
@@ -32,11 +32,14 @@ async def _check_company_access(
 @router.get("/scores")
 async def get_esg_scores(
     company_id: UUID,
-    year: int = Query(default=datetime.now().year),
+    year: Optional[int] = Query(default=None),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Get ESG scores for the company dashboard."""
+    from datetime import datetime, timezone
+    if year is None:
+        year = datetime.now(timezone.utc).year
     await _check_company_access(company_id, current_user, db)
 
     scoring = ScoringService(db)
@@ -46,11 +49,14 @@ async def get_esg_scores(
 @router.get("/audit")
 async def get_audit_results(
     company_id: UUID,
-    year: int = Query(default=datetime.now().year),
+    year: Optional[int] = Query(default=None),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Run audit and return results for dashboard."""
+    from datetime import datetime, timezone
+    if year is None:
+        year = datetime.now(timezone.utc).year
     await _check_company_access(company_id, current_user, db)
 
     audit = AuditService(db)
@@ -61,11 +67,14 @@ async def get_audit_results(
 async def get_framework_coverage(
     company_id: UUID,
     framework_id: UUID,
-    year: int = Query(default=datetime.now().year),
+    year: Optional[int] = Query(default=None),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Get framework coverage stats for dashboard."""
+    from datetime import datetime, timezone
+    if year is None:
+        year = datetime.now(timezone.utc).year
     await _check_company_access(company_id, current_user, db)
 
     scoring = ScoringService(db)

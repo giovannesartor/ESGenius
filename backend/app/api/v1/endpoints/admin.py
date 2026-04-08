@@ -12,7 +12,7 @@ from app.core.database import get_db
 from app.api.dependencies import get_current_superadmin
 from app.domain.models.user import User
 from app.domain.models.company import Company
-from app.domain.models.framework import Framework, Indicator, Metric
+from app.domain.models.framework import Framework, Category, Indicator, Metric
 from app.domain.models.document import Document
 from app.domain.models.report import Report
 
@@ -258,7 +258,9 @@ async def list_frameworks_admin(
     for fw in frameworks:
         indicator_count = (
             await db.execute(
-                select(func.count(Indicator.id)).where(Indicator.framework_id == fw.id)
+                select(func.count(Indicator.id))
+                .join(Category, Category.id == Indicator.category_id)
+                .where(Category.framework_id == fw.id)
             )
         ).scalar() or 0
 
@@ -345,7 +347,10 @@ async def delete_framework(
     if not framework:
         raise HTTPException(status_code=404, detail="Framework not found")
 
-    await db.execute(delete(Indicator).where(Indicator.framework_id == framework_id))
+    # Delete indicators through categories (Indicator has category_id, not framework_id)
+    cat_ids_q = select(Category.id).where(Category.framework_id == framework_id)
+    await db.execute(delete(Indicator).where(Indicator.category_id.in_(cat_ids_q)))
+    await db.execute(delete(Category).where(Category.framework_id == framework_id))
     await db.execute(delete(Framework).where(Framework.id == framework_id))
     await db.commit()
     return {"detail": "Framework deleted"}

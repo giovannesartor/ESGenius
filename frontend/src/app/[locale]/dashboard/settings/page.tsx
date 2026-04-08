@@ -8,23 +8,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
+import { authApi } from "@/services/api";
 import { Badge } from "@/components/ui/badge";
 import { Settings, User, Bell, Shield, Loader2, CheckCircle2 } from "lucide-react";
 
 export default function SettingsPage() {
   const t = useTranslations();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [fullName, setFullName] = useState(user?.full_name || "");
 
   const handleSave = async () => {
+    if (!token) return;
     setSaving(true);
-    // TODO: call API to save
-    await new Promise((r) => setTimeout(r, 1000));
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    try {
+      await authApi.updateMe(token, { full_name: fullName });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch {
+      // Handle error silently for now
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

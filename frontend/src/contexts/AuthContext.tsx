@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { authApi } from "@/services/api";
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
+import { authApi, ApiError } from "@/services/api";
 
 interface User {
   id: string;
@@ -9,6 +9,8 @@ interface User {
   full_name: string;
   avatar_url?: string;
   is_email_verified: boolean;
+  is_superadmin?: boolean;
+  is_active?: boolean;
 }
 
 interface AuthContextType {
@@ -27,19 +29,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const refreshingRef = useRef(false);
+
+  const clearAuth = useCallback(() => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setUser(null);
+    setToken(null);
+  }, []);
+
+  const tryRefreshToken = useCallback(async (): Promise<string | null> => {
+    if (refreshingRef.current) return null;
+    refreshingRef.current = true;
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+      if (!refreshToken) return null;
+      const response = await authApi.refresh(refreshToken);
+      localStorage.setItem("access_token", response.access_token);
+      localStorage.setItem("refresh_token", response.refresh_token);
+      return response.access_token;
+    } catch {
+      clearAuth();
+      return null;
+    } finally {
+      refreshingRef.current = false;
+    }
+  }, [clearAuth]);
 
   const loadUser = useCallback(async (accessToken: string) => {
     try {
       const userData = await authApi.getMe(accessToken) as User;
       setUser(userData);
       setToken(accessToken);
-    } catch {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      setUser(null);
-      setToken(null);
+    } catch (err) {
+      // If 401, try refreshing the token
+      if (err instanceof ApiError && err.status === 401) {
+        const newToken = await tryRefreshToken();
+        if (newToken) {
+          try {
+            const userData = await authApi.getMe(newToken) as User;
+            setUser(userData);
+            setToken(newToken);
+            return;
+          } catch {
+            // refresh also failed
+          }
+        }
+      }
+      clearAuth();
     }
-  }, []);
+  }, [clearAuth, tryRefreshToken]);
 
   useEffect(() => {
     const savedToken = localStorage.getItem("access_token");
@@ -62,10 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setUser(null);
-    setToken(null);
+    clearAuth();
   };
 
   const googleLogin = async () => {
