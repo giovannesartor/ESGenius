@@ -10,22 +10,22 @@ interface LogoProps {
 
 export function Logo({ className, size = "md", showText = true }: LogoProps) {
   const sizes = {
-    sm: { img: 32, text: "text-lg" },
-    md: { img: 54, text: "text-xl" },
-    lg: { img: 56, text: "text-3xl" },
-    xl: { img: 72, text: "text-4xl" },
-    "2xl": { img: 216, text: "text-5xl" },
+    sm: { img: 40, text: "text-xl" },
+    md: { img: 64, text: "text-2xl" },
+    lg: { img: 80, text: "text-4xl" },
+    xl: { img: 96, text: "text-5xl" },
+    "2xl": { img: 216, text: "text-6xl" },
   };
 
   const s = sizes[size];
 
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className ?? ""}`}>
+    <span className={`inline-flex items-center gap-3 ${className ?? ""}`}>
       <Image src="/logo-icon.png" alt="ESG360" width={s.img} height={s.img} priority />
       {showText && (
         <span className={`font-bold tracking-tight ${s.text}`}>
           <span className="text-brand-green">ESG</span>
-          <span className="text-brand-blue">enius</span>
+          <span className="text-brand-blue">360</span>
         </span>
       )}
     </span>

@@ -48,8 +48,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen">
       {/* Left panel - branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-green/5 via-background to-brand-blue/10 items-center justify-center p-12">
-        <div className="max-w-md text-center">
-          <Logo size="lg" />
+        <div className="max-w-md text-center flex flex-col items-center">
+          <Logo size="xl" />
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
             {t("auth.loginBranding")}
           </p>

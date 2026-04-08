@@ -56,8 +56,8 @@ export default function RegisterPage() {
     <div className="flex min-h-screen">
       {/* Left panel - branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-green/5 via-background to-brand-blue/10 items-center justify-center p-12">
-        <div className="max-w-md">
-          <Logo size="lg" />
+        <div className="max-w-md flex flex-col items-center lg:items-start">
+          <Logo size="xl" />
           <h2 className="mt-8 text-2xl font-bold text-foreground">
             {t("auth.registerHeading")}
           </h2>
