@@ -201,13 +201,22 @@
       "documents": "Documents",
       "reports": "Reports",
       "upload": "Upload",
-      "settings": "Settings"
+      "settings": "Settings",
+      "esgScore": "ESG Score",
+      "insights": "AI Insights",
+      "adminDashboard": "Admin Panel"
     },
     "stats": {
       "esgScore": "ESG Score",
       "companies": "Companies",
       "documents": "Documents",
       "reports": "Reports"
+    },
+    "kpi": {
+      "esgScore": "ESG Score",
+      "environmental": "Environmental",
+      "social": "Social",
+      "governance": "Governance"
     },
     "pillarScores": "ESG Pillar Scores",
     "pillars": {
@@ -216,10 +225,44 @@
       "governance": "Governance"
     },
     "overallScore": "Overall ESG Score",
+    "overall": "Overall",
     "recentActivity": "Recent Activity",
+    "esgEvolution": "ESG Score Evolution",
+    "esgEvolutionDesc": "12-month performance trend across all pillars",
+    "categoryBreakdown": "Category Breakdown",
+    "categoryBreakdownDesc": "Score distribution by ESG pillar",
+    "recentReports": "Recent Reports",
+    "recentReportsDesc": "Latest reports generated across all frameworks",
+    "viewAll": "View all",
+    "reportName": "Report",
+    "framework": "Framework",
+    "date": "Date",
+    "score": "Score",
+    "status": "Status",
+    "published": "Published",
+    "draft": "Draft",
+    "aiInsights": "AI Insights",
+    "aiInsightsDesc": "AI-powered recommendations and risk alerts",
+    "quickActions": "Quick Actions",
+    "quickActionsDesc": "Common tasks and shortcuts",
     "quickUpload": "Upload Document",
+    "quickUploadDesc": "Upload ESG documents for AI analysis",
     "quickReport": "Generate Report",
-    "quickCompany": "Manage Companies"
+    "quickReportDesc": "Create a new ESG report",
+    "quickInsights": "View Insights",
+    "quickInsightsDesc": "Explore AI-powered ESG recommendations",
+    "quickCompany": "Manage Companies",
+    "esgScoreTitle": "ESG Score Analysis",
+    "esgScoreSubtitle": "Comprehensive breakdown of your ESG performance across all pillars and indicators.",
+    "esgScorePercentile": "Your score is in the {percentile}th percentile of your industry.",
+    "esgRadar": "Indicator Coverage",
+    "esgRadarDesc": "Performance across key ESG indicators",
+    "benchmark": "Industry Benchmark",
+    "benchmarkDesc": "How you compare to industry peers",
+    "indicators": "indicators",
+    "insightsTitle": "AI-Powered Insights",
+    "insightsSubtitle": "Smart recommendations and risk alerts generated from your ESG data.",
+    "aiPowered": "AI-Powered"
   },
 
   "admin": {

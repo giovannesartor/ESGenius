@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -23,7 +23,10 @@ import {
   Menu,
   X,
   Shield,
+  Loader2,
 } from "lucide-react";
+
+const ADMIN_EMAIL = "giovannesartor@gmail.com";
 
 const adminNavItems = [
   { key: "overview", href: "/admin", icon: LayoutDashboard },
@@ -41,8 +44,38 @@ export default function AdminLayout({
 }) {
   const t = useTranslations();
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const router = useRouter();
+  const { user, logout, isLoading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
+  // Auth + Admin guard
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        router.push("/login");
+      } else if (!isAdmin) {
+        router.push("/dashboard");
+      }
+    }
+  }, [user, isLoading, isAdmin, router]);
+
+  if (isLoading || !user || !isAdmin) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
@@ -110,7 +143,7 @@ export default function AdminLayout({
             </p>
             <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
-          <button onClick={logout} className="text-muted-foreground hover:text-foreground p-1">
+          <button onClick={handleLogout} className="text-muted-foreground hover:text-foreground p-1">
             <LogOut className="h-4 w-4" />
           </button>
         </div>

@@ -201,13 +201,22 @@
       "documents": "Documentos",
       "reports": "Relatórios",
       "upload": "Enviar",
-      "settings": "Configurações"
+      "settings": "Configurações",
+      "esgScore": "Pontuação ESG",
+      "insights": "Insights IA",
+      "adminDashboard": "Painel Admin"
     },
     "stats": {
       "esgScore": "Pontuação ESG",
       "companies": "Empresas",
       "documents": "Documentos",
       "reports": "Relatórios"
+    },
+    "kpi": {
+      "esgScore": "Pontuação ESG",
+      "environmental": "Ambiental",
+      "social": "Social",
+      "governance": "Governança"
     },
     "pillarScores": "Pontuações por Pilar ESG",
     "pillars": {
@@ -216,10 +225,44 @@
       "governance": "Governança"
     },
     "overallScore": "Pontuação ESG Geral",
+    "overall": "Geral",
     "recentActivity": "Atividade Recente",
+    "esgEvolution": "Evolução do Score ESG",
+    "esgEvolutionDesc": "Tendência de desempenho de 12 meses em todos os pilares",
+    "categoryBreakdown": "Distribuição por Categoria",
+    "categoryBreakdownDesc": "Distribuição de pontuação por pilar ESG",
+    "recentReports": "Relatórios Recentes",
+    "recentReportsDesc": "Últimos relatórios gerados em todos os frameworks",
+    "viewAll": "Ver todos",
+    "reportName": "Relatório",
+    "framework": "Framework",
+    "date": "Data",
+    "score": "Pontuação",
+    "status": "Status",
+    "published": "Publicado",
+    "draft": "Rascunho",
+    "aiInsights": "Insights IA",
+    "aiInsightsDesc": "Recomendações e alertas de risco gerados por IA",
+    "quickActions": "Ações Rápidas",
+    "quickActionsDesc": "Tarefas comuns e atalhos",
     "quickUpload": "Enviar Documento",
+    "quickUploadDesc": "Envie documentos ESG para análise por IA",
     "quickReport": "Gerar Relatório",
-    "quickCompany": "Gerenciar Empresas"
+    "quickReportDesc": "Crie um novo relatório ESG",
+    "quickInsights": "Ver Insights",
+    "quickInsightsDesc": "Explore recomendações ESG geradas por IA",
+    "quickCompany": "Gerenciar Empresas",
+    "esgScoreTitle": "Análise de Pontuação ESG",
+    "esgScoreSubtitle": "Análise detalhada do seu desempenho ESG em todos os pilares e indicadores.",
+    "esgScorePercentile": "Sua pontuação está no percentil {percentile} do seu setor.",
+    "esgRadar": "Cobertura de Indicadores",
+    "esgRadarDesc": "Desempenho nos principais indicadores ESG",
+    "benchmark": "Benchmark do Setor",
+    "benchmarkDesc": "Como você se compara aos pares do setor",
+    "indicators": "indicadores",
+    "insightsTitle": "Insights com Inteligência Artificial",
+    "insightsSubtitle": "Recomendações inteligentes e alertas de risco gerados a partir dos seus dados ESG.",
+    "aiPowered": "Powered by IA"
   },
 
   "admin": {
