@@ -280,7 +280,7 @@ export default function HomePage() {
 
               {/* RIGHT — Stats Panel */}
               <motion.div
-                className="relative hidden lg:block"
+                className="hidden lg:flex flex-col gap-0"
                 initial={{ opacity: 0, x: 40, scale: 0.96 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.25 }}
@@ -345,36 +345,33 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Floating mini card — GRI coverage */}
+                {/* Bottom card row — inline, no absolute overlaps */}
                 <motion.div
-                  className="absolute -bottom-6 -left-10 glass-dark-card rounded-xl px-4 py-3 glow-blue-sm"
-                  initial={{ opacity: 0, y: 20 }}
+                  className="mt-3 grid grid-cols-2 gap-3"
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2, duration: 0.5 }}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/15">
-                      <Globe className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-white">{t("home.griCoverage")}</div>
-                      <div className="text-[10px] text-slate-500">{t("home.griComplete")}</div>
+                  {/* GRI coverage */}
+                  <div className="glass-dark-card rounded-xl px-4 py-3 glow-blue-sm">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/15">
+                        <Globe className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-white truncate">{t("home.griCoverage")}</div>
+                        <div className="text-[10px] text-slate-500">{t("home.griComplete")}</div>
+                      </div>
                     </div>
                   </div>
-                </motion.div>
-
-                {/* Floating mini card — Activity */}
-                <motion.div
-                  className="absolute -top-5 -right-8 glass-dark-card rounded-xl px-4 py-3"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.4, duration: 0.5 }}
-                >
-                  <div className="flex items-center gap-3">
-                    <Sparkline />
-                    <div>
-                      <div className="text-xs font-bold text-white">{t("home.quarterChange")}</div>
-                      <div className="text-[10px] text-slate-500">{t("home.vsLastQuarter")}</div>
+                  {/* Activity trend */}
+                  <div className="glass-dark-card rounded-xl px-4 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <Sparkline />
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-white truncate">{t("home.quarterChange")}</div>
+                        <div className="text-[10px] text-slate-500">{t("home.vsLastQuarter")}</div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
