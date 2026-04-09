@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu, X, ArrowRight } from "lucide-react";
+import { useTheme } from "next-themes";
 
 export function Navbar() {
   const t = useTranslations();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [onHero, setOnHero] = useState(true);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +28,8 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const darkMode = onHero && !mobileOpen;
+  // Only render dark nav styles when actually in dark mode on the hero section
+  const darkMode = onHero && !mobileOpen && resolvedTheme === "dark";
 
   return (
     <header
@@ -38,16 +41,16 @@ export function Navbar() {
           : "border-b border-transparent bg-background/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* Logo */}
         <Link href="/" className="relative flex items-center">
           <Image
             src="/logo-icon.png"
             alt="ESG360"
-            width={480}
-            height={320}
-            className="h-20 w-auto object-contain"
+            width={384}
+            height={256}
+            className="h-14 w-auto object-contain"
             priority
           />
         </Link>

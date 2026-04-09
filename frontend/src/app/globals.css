@@ -161,6 +161,21 @@
     #060c14;
 }
 
+/* Theme-aware hero: light mode = clean gradient on bg, dark mode = same as hero-dark */
+.hero-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 40%, rgba(16, 185, 129, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 25%, rgba(59, 130, 246, 0.05) 0%, transparent 55%),
+    var(--background);
+}
+.dark .hero-bg {
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 40%, rgba(16, 185, 129, 0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 25%, rgba(59, 130, 246, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+    #060c14;
+}
+
 /* Dot grid pattern for dark hero */
 .dot-grid-dark {
   background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);

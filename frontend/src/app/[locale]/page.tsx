@@ -201,17 +201,17 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             HERO — Dark, Immersive, Editorial
         ════════════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden hero-dark min-h-screen flex items-center">
-          {/* Background layers */}
-          <div className="absolute inset-0 dot-grid-dark" />
-          <div className="absolute inset-0 line-grid-dark opacity-60" />
+        <section className="relative overflow-hidden hero-bg min-h-screen flex items-center">
+          {/* Background layers — only visible in dark mode */}
+          <div className="absolute inset-0 dot-grid-dark hidden dark:block" />
+          <div className="absolute inset-0 line-grid-dark opacity-60 hidden dark:block" />
 
-          {/* Floating orbs */}
-          <div className="pointer-events-none absolute -left-32 top-1/4 w-[500px] h-[500px] rounded-full"
+          {/* Floating orbs — subtle in light mode, prominent in dark */}
+          <div className="pointer-events-none absolute -left-32 top-1/4 w-[500px] h-[500px] rounded-full opacity-40 dark:opacity-100"
             style={{ background: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)" }} />
-          <div className="pointer-events-none absolute -right-20 top-1/3 w-[400px] h-[400px] rounded-full"
+          <div className="pointer-events-none absolute -right-20 top-1/3 w-[400px] h-[400px] rounded-full opacity-40 dark:opacity-100"
             style={{ background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)" }} />
-          <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full"
+          <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-40 dark:opacity-100"
             style={{ background: "radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%)" }} />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-20 lg:py-0">
@@ -225,19 +225,19 @@ export default function HomePage() {
               >
                 {/* Badge */}
                 <div className="mb-7">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-400">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 dark:border-emerald-500/20 bg-emerald-500/8 dark:bg-emerald-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
                     {t("home.heroBadge")}
                   </span>
                 </div>
 
                 {/* Headline */}
-                <h1 className="text-4xl font-black tracking-tight leading-[1.06] text-white sm:text-5xl lg:text-[3.6rem] mb-6">
+                <h1 className="text-4xl font-black tracking-tight leading-[1.06] text-foreground dark:text-white sm:text-5xl lg:text-[3.6rem] mb-6">
                   {t("hero.title").split(" ").slice(0, -2).join(" ")}{" "}
                   <span className="text-gradient-emerald">{t("hero.title").split(" ").slice(-2).join(" ")}</span>
                 </h1>
 
-                <p className="text-lg text-slate-400 leading-relaxed mb-10 max-w-[480px]">
+                <p className="text-lg text-muted-foreground dark:text-slate-400 leading-relaxed mb-10 max-w-[480px]">
                   {t("hero.subtitle")}
                 </p>
 
@@ -256,7 +256,7 @@ export default function HomePage() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="h-12 px-8 text-sm font-semibold rounded-xl border-white/10 text-slate-300 hover:bg-white/5 hover:text-white hover:border-white/20 transition-all duration-200 bg-transparent"
+                      className="h-12 px-8 text-sm font-semibold rounded-xl border-border text-muted-foreground hover:bg-muted hover:text-foreground dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white dark:hover:border-white/20 dark:bg-transparent transition-all duration-200"
                     >
                       {t("hero.cta2")}
                     </Button>
@@ -270,8 +270,8 @@ export default function HomePage() {
                     { icon: <Lock className="h-3.5 w-3.5" />, text: t("home.trustEncrypted") },
                     { icon: <CheckCircle2 className="h-3.5 w-3.5" />, text: t("home.trustUptime99") },
                   ].map((b) => (
-                    <div key={b.text} className="flex items-center gap-1.5 text-slate-500">
-                      <span className="text-emerald-500/70">{b.icon}</span>
+                    <div key={b.text} className="flex items-center gap-1.5 text-muted-foreground/60 dark:text-slate-500">
+                      <span className="text-emerald-600 dark:text-emerald-500/70">{b.icon}</span>
                       <span className="text-[11px] font-semibold tracking-wide">{b.text}</span>
                     </div>
                   ))}
