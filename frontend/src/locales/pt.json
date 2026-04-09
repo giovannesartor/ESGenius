@@ -71,7 +71,25 @@
     "viewPlans": "Ver planos",
     "trustSoc2": "SOC 2",
     "trustEncrypted": "Encriptado",
-    "trustUptime99": "99.9% Uptime"
+    "trustUptime99": "99.9% Uptime",
+    "frameworkCoverageTitle": "Cobertura de Frameworks",
+    "frameworkCoverageDesc": "Cobertura média por framework ESG",
+    "ctaLabel": "Começar Agora",
+    "faqLabel": "Perguntas Frequentes",
+    "faqTitle": "Perguntas Frequentes",
+    "faqSubtitle": "Tudo o que você precisa saber sobre a plataforma ESG360.",
+    "faq1q": "Quais tipos de documentos posso enviar?",
+    "faq1a": "O ESG360 aceita PDFs, planilhas Excel (.xlsx, .csv), documentos Word e relatórios de sustentabilidade em qualquer formato padrão. Nossa engine de IA extrai e classifica automaticamente os pontos de dados ESG de conteúdo não estruturado.",
+    "faq2q": "Quais frameworks ESG são suportados?",
+    "faq2a": "Suportamos GRI Standards, SASB, TCFD, CDP, ISSB, CSRD e ODS da ONU. Os dados são mapeados automaticamente em todos os frameworks simultaneamente — você reporta uma vez e está em conformidade em todos.",
+    "faq3q": "Como funciona a análise com IA?",
+    "faq3a": "Nossa engine utiliza processamento avançado de linguagem natural para ler seus documentos, extrair pontos de dados relevantes, classificá-los por pilar ESG (Ambiental, Social, Governança) e mapeá-los aos indicadores de framework apropriados — tudo em segundos.",
+    "faq4q": "Posso gerenciar múltiplas empresas em uma conta?",
+    "faq4a": "Sim. O ESG360 suporta gestão multi-empresa com dashboards separados, scores ESG independentes e relatórios consolidados em nível de grupo a partir de uma única conta.",
+    "faq5q": "Os relatórios gerados estão prontos para auditoria?",
+    "faq5a": "Com certeza. Os relatórios são gerados seguindo as diretrizes oficiais dos frameworks e incluem todas as divulgações obrigatórias, fontes de dados e referências de metodologia. Estão prontos para auditores externos e submissões regulatórias.",
+    "faq6q": "Meus dados estão seguros?",
+    "faq6a": "Seus dados são encriptados em repouso e em trânsito. Seguimos padrões de conformidade SOC 2, implementamos controles de acesso baseados em função e mantemos trilhas de auditoria completas para cada ação na plataforma."
   },
 
   "features": {

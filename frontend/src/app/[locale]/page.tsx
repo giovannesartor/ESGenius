@@ -8,6 +8,12 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { motion, useInView } from "framer-motion";
 import {
   Brain,
@@ -277,30 +283,6 @@ export default function HomePage() {
                   </Link>
                 </div>
 
-                {/* Social proof */}
-                <div className="flex items-center gap-4">
-                  <div className="flex -space-x-2">
-                    {["#16a34a", "#2563eb", "#f59e0b", "#8b5cf6"].map((c, i) => (
-                      <div
-                        key={i}
-                        className="h-8 w-8 rounded-full border-2 border-background flex items-center justify-center text-[10px] font-bold text-white"
-                        style={{ backgroundColor: c }}
-                      >
-                        {["AB", "CD", "EF", "GH"][i]}
-                      </div>
-                    ))}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-0.5 mb-0.5">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <Star key={s} className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground">500+</span> empresas confiam na plataforma
-                    </p>
-                  </div>
-                </div>
               </motion.div>
 
               {/* Right — Animated ESG Stats Panel */}
@@ -627,12 +609,12 @@ export default function HomePage() {
                 <div className="rounded-2xl border border-border/80 bg-card shadow-lg shadow-black/4 dark:shadow-black/20 overflow-hidden">
                   <div className="px-8 pt-8 pb-6 border-b border-border/60">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-sm font-bold text-foreground">Framework Coverage</h3>
+                      <h3 className="text-sm font-bold text-foreground">{t("home.frameworkCoverageTitle")}</h3>
                       <Badge variant="secondary" className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0">
                         {t("home.averageCoverage")}: 86.2%
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground">Cobertura média por framework ESG</p>
+                    <p className="text-xs text-muted-foreground">{t("home.frameworkCoverageDesc")}</p>
                   </div>
                   <div className="px-8 py-6 space-y-5">
                     {coverageBars.map((item) => (
@@ -762,6 +744,40 @@ export default function HomePage() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
+            FAQ
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-24 sm:py-32 bg-background">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <FadeIn className="text-center mb-14">
+              <div className="mb-4 flex justify-center">
+                <SectionLabel color="blue">{t("home.faqLabel")}</SectionLabel>
+              </div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl mb-4">
+                {t("home.faqTitle")}
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
+                {t("home.faqSubtitle")}
+              </p>
+            </FadeIn>
+
+            <FadeIn>
+              <Accordion type="single" collapsible className="w-full">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <AccordionItem key={i} value={`faq-${i}`} className="border-border/60">
+                    <AccordionTrigger className="text-left text-sm font-semibold text-foreground hover:no-underline hover:text-primary transition-colors py-5">
+                      {t(`home.faq${i}q`)}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pr-8">
+                      {t(`home.faq${i}a`)}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
             FINAL CTA
         ════════════════════════════════════════════════════════════════ */}
         <section className="py-24 sm:py-32 bg-background relative overflow-hidden">
@@ -771,7 +787,7 @@ export default function HomePage() {
 
           <FadeIn className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
             <div className="mb-6 flex justify-center">
-              <SectionLabel color="emerald">Começar agora</SectionLabel>
+              <SectionLabel color="emerald">{t("home.ctaLabel")}</SectionLabel>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl mb-6">
               {t("cta.title")}

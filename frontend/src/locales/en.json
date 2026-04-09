@@ -71,7 +71,25 @@
     "viewPlans": "View plans",
     "trustSoc2": "SOC 2",
     "trustEncrypted": "Encrypted",
-    "trustUptime99": "99.9% Uptime"
+    "trustUptime99": "99.9% Uptime",
+    "frameworkCoverageTitle": "Framework Coverage",
+    "frameworkCoverageDesc": "Average coverage across ESG frameworks",
+    "ctaLabel": "Get Started",
+    "faqLabel": "FAQ",
+    "faqTitle": "Frequently Asked Questions",
+    "faqSubtitle": "Everything you need to know about the ESG360 platform.",
+    "faq1q": "What types of documents can I upload?",
+    "faq1a": "ESG360 accepts PDFs, Excel spreadsheets (.xlsx, .csv), Word documents, and sustainability reports in any standard format. Our AI engine automatically extracts and classifies ESG data points from unstructured content.",
+    "faq2q": "Which ESG frameworks are supported?",
+    "faq2a": "We support GRI Standards, SASB, TCFD, CDP, ISSB, CSRD, and UN SDGs. Data is automatically mapped across all frameworks simultaneously, so you report once and comply everywhere.",
+    "faq3q": "How does the AI-powered analysis work?",
+    "faq3a": "Our engine uses advanced natural language processing to read your documents, extract relevant data points, classify them by ESG pillar (Environmental, Social, Governance), and map them to the appropriate framework indicators — all in seconds.",
+    "faq4q": "Can I manage multiple companies on one account?",
+    "faq4a": "Yes. ESG360 supports multi-company management with separate dashboards, independent ESG scores, and consolidated group-level reporting from a single account.",
+    "faq5q": "Are the generated reports audit-ready?",
+    "faq5a": "Absolutely. Reports are generated following official framework guidelines and include all required disclosures, data sources, and methodology references. They are ready for external auditors and regulatory submissions.",
+    "faq6q": "Is my data secure?",
+    "faq6a": "Your data is encrypted at rest and in transit. We follow SOC 2 compliance standards, implement role-based access controls, and maintain complete audit trails for every action on the platform."
   },
 
   "features": {

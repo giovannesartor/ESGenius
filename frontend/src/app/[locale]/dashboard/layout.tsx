@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   LayoutDashboard,
   Building2,
@@ -337,6 +338,8 @@ export default function DashboardLayout({
             </Button>
 
             <LanguageSwitcher />
+
+            <ThemeToggle />
 
             {/* Notifications */}
             <button className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">

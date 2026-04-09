@@ -71,7 +71,25 @@
     "viewPlans": "Ver planes",
     "trustSoc2": "SOC 2",
     "trustEncrypted": "Encriptado",
-    "trustUptime99": "99.9% Uptime"
+    "trustUptime99": "99.9% Uptime",
+    "frameworkCoverageTitle": "Cobertura de Frameworks",
+    "frameworkCoverageDesc": "Cobertura promedio por framework ESG",
+    "ctaLabel": "Comenzar Ahora",
+    "faqLabel": "Preguntas Frecuentes",
+    "faqTitle": "Preguntas Frecuentes",
+    "faqSubtitle": "Todo lo que necesita saber sobre la plataforma ESG360.",
+    "faq1q": "¿Qué tipos de documentos puedo subir?",
+    "faq1a": "ESG360 acepta PDFs, hojas de cálculo Excel (.xlsx, .csv), documentos Word e informes de sostenibilidad en cualquier formato estándar. Nuestro motor de IA extrae y clasifica automáticamente los puntos de datos ESG del contenido no estructurado.",
+    "faq2q": "¿Qué marcos ESG son soportados?",
+    "faq2a": "Soportamos GRI Standards, SASB, TCFD, CDP, ISSB, CSRD y ODS de la ONU. Los datos se mapean automáticamente en todos los marcos simultáneamente — reporta una vez y cumple en todos.",
+    "faq3q": "¿Cómo funciona el análisis con IA?",
+    "faq3a": "Nuestro motor utiliza procesamiento avanzado de lenguaje natural para leer sus documentos, extraer puntos de datos relevantes, clasificarlos por pilar ESG (Ambiental, Social, Gobernanza) y mapearlos a los indicadores de marco apropiados — todo en segundos.",
+    "faq4q": "¿Puedo gestionar múltiples empresas en una cuenta?",
+    "faq4a": "Sí. ESG360 soporta gestión multi-empresa con paneles separados, scores ESG independientes e informes consolidados a nivel de grupo desde una única cuenta.",
+    "faq5q": "¿Los informes generados están listos para auditoría?",
+    "faq5a": "Absolutamente. Los informes se generan siguiendo las directrices oficiales de los marcos e incluyen todas las divulgaciones requeridas, fuentes de datos y referencias de metodología. Están listos para auditores externos y envíos regulatorios.",
+    "faq6q": "¿Mis datos están seguros?",
+    "faq6a": "Sus datos están encriptados en reposo y en tránsito. Seguimos estándares de cumplimiento SOC 2, implementamos controles de acceso basados en roles y mantenemos registros de auditoría completos para cada acción en la plataforma."
   },
 
   "features": {
