@@ -138,13 +138,7 @@ export default function DashboardLayout({
     <div className="flex flex-col h-full">
       {/* Logo area */}
       <div className={`flex items-center h-[57px] px-4 shrink-0 ${collapsed ? "justify-center" : "gap-3"}`}>
-        {collapsed ? (
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary shadow-sm shadow-primary/25">
-            <span className="text-[11px] font-extrabold text-primary-foreground tracking-tight">ES</span>
-          </div>
-        ) : (
-          <Logo size="sm" />
-        )}
+        <Logo size="sm" showText={false} />
       </div>
 
       <Separator className="opacity-60" />
@@ -309,7 +303,6 @@ export default function DashboardLayout({
             </button>
             {/* Breadcrumb */}
             <div className="hidden sm:flex items-center gap-1.5 text-xs">
-              <span className="font-semibold text-foreground/60">ESG360</span>
               <ChevronRight className="h-3 w-3 text-muted-foreground/40" />
               <span className="font-medium text-foreground">
                 {pathname === "/dashboard"

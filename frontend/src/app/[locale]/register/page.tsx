@@ -57,7 +57,7 @@ export default function RegisterPage() {
       {/* Left panel - branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-green/5 via-background to-brand-blue/10 items-center justify-center p-12">
         <div className="max-w-md flex flex-col items-center lg:items-start">
-          <Logo size="xl" />
+          <Logo size="2xl" showText={false} />
           <h2 className="mt-8 text-2xl font-bold text-foreground">
             {t("auth.registerHeading")}
           </h2>
@@ -80,7 +80,7 @@ export default function RegisterPage() {
         <Card className="w-full max-w-md border-0 shadow-none lg:border lg:shadow-sm">
           <CardHeader className="space-y-1 pb-4">
             <div className="lg:hidden flex justify-center mb-4">
-              <Logo />
+              <Logo size="lg" showText={false} />
             </div>
             <h1 className="text-2xl font-bold text-foreground text-center lg:text-left">
               {t("auth.registerTitle")}
