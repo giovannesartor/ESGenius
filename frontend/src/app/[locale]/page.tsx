@@ -162,7 +162,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className={`bento-card group relative overflow-hidden rounded-2xl border bg-white dark:bg-card p-7 ${accent.border} hover:shadow-lg ${className}`}
+      className={`bento-card group relative overflow-hidden rounded-2xl border bg-card p-7 ${accent.border} hover:shadow-lg ${className}`}
       style={{ transition: "all 0.25s ease" }}
     >
       {/* Accent glow corner */}
@@ -541,40 +541,8 @@ export default function HomePage() {
                 />
               </FadeIn>
 
-              {/* Dashboard — Large card spans 2 cols on desktop */}
-              <FadeIn delay={0.2} className="sm:col-span-1 lg:col-span-2">
-                <FeatureCard
-                  icon={<LayoutDashboard className="h-5 w-5" />}
-                  title={t("features.dashboard.title")}
-                  desc={t("features.dashboard.desc")}
-                  accent={{
-                    bg: "bg-cyan-500/10",
-                    text: "text-cyan-600 dark:text-cyan-400",
-                    border: "border-cyan-500/15 hover:border-cyan-500/30",
-                    glow: "rgba(6, 182, 212, 0.15)",
-                  }}
-                  large
-                  className="h-full"
-                  extra={
-                    <div className="grid grid-cols-4 gap-2">
-                      {[
-                        { label: "E Score", value: "87", color: "text-emerald-600 dark:text-emerald-400" },
-                        { label: "S Score", value: "72", color: "text-blue-600 dark:text-blue-400" },
-                        { label: "G Score", value: "91", color: "text-amber-600 dark:text-amber-400" },
-                        { label: "Overall", value: "83", color: "text-cyan-600 dark:text-cyan-400" },
-                      ].map((s) => (
-                        <div key={s.label} className="rounded-lg bg-muted/60 border border-border/60 p-2 text-center">
-                          <div className={`text-base font-black tabular ${s.color}`}>{s.value}</div>
-                          <div className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-wide mt-0.5">{s.label}</div>
-                        </div>
-                      ))}
-                    </div>
-                  }
-                />
-              </FadeIn>
-
               {/* Security */}
-              <FadeIn delay={0.24}>
+              <FadeIn delay={0.2}>
                 <FeatureCard
                   icon={<Shield className="h-5 w-5" />}
                   title={t("features.security.title")}
@@ -592,6 +560,42 @@ export default function HomePage() {
                         <div key={item} className="flex items-center gap-2 text-[11px] text-muted-foreground">
                           <Lock className="h-3 w-3 text-rose-500 shrink-0" />
                           {item}
+                        </div>
+                      ))}
+                    </div>
+                  }
+                />
+              </FadeIn>
+
+              {/* Dashboard — Full width card */}
+              <FadeIn delay={0.28} className="sm:col-span-2 lg:col-span-3">
+                <FeatureCard
+                  icon={<LayoutDashboard className="h-5 w-5" />}
+                  title={t("features.dashboard.title")}
+                  desc={t("features.dashboard.desc")}
+                  accent={{
+                    bg: "bg-cyan-500/10",
+                    text: "text-cyan-600 dark:text-cyan-400",
+                    border: "border-cyan-500/15 hover:border-cyan-500/30",
+                    glow: "rgba(6, 182, 212, 0.15)",
+                  }}
+                  large
+                  className="h-full"
+                  extra={
+                    <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                      {[
+                        { label: "E Score", value: "87", color: "text-emerald-600 dark:text-emerald-400" },
+                        { label: "S Score", value: "72", color: "text-blue-600 dark:text-blue-400" },
+                        { label: "G Score", value: "91", color: "text-amber-600 dark:text-amber-400" },
+                        { label: "Overall", value: "83", color: "text-cyan-600 dark:text-cyan-400" },
+                        { label: "Reports", value: "12", color: "text-violet-600 dark:text-violet-400" },
+                        { label: "Frameworks", value: "8", color: "text-rose-600 dark:text-rose-400" },
+                        { label: "Indicators", value: "156", color: "text-amber-600 dark:text-amber-400" },
+                        { label: "Compliance", value: "94%", color: "text-emerald-600 dark:text-emerald-400" },
+                      ].map((s) => (
+                        <div key={s.label} className="rounded-lg bg-muted/60 border border-border/60 p-2 text-center">
+                          <div className={`text-base font-black tabular ${s.color}`}>{s.value}</div>
+                          <div className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-wide mt-0.5">{s.label}</div>
                         </div>
                       ))}
                     </div>
@@ -677,7 +681,7 @@ export default function HomePage() {
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               {/* Section label */}
               <div className="text-center mb-16">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Platform by the numbers
                 </span>
               </div>
@@ -697,7 +701,7 @@ export default function HomePage() {
                       style={{ textShadow: "0 0 40px rgba(255,255,255,0.1)" }}>
                       {stat.value}
                     </div>
-                    <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">{stat.label}</div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -906,7 +910,7 @@ export default function HomePage() {
                   { icon: <Lock className="h-3.5 w-3.5" />, text: t("home.trustEncrypted") },
                   { icon: <CheckCircle2 className="h-3.5 w-3.5" />, text: t("home.trustUptime99") },
                 ].map((b) => (
-                  <div key={b.text} className="flex items-center gap-1.5 text-slate-600">
+                  <div key={b.text} className="flex items-center gap-1.5 text-slate-400">
                     <span className="text-emerald-600/70">{b.icon}</span>
                     <span className="text-[11px] font-semibold tracking-wide">{b.text}</span>
                   </div>

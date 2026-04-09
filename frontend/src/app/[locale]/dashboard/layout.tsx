@@ -132,7 +132,7 @@ export default function DashboardLayout({
       {/* Logo area */}
       <div className={`flex items-center h-[57px] px-4 shrink-0 border-b ${collapsed ? "justify-center" : "gap-3"}`}
         style={{ borderColor: "#1a2740" }}>
-        <Logo size="sm" showText={!collapsed} />
+        <Logo size="sm" showText={false} />
       </div>
 
       {/* Navigation */}

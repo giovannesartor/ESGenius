@@ -38,16 +38,16 @@ export function Navbar() {
           : "border-b border-transparent bg-background/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* Logo */}
         <Link href="/" className="relative flex items-center">
           <Image
             src="/logo-icon.png"
             alt="ESG360"
-            width={240}
-            height={160}
-            className="h-12 w-auto object-contain"
+            width={480}
+            height={320}
+            className="h-20 w-auto object-contain"
             priority
           />
         </Link>

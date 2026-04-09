@@ -206,10 +206,18 @@
 /* Bento card hover */
 .bento-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  /* Light mode: subtle shadow so cards stand out from bg-background */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.03);
 }
 .bento-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+}
+.dark .bento-card {
+  box-shadow: none;
+}
+.dark .bento-card:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Marquee animation */
