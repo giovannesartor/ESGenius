@@ -38,7 +38,7 @@ export default function SettingsPage() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">{t("dashboard.nav.settings")}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Manage your account settings and preferences
+          {t("dashboard.settingsSubtitle")}
         </p>
       </div>
 
@@ -47,13 +47,13 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <User className="h-5 w-5 text-primary" />
-            Profile
+            {t("dashboard.profile")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Full Name</Label>
+              <Label>{t("dashboard.fullName")}</Label>
               <Input
                 className="h-10"
                 value={fullName}
@@ -61,7 +61,7 @@ export default function SettingsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Email</Label>
+              <Label>{t("dashboard.emailLabel")}</Label>
               <Input className="h-10" value={user?.email || ""} disabled />
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function SettingsPage() {
               ) : (
                 <Settings className="mr-2 h-4 w-4" />
               )}
-              {saved ? "Saved" : "Save Changes"}
+              {saved ? t("dashboard.savedLabel") : t("dashboard.saveChanges")}
             </Button>
           </div>
         </CardContent>
@@ -85,14 +85,14 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Bell className="h-5 w-5 text-primary" />
-            Notifications
+            {t("dashboard.notifications")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {[
-            { label: "Report generation completed", desc: "Get notified when AI finishes processing" },
-            { label: "ESG score updates", desc: "Monthly score change alerts" },
-            { label: "Document processing", desc: "Alerts when uploaded files are analyzed" },
+            { label: t("dashboard.notifReportComplete"), desc: t("dashboard.notifReportCompleteDesc") },
+            { label: t("dashboard.notifScoreUpdates"), desc: t("dashboard.notifScoreUpdatesDesc") },
+            { label: t("dashboard.notifDocProcessing"), desc: t("dashboard.notifDocProcessingDesc") },
           ].map((item, i) => (
             <div key={i} className="flex items-center justify-between py-2">
               <div>
@@ -114,24 +114,24 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Shield className="h-5 w-5 text-primary" />
-            Security
+            {t("dashboard.security")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-foreground">Password</p>
-              <p className="text-xs text-muted-foreground">Last changed 30 days ago</p>
+              <p className="text-sm font-medium text-foreground">{t("dashboard.passwordLabel")}</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.passwordLastChanged")}</p>
             </div>
-            <Button variant="outline" size="sm">Change Password</Button>
+            <Button variant="outline" size="sm">{t("dashboard.changePassword")}</Button>
           </div>
           <Separator />
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-foreground">Two-factor authentication</p>
-              <p className="text-xs text-muted-foreground">Add extra security to your account</p>
+              <p className="text-sm font-medium text-foreground">{t("dashboard.twoFactor")}</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.twoFactorDesc")}</p>
             </div>
-            <Badge variant="outline" className="text-xs">Coming soon</Badge>
+            <Badge variant="outline" className="text-xs">{t("dashboard.comingSoon")}</Badge>
           </div>
         </CardContent>
       </Card>

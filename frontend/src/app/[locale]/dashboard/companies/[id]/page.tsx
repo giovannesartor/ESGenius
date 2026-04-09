@@ -77,7 +77,7 @@ export default function CompanyDetailPage() {
         if (companyData.status === "fulfilled") {
           setCompany(companyData.value as Company);
         } else {
-          setError("Company not found");
+          setError(t("dashboard.companyNotFound"));
           return;
         }
 
@@ -89,7 +89,7 @@ export default function CompanyDetailPage() {
           setDocuments((docsData.value as Document[]) || []);
         }
       } catch {
-        setError("Failed to load company data");
+        setError(t("dashboard.failedLoadCompany"));
       } finally {
         setLoading(false);
       }
@@ -111,10 +111,10 @@ export default function CompanyDetailPage() {
       <div className="p-6 max-w-4xl mx-auto">
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <Building2 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-          <h2 className="text-lg font-semibold mb-2">{error || "Company not found"}</h2>
+          <h2 className="text-lg font-semibold mb-2">{error || t("dashboard.companyNotFound")}</h2>
           <Button variant="outline" onClick={() => router.push("/dashboard/companies")}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Companies
+            {t("dashboard.backToCompanies")}
           </Button>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function CompanyDetailPage() {
           <Link href={`/dashboard/upload?company=${companyId}`}>
             <Button variant="outline" size="sm">
               <Upload className="mr-2 h-4 w-4" />
-              Upload Document
+              {t("dashboard.uploadDocument")}
             </Button>
           </Link>
         </div>
@@ -191,7 +191,7 @@ export default function CompanyDetailPage() {
                 <div className={`p-2 rounded-lg ${scoreBg(scores.overall_score)}`}>
                   <TrendingUp className={`h-4 w-4 ${scoreColor(scores.overall_score)}`} />
                 </div>
-                <span className="text-sm font-medium text-muted-foreground">Overall ESG</span>
+                <span className="text-sm font-medium text-muted-foreground">{t("dashboard.overallEsg")}</span>
               </div>
               <p className={`text-3xl font-bold ${scoreColor(scores.overall_score)}`}>
                 {scores.overall_score.toFixed(1)}
@@ -205,7 +205,7 @@ export default function CompanyDetailPage() {
                 <div className="p-2 rounded-lg bg-emerald-50">
                   <Leaf className="h-4 w-4 text-emerald-600" />
                 </div>
-                <span className="text-sm font-medium text-muted-foreground">Environmental</span>
+                <span className="text-sm font-medium text-muted-foreground">{t("dashboard.environmentalLabel")}</span>
               </div>
               <p className={`text-3xl font-bold ${scoreColor(scores.environmental_score)}`}>
                 {scores.environmental_score.toFixed(1)}
@@ -219,7 +219,7 @@ export default function CompanyDetailPage() {
                 <div className="p-2 rounded-lg bg-blue-50">
                   <Scale className="h-4 w-4 text-blue-600" />
                 </div>
-                <span className="text-sm font-medium text-muted-foreground">Social</span>
+                <span className="text-sm font-medium text-muted-foreground">{t("dashboard.socialLabel")}</span>
               </div>
               <p className={`text-3xl font-bold ${scoreColor(scores.social_score)}`}>
                 {scores.social_score.toFixed(1)}
@@ -233,7 +233,7 @@ export default function CompanyDetailPage() {
                 <div className="p-2 rounded-lg bg-purple-50">
                   <Shield className="h-4 w-4 text-purple-600" />
                 </div>
-                <span className="text-sm font-medium text-muted-foreground">Governance</span>
+                <span className="text-sm font-medium text-muted-foreground">{t("dashboard.governanceLabel")}</span>
               </div>
               <p className={`text-3xl font-bold ${scoreColor(scores.governance_score)}`}>
                 {scores.governance_score.toFixed(1)}
@@ -250,23 +250,23 @@ export default function CompanyDetailPage() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-primary" />
-              Data Summary
+              {t("dashboard.dataSummary")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-muted-foreground">Total Data Points</span>
+                <span className="text-sm text-muted-foreground">{t("dashboard.totalDataPoints")}</span>
                 <span className="text-sm font-semibold">{scores?.total_data_points ?? 0}</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-muted-foreground">Documents Uploaded</span>
+                <span className="text-sm text-muted-foreground">{t("dashboard.documentsUploaded")}</span>
                 <span className="text-sm font-semibold">{documents.length}</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-muted-foreground">Created</span>
+                <span className="text-sm text-muted-foreground">{t("dashboard.createdLabel")}</span>
                 <span className="text-sm font-semibold">
                   {company.created_at
                     ? new Date(company.created_at).toLocaleDateString()
@@ -282,14 +282,14 @@ export default function CompanyDetailPage() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <FileText className="h-4 w-4 text-primary" />
-              Recent Documents
+              {t("dashboard.recentDocuments")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {documents.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <FileText className="h-8 w-8 text-muted-foreground/30 mb-2" />
-                <p className="text-sm text-muted-foreground">No documents yet</p>
+                <p className="text-sm text-muted-foreground">{t("dashboard.noDocumentsTitle")}</p>
               </div>
             ) : (
               <div className="space-y-2">

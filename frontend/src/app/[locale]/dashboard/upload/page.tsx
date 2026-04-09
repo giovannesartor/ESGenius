@@ -113,12 +113,12 @@ export default function UploadPage() {
       <div className="p-6 max-w-3xl mx-auto">
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <Building2 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No company found</h3>
+          <h3 className="text-lg font-semibold mb-2">{t("dashboard.noCompanyTitle")}</h3>
           <p className="text-sm text-muted-foreground mb-6">
-            Create a company first to upload documents.
+            {t("dashboard.noCompanyUploadDesc")}
           </p>
           <Link href="/dashboard/companies/new">
-            <Button className="font-semibold">Create Company</Button>
+            <Button className="font-semibold">{t("dashboard.createCompany")}</Button>
           </Link>
         </div>
       </div>
@@ -132,7 +132,7 @@ export default function UploadPage() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">{t("dashboard.nav.upload")}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Upload ESG documents for AI-powered analysis — <span className="font-medium text-foreground">{company.name}</span>
+          {t("dashboard.uploadSubtitle")} — <span className="font-medium text-foreground">{company.name}</span>
         </p>
       </div>
 
@@ -152,10 +152,10 @@ export default function UploadPage() {
             <CloudUpload className="h-10 w-10 text-primary" />
           </div>
           <h3 className="text-lg font-semibold text-foreground mb-1">
-            Drop your files here
+            {t("dashboard.dropTitle")}
           </h3>
           <p className="text-sm text-muted-foreground mb-6 text-center max-w-sm">
-            Supports PDF, Excel, Word, and CSV files up to 50MB each
+            {t("dashboard.dropDesc")}
           </p>
           <label>
             <input
@@ -169,7 +169,7 @@ export default function UploadPage() {
             <Button variant="outline" className="font-semibold cursor-pointer" asChild>
               <span>
                 <Upload className="mr-2 h-4 w-4" />
-                Browse Files
+                {t("dashboard.browseFiles")}
               </span>
             </Button>
           </label>
@@ -182,7 +182,7 @@ export default function UploadPage() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium">
-                {files.length} file{files.length !== 1 ? "s" : ""} selected
+                {t("dashboard.filesSelected", { count: files.length })}
               </CardTitle>
               {pendingCount > 0 && (
                 <Button
@@ -196,7 +196,7 @@ export default function UploadPage() {
                   ) : (
                     <Upload className="mr-2 h-3.5 w-3.5" />
                   )}
-                  Upload {pendingCount > 1 ? `All (${pendingCount})` : ""}
+                  {t("dashboard.uploadAll", { count: pendingCount })}
                 </Button>
               )}
             </div>
@@ -220,20 +220,20 @@ export default function UploadPage() {
                   {file.status === "done" ? (
                     <Badge variant="secondary" className="text-xs text-emerald-600 bg-emerald-50">
                       <CheckCircle2 className="mr-1 h-3 w-3" />
-                      Done
+                      {t("dashboard.statusDone")}
                     </Badge>
                   ) : file.status === "error" ? (
                     <Badge variant="secondary" className="text-xs text-destructive bg-destructive/10">
                       <AlertCircle className="mr-1 h-3 w-3" />
-                      Error
+                      {t("dashboard.statusError")}
                     </Badge>
                   ) : file.status === "uploading" ? (
                     <Badge variant="secondary" className="text-xs">
                       <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                      Uploading
+                      {t("dashboard.statusUploading")}
                     </Badge>
                   ) : (
-                    <Badge variant="secondary" className="text-xs">Pending</Badge>
+                    <Badge variant="secondary" className="text-xs">{t("dashboard.statusPending")}</Badge>
                   )}
                   {file.status !== "uploading" && (
                     <button

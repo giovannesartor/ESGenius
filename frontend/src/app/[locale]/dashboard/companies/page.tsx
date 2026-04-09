@@ -48,7 +48,7 @@ export default function CompaniesPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t("dashboard.nav.companies")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage your company profiles and ESG assessments
+            {t("dashboard.companiesSubtitle")}
           </p>
         </div>
         <Link href="/dashboard/companies/new">
@@ -63,7 +63,7 @@ export default function CompaniesPage() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search companies..."
+          placeholder={t("dashboard.searchCompanies")}
           className="pl-10 h-10"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -78,14 +78,14 @@ export default function CompaniesPage() {
         <Card className="border-dashed border-2 border-border/50">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Building2 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-1">No companies yet</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-1">{t("dashboard.noCompaniesTitle")}</h3>
             <p className="text-sm text-muted-foreground mb-6 text-center max-w-sm">
-              Create your first company profile to start tracking ESG data
+              {t("dashboard.noCompaniesDesc")}
             </p>
             <Link href="/dashboard/companies/new">
               <Button className="font-semibold">
                 <Plus className="mr-2 h-4 w-4" />
-                Create Company
+                {t("dashboard.createCompany")}
               </Button>
             </Link>
           </CardContent>
@@ -122,7 +122,7 @@ export default function CompaniesPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-1 mt-4 text-xs text-primary font-medium">
-                    View Details <ArrowRight className="h-3 w-3" />
+                    {t("dashboard.viewDetails")} <ArrowRight className="h-3 w-3" />
                   </div>
                 </CardContent>
               </Card>

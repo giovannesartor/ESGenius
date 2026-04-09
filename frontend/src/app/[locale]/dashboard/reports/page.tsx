@@ -56,10 +56,10 @@ export default function ReportsPage() {
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <Building2 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No company found</h3>
-          <p className="text-sm text-muted-foreground mb-6">Create a company first.</p>
+          <h3 className="text-lg font-semibold mb-2">{t("dashboard.noCompanyTitle")}</h3>
+          <p className="text-sm text-muted-foreground mb-6">{t("dashboard.noCompanyGenericDesc")}</p>
           <Link href="/dashboard/companies/new">
-            <Button className="font-semibold">Create Company</Button>
+            <Button className="font-semibold">{t("dashboard.createCompany")}</Button>
           </Link>
         </div>
       </div>
@@ -72,12 +72,12 @@ export default function ReportsPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t("dashboard.nav.reports")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Generate and manage ESG compliance reports — <span className="font-medium text-foreground">{company.name}</span>
+            {t("dashboard.reportsSubtitle")} — <span className="font-medium text-foreground">{company.name}</span>
           </p>
         </div>
         <Button className="font-semibold" disabled>
           <Plus className="mr-2 h-4 w-4" />
-          Generate Report
+          {t("dashboard.generateReport")}
         </Button>
       </div>
 
@@ -89,13 +89,13 @@ export default function ReportsPage() {
         <Card className="border-dashed border-2 border-border/50">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <BarChart3 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-            <h3 className="text-lg font-semibold mb-1">No reports yet</h3>
+            <h3 className="text-lg font-semibold mb-1">{t("dashboard.noReportsTitle")}</h3>
             <p className="text-sm text-muted-foreground mb-6 text-center max-w-sm">
-              Upload ESG documents first, then generate compliance reports
+              {t("dashboard.noReportsDesc")}
             </p>
             <Link href="/dashboard/upload">
               <Button variant="outline" className="font-semibold">
-                Upload Documents
+                {t("dashboard.uploadDocuments")}
               </Button>
             </Link>
           </CardContent>
@@ -130,7 +130,7 @@ export default function ReportsPage() {
                     ) : (
                       <FileText className="mr-1 h-3 w-3" />
                     )}
-                    {report.status === "published" ? "Published" : report.status || "Draft"}
+                    {report.status === "published" ? t("dashboard.published") : report.status || t("dashboard.draft")}
                   </Badge>
                 </div>
                 <CardTitle className="text-base font-semibold mt-2">

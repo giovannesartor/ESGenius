@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCompany } from "@/hooks/useCompany";
-import { analyticsApi } from "@/services/api";
+import { analyticsApi, reportApi } from "@/services/api";
 import {
   TrendingUp,
   TrendingDown,
@@ -45,106 +45,7 @@ import {
   Cell,
 } from "recharts";
 
-// ─── Fallback Mock Data ───
-
-const MOCK_STATS = [
-  {
-    key: "esgScore",
-    value: "72",
-    change: "+4.2%",
-    trend: "up" as const,
-    icon: Target,
-    accent: "text-brand-green",
-    bg: "bg-brand-green/10",
-    border: "border-brand-green/20",
-  },
-  {
-    key: "environmental",
-    value: "68",
-    change: "+2.1%",
-    trend: "up" as const,
-    icon: Leaf,
-    accent: "text-emerald-600",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/20",
-  },
-  {
-    key: "social",
-    value: "75",
-    change: "+5.8%",
-    trend: "up" as const,
-    icon: Users,
-    accent: "text-brand-blue",
-    bg: "bg-brand-blue/10",
-    border: "border-brand-blue/20",
-  },
-  {
-    key: "governance",
-    value: "73",
-    change: "-1.2%",
-    trend: "down" as const,
-    icon: Activity,
-    accent: "text-brand-gold",
-    bg: "bg-brand-gold/10",
-    border: "border-brand-gold/20",
-  },
-];
-
-const MOCK_EVOLUTION = [
-  { month: "Jan", overall: 58, env: 52, social: 62, gov: 60 },
-  { month: "Feb", overall: 60, env: 55, social: 63, gov: 62 },
-  { month: "Mar", overall: 62, env: 57, social: 64, gov: 65 },
-  { month: "Apr", overall: 63, env: 58, social: 66, gov: 65 },
-  { month: "May", overall: 65, env: 60, social: 68, gov: 67 },
-  { month: "Jun", overall: 64, env: 59, social: 67, gov: 66 },
-  { month: "Jul", overall: 66, env: 61, social: 69, gov: 68 },
-  { month: "Aug", overall: 67, env: 63, social: 70, gov: 68 },
-  { month: "Sep", overall: 68, env: 64, social: 71, gov: 69 },
-  { month: "Oct", overall: 69, env: 65, social: 72, gov: 70 },
-  { month: "Nov", overall: 71, env: 67, social: 74, gov: 72 },
-  { month: "Dec", overall: 72, env: 68, social: 75, gov: 73 },
-];
-
-const MOCK_CATEGORY = [
-  { name: "Environmental", value: 68, color: "#16a34a" },
-  { name: "Social", value: 75, color: "#2563eb" },
-  { name: "Governance", value: 73, color: "#f59e0b" },
-];
-
-const MOCK_REPORTS = [
-  { id: "1", name: "GRI Annual Report 2025", date: "2026-03-15", score: 78, framework: "GRI", status: "published" },
-  { id: "2", name: "SASB Disclosure Q1 2026", date: "2026-03-01", score: 72, framework: "SASB", status: "published" },
-  { id: "3", name: "TCFD Climate Report", date: "2026-02-20", score: 65, framework: "TCFD", status: "draft" },
-  { id: "4", name: "CDP Response 2025", date: "2026-02-10", score: 70, framework: "CDP", status: "published" },
-  { id: "5", name: "SDG Impact Assessment", date: "2026-01-28", score: 82, framework: "SDGs", status: "draft" },
-];
-
-const MOCK_INSIGHTS = [
-  {
-    type: "recommendation" as const,
-    title: "Improve Carbon Disclosure",
-    desc: "Your Scope 3 emissions reporting covers only 40% of categories. Expanding coverage could improve your Environmental score by 8-12 points.",
-    icon: Lightbulb,
-    color: "text-brand-green bg-brand-green/10",
-    priority: "high",
-  },
-  {
-    type: "risk" as const,
-    title: "Governance Gap Detected",
-    desc: "Board diversity metrics are below industry median. Consider documenting your diversity policy to avoid regulatory scrutiny.",
-    icon: ShieldAlert,
-    color: "text-destructive bg-destructive/10",
-    priority: "high",
-  },
-  {
-    type: "recommendation" as const,
-    title: "Supply Chain Due Diligence",
-    desc: "Add supplier ESG assessments to strengthen your Social pillar. Current coverage: 23% of Tier 1 suppliers.",
-    icon: Lightbulb,
-    color: "text-brand-blue bg-brand-blue/10",
-    priority: "medium",
-  },
-];
+// ─── Quick Actions Config ───
 
 const quickActions = [
   {
@@ -204,10 +105,18 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const { company, token } = useCompany();
 
-  const [stats, setStats] = useState(MOCK_STATS);
-  const [categoryBreakdown, setCategoryBreakdown] = useState(MOCK_CATEGORY);
-  const [overallValue, setOverallValue] = useState(72);
-  const [aiInsights, setAiInsights] = useState(MOCK_INSIGHTS);
+  const EMPTY_STATS = [
+    { key: "esgScore", value: "—", change: "", trend: "up" as const, icon: Target, accent: "text-brand-green", bg: "bg-brand-green/10", border: "border-brand-green/20" },
+    { key: "environmental", value: "—", change: "", trend: "up" as const, icon: Leaf, accent: "text-emerald-600", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+    { key: "social", value: "—", change: "", trend: "up" as const, icon: Users, accent: "text-brand-blue", bg: "bg-brand-blue/10", border: "border-brand-blue/20" },
+    { key: "governance", value: "—", change: "", trend: "up" as const, icon: Activity, accent: "text-brand-gold", bg: "bg-brand-gold/10", border: "border-brand-gold/20" },
+  ];
+
+  const [stats, setStats] = useState(EMPTY_STATS);
+  const [categoryBreakdown, setCategoryBreakdown] = useState<Array<{ name: string; value: number; color: string }>>([]);
+  const [overallValue, setOverallValue] = useState(0);
+  const [aiInsights, setAiInsights] = useState<Array<{ type: "recommendation" | "risk"; title: string; desc: string; icon: typeof Lightbulb; color: string; priority: string }>>([]);
+  const [reports, setReports] = useState<Array<{ id: string; name: string; date: string; score: number; framework: string; status: string }>>([]);
 
   useEffect(() => {
     if (!token || !company) return;
@@ -226,19 +135,19 @@ export default function DashboardPage() {
         setOverallValue(overall);
 
         setStats([
-          { ...MOCK_STATS[0], value: String(overall) },
-          { ...MOCK_STATS[1], value: String(pillarMap["E"]?.score ?? 0) },
-          { ...MOCK_STATS[2], value: String(pillarMap["S"]?.score ?? 0) },
-          { ...MOCK_STATS[3], value: String(pillarMap["G"]?.score ?? 0) },
+          { ...EMPTY_STATS[0], value: String(overall) },
+          { ...EMPTY_STATS[1], value: String(pillarMap["E"]?.score ?? 0) },
+          { ...EMPTY_STATS[2], value: String(pillarMap["S"]?.score ?? 0) },
+          { ...EMPTY_STATS[3], value: String(pillarMap["G"]?.score ?? 0) },
         ]);
 
         setCategoryBreakdown([
-          { name: "Environmental", value: pillarMap["E"]?.score ?? 0, color: "#16a34a" },
-          { name: "Social", value: pillarMap["S"]?.score ?? 0, color: "#2563eb" },
-          { name: "Governance", value: pillarMap["G"]?.score ?? 0, color: "#f59e0b" },
+          { name: t("dashboard.pillars.environmental"), value: pillarMap["E"]?.score ?? 0, color: "#16a34a" },
+          { name: t("dashboard.pillars.social"), value: pillarMap["S"]?.score ?? 0, color: "#2563eb" },
+          { name: t("dashboard.pillars.governance"), value: pillarMap["G"]?.score ?? 0, color: "#f59e0b" },
         ]);
       } catch {
-        // Use mock data fallback
+        // No fallback
       }
     };
 
@@ -271,12 +180,32 @@ export default function DashboardPage() {
           );
         }
       } catch {
-        // Use mock data fallback
+        // No fallback
+      }
+    };
+
+    const fetchReports = async () => {
+      try {
+        const raw = await reportApi.list(token, company.id);
+        const data = raw as Array<{ id: string; title?: string; framework_code?: string; status: string; created_at: string }>;
+        setReports(
+          data.slice(0, 5).map((r) => ({
+            id: r.id,
+            name: r.title || `Report ${r.id.slice(0, 8)}`,
+            date: new Date(r.created_at).toLocaleDateString(),
+            score: 0,
+            framework: r.framework_code || "—",
+            status: r.status,
+          }))
+        );
+      } catch {
+        // No fallback
       }
     };
 
     fetchScores();
     fetchKPIs();
+    fetchReports();
   }, [token, company]);
 
   return (
@@ -372,37 +301,8 @@ export default function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent className="px-2 sm:px-4 pt-4 pb-4">
-            <div className="h-[280px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={MOCK_EVOLUTION} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.5} />
-                  <XAxis
-                    dataKey="month"
-                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    domain={[40, 100]}
-                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "var(--card)",
-                      border: "1px solid var(--border)",
-                      borderRadius: "12px",
-                      fontSize: "12px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                    }}
-                  />
-                  <Line type="monotone" dataKey="overall" stroke="var(--foreground)" strokeWidth={2.5} dot={false} />
-                  <Line type="monotone" dataKey="env" stroke="#16a34a" strokeWidth={1.5} dot={false} strokeDasharray="4 4" />
-                  <Line type="monotone" dataKey="social" stroke="#2563eb" strokeWidth={1.5} dot={false} strokeDasharray="4 4" />
-                  <Line type="monotone" dataKey="gov" stroke="#f59e0b" strokeWidth={1.5} dot={false} strokeDasharray="4 4" />
-                </LineChart>
-              </ResponsiveContainer>
+            <div className="h-[280px] w-full flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">{t("dashboard.noEvolutionData")}</p>
             </div>
           </CardContent>
         </Card>
@@ -495,6 +395,12 @@ export default function DashboardPage() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
+          {reports.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <FileText className="h-10 w-10 text-muted-foreground/40 mb-3" />
+              <p className="text-sm text-muted-foreground">{t("dashboard.noReportsYet")}</p>
+            </div>
+          ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -502,13 +408,12 @@ export default function DashboardPage() {
                   <th className="text-left text-xs font-medium text-muted-foreground px-6 py-3">{t("dashboard.reportName")}</th>
                   <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">{t("dashboard.framework")}</th>
                   <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">{t("dashboard.date")}</th>
-                  <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">{t("dashboard.score")}</th>
                   <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">{t("dashboard.status")}</th>
                   <th className="text-right text-xs font-medium text-muted-foreground px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody>
-                {MOCK_REPORTS.map((report) => (
+                {reports.map((report) => (
                   <tr key={report.id} className="border-b border-border/30 hover:bg-muted/40 transition-colors">
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
@@ -525,23 +430,6 @@ export default function DashboardPage() {
                     </td>
                     <td className="px-4 py-3.5">
                       <span className="text-sm text-muted-foreground">{report.date}</span>
-                    </td>
-                    <td className="px-4 py-3.5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${
-                              report.score >= 75
-                                ? "bg-brand-green"
-                                : report.score >= 60
-                                ? "bg-brand-gold"
-                                : "bg-destructive"
-                            }`}
-                            style={{ width: `${report.score}%` }}
-                          />
-                        </div>
-                        <span className="text-sm font-semibold text-foreground">{report.score}</span>
-                      </div>
                     </td>
                     <td className="px-4 py-3.5">
                       <Badge
@@ -570,6 +458,7 @@ export default function DashboardPage() {
               </tbody>
             </table>
           </div>
+          )}
         </CardContent>
       </Card>
 
@@ -599,7 +488,12 @@ export default function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent className="px-6 pb-6 space-y-3">
-            {aiInsights.map((insight, i) => (
+            {aiInsights.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8">
+                <Brain className="h-8 w-8 text-muted-foreground/40 mb-2" />
+                <p className="text-sm text-muted-foreground">{t("dashboard.noDataTitle")}</p>
+              </div>
+            ) : aiInsights.map((insight, i) => (
               <div
                 key={i}
                 className="flex items-start gap-4 p-4 rounded-xl border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors"
@@ -618,7 +512,7 @@ export default function DashboardPage() {
                           : "bg-brand-gold/10 text-brand-gold border border-brand-gold/20"
                       }`}
                     >
-                      {insight.priority === "high" ? "High" : "Medium"}
+                      {insight.priority === "high" ? t("dashboard.priorityHigh") : t("dashboard.priorityMedium")}
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">{insight.desc}</p>

@@ -41,7 +41,7 @@ export default function NewCompanyPage() {
       router.push("/dashboard/companies");
     } catch (err: unknown) {
       const apiErr = err as { data?: { detail?: string } };
-      setError(apiErr?.data?.detail || "Failed to create company");
+      setError(apiErr?.data?.detail || t("dashboard.failedCreateCompany"));
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ export default function NewCompanyPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t("dashboard.newCompany")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Create a new company profile for ESG assessment
+            {t("dashboard.newCompanySubtitle")}
           </p>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function NewCompanyPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Building2 className="h-5 w-5 text-primary" />
-            Company Details
+            {t("dashboard.companyDetails")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -80,10 +80,10 @@ export default function NewCompanyPage() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="name">Company Name *</Label>
+              <Label htmlFor="name">{t("dashboard.companyNameLabel")} *</Label>
               <Input
                 id="name"
-                placeholder="e.g., Acme Corporation"
+                placeholder={t("dashboard.companyNamePlaceholder")}
                 className="h-11"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -93,20 +93,20 @@ export default function NewCompanyPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="sector">Sector</Label>
+                <Label htmlFor="sector">{t("dashboard.sectorLabel")}</Label>
                 <Input
                   id="sector"
-                  placeholder="e.g., Technology"
+                  placeholder={t("dashboard.sectorPlaceholder")}
                   className="h-11"
                   value={form.sector}
                   onChange={(e) => setForm({ ...form, sector: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
+                <Label htmlFor="country">{t("dashboard.countryLabel")}</Label>
                 <Input
                   id="country"
-                  placeholder="e.g., Brazil"
+                  placeholder={t("dashboard.countryPlaceholder")}
                   className="h-11"
                   value={form.country}
                   onChange={(e) => setForm({ ...form, country: e.target.value })}
@@ -115,10 +115,10 @@ export default function NewCompanyPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="size">Company Size</Label>
+              <Label htmlFor="size">{t("dashboard.companySize")}</Label>
               <Input
                 id="size"
-                placeholder="e.g., 1000-5000 employees"
+                placeholder={t("dashboard.sizePlaceholder")}
                 className="h-11"
                 value={form.size}
                 onChange={(e) => setForm({ ...form, size: e.target.value })}
@@ -126,10 +126,10 @@ export default function NewCompanyPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("dashboard.descriptionLabel")}</Label>
               <Textarea
                 id="description"
-                placeholder="Brief description of the company..."
+                placeholder={t("dashboard.descriptionPlaceholder")}
                 rows={3}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -138,11 +138,11 @@ export default function NewCompanyPage() {
 
             <div className="flex justify-end gap-3 pt-2">
               <Button type="button" variant="outline" onClick={() => router.back()}>
-                Cancel
+                {t("dashboard.cancelLabel")}
               </Button>
               <Button type="submit" disabled={loading} className="font-semibold">
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Create Company
+                {t("dashboard.createCompany")}
               </Button>
             </div>
           </form>

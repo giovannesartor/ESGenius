@@ -1,12 +1,13 @@
 "use client";
 
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { motion, useInView } from "framer-motion";
 import {
   Brain,
   BarChart3,
@@ -19,7 +20,6 @@ import {
   TrendingUp,
   FileText,
   Zap,
-  Globe2,
   ChevronRight,
   Lock,
   LineChart,
@@ -27,6 +27,32 @@ import {
   Users,
   Building2,
 } from "lucide-react";
+
+/* ── Scroll-animated wrapper ─────────────────────────────────────── */
+function FadeIn({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.5, ease: "easeOut", delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 /* ── Animated ESG Score Ring (CSS only) ──────────────────────────── */
 function ScoreRing({
@@ -47,7 +73,7 @@ function ScoreRing({
     <div className="flex flex-col items-center gap-2">
       <div className="relative h-24 w-24">
         <svg className="h-24 w-24 -rotate-90" viewBox="0 0 96 96">
-          <circle cx="48" cy="48" r="42" fill="none" stroke="#f1f5f9" strokeWidth="6" />
+          <circle cx="48" cy="48" r="42" fill="none" className="stroke-muted" strokeWidth="6" />
           <circle
             cx="48"
             cy="48"
@@ -65,10 +91,10 @@ function ScoreRing({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xl font-extrabold text-slate-900">{score}</span>
+          <span className="text-xl font-extrabold text-foreground">{score}</span>
         </div>
       </div>
-      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{label}</span>
     </div>
   );
 }
@@ -116,8 +142,16 @@ const frameworks = [
 export default function HomePage() {
   const t = useTranslations();
 
+  const coverageBars = [
+    { key: "fwGri", pct: 94, color: "bg-emerald-500" },
+    { key: "fwSasb", pct: 88, color: "bg-blue-500" },
+    { key: "fwTcfd", pct: 91, color: "bg-amber-500" },
+    { key: "fwCdp", pct: 76, color: "bg-violet-500" },
+    { key: "fwIssb", pct: 82, color: "bg-teal-500" },
+  ];
+
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-background">
       <style>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(8px); }
@@ -127,10 +161,6 @@ export default function HomePage() {
           from { opacity: 0; transform: translateX(20px); }
           to { opacity: 1; transform: translateX(0); }
         }
-        @keyframes countPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-        }
       `}</style>
 
       <Navbar />
@@ -139,32 +169,37 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             HERO — Split: Text Left + Animated Stats Right
         ════════════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden bg-white">
+        <section className="relative overflow-hidden bg-background">
           <div className="absolute inset-0 -z-10">
-            <div className="absolute top-0 right-0 w-[50%] h-full bg-slate-50/80" />
-            <div className="absolute bottom-0 left-[45%] w-px h-[60%] bg-gradient-to-t from-slate-200/60 to-transparent" />
+            <div className="absolute top-0 right-0 w-[50%] h-full bg-muted/50" />
+            <div className="absolute bottom-0 left-[45%] w-px h-[60%] bg-gradient-to-t from-border/60 to-transparent" />
           </div>
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[calc(100vh-4rem)] py-16 lg:py-0">
               {/* Left — Text */}
-              <div className="max-w-xl">
+              <motion.div
+                className="max-w-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <div className="flex items-center gap-3 mb-8">
                   <div className="h-px w-8 bg-emerald-500" />
-                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">
+                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
                     {t("home.heroBadge")}
                   </span>
                 </div>
 
-                <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.5rem] leading-[1.1] mb-6">
+                <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem] leading-[1.1] mb-6">
                   {t("hero.title")}
                 </h1>
 
-                <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-md">
+                <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-md">
                   {t("hero.subtitle")}
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-3 mb-12">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Link href="/register">
                     <Button
                       size="lg"
@@ -178,41 +213,32 @@ export default function HomePage() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="h-12 px-8 text-sm font-semibold rounded-lg border-slate-300 text-slate-700 hover:bg-slate-50"
+                      className="h-12 px-8 text-sm font-semibold rounded-lg"
                     >
                       {t("hero.cta2")}
                     </Button>
                   </Link>
                 </div>
+              </motion.div>
 
-                {/* Trust numbers */}
-                <div className="flex gap-10">
-                  {[
-                    { value: "500+", label: t("home.trustCompanies") },
-                    { value: "10M+", label: t("home.trustDataPoints") },
-                    { value: "99.9%", label: t("home.trustUptime") },
-                  ].map((item) => (
-                    <div key={item.label}>
-                      <div className="text-2xl font-extrabold text-slate-900">{item.value}</div>
-                      <div className="text-xs font-medium text-slate-400 mt-0.5">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right — Animated ESG Stats Panel */}
-              <div className="relative" style={{ animation: "slideIn 0.8s ease-out 0.3s both" }}>
+              {/* Right — Animated ESG Stats Panel (hidden on mobile) */}
+              <motion.div
+                className="relative hidden lg:block"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
+              >
                 {/* Main card */}
-                <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/50">
+                <div className="rounded-2xl border border-border bg-card p-8 shadow-xl shadow-black/5 dark:shadow-black/20">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-8">
                     <div>
-                      <div className="text-sm font-bold text-slate-900">{t("home.statsTitle")}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">{t("home.statsSubtitle")}</div>
+                      <div className="text-sm font-bold text-foreground">{t("home.statsTitle")}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{t("home.statsSubtitle")}</div>
                     </div>
-                    <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1">
+                    <div className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1">
                       <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                      <span className="text-[11px] font-bold text-emerald-700">{t("home.statsOnTrack")}</span>
+                      <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">{t("home.statsOnTrack")}</span>
                     </div>
                   </div>
 
@@ -224,12 +250,12 @@ export default function HomePage() {
                   </div>
 
                   {/* Overall score bar */}
-                  <div className="rounded-xl bg-slate-50 p-5 mb-6">
+                  <div className="rounded-xl bg-muted p-5 mb-6">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t("home.overallScore")}</span>
-                      <span className="text-2xl font-extrabold text-slate-900">83.4</span>
+                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("home.overallScore")}</span>
+                      <span className="text-2xl font-extrabold text-foreground">83.4</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+                    <div className="h-2 w-full rounded-full bg-border overflow-hidden">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-blue-500 to-amber-500"
                         style={{
@@ -249,11 +275,11 @@ export default function HomePage() {
                       { label: t("home.trend"), value: "+12%", icon: <TrendingUp className="h-3.5 w-3.5" /> },
                     ].map((m) => (
                       <div key={m.label} className="text-center">
-                        <div className="flex items-center justify-center gap-1.5 text-slate-400 mb-1">
+                        <div className="flex items-center justify-center gap-1.5 text-muted-foreground mb-1">
                           {m.icon}
                           <span className="text-[10px] font-bold uppercase tracking-wider">{m.label}</span>
                         </div>
-                        <div className="text-sm font-extrabold text-slate-900">{m.value}</div>
+                        <div className="text-sm font-extrabold text-foreground">{m.value}</div>
                       </div>
                     ))}
                   </div>
@@ -261,34 +287,34 @@ export default function HomePage() {
 
                 {/* Floating mini card — Framework coverage */}
                 <div
-                  className="absolute -bottom-4 -left-6 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-lg shadow-slate-200/40"
+                  className="absolute -bottom-4 -left-6 rounded-xl border border-border bg-card px-5 py-4 shadow-lg shadow-black/5 dark:shadow-black/20"
                   style={{ animation: "fadeInUp 0.6s ease-out 1.2s both" }}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
                       <Layers className="h-4 w-4" />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-slate-900">{t("home.griCoverage")}</div>
-                      <div className="text-[11px] text-slate-400">{t("home.griComplete")}</div>
+                      <div className="text-xs font-bold text-foreground">{t("home.griCoverage")}</div>
+                      <div className="text-[11px] text-muted-foreground">{t("home.griComplete")}</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Floating mini card — Activity */}
                 <div
-                  className="absolute -top-3 -right-4 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-lg shadow-slate-200/40"
+                  className="absolute -top-3 -right-4 rounded-xl border border-border bg-card px-5 py-4 shadow-lg shadow-black/5 dark:shadow-black/20"
                   style={{ animation: "fadeInUp 0.6s ease-out 1.5s both" }}
                 >
                   <div className="flex items-center gap-3">
                     <MiniChart />
                     <div>
-                      <div className="text-xs font-bold text-slate-900">{t("home.quarterChange")}</div>
-                      <div className="text-[11px] text-slate-400">{t("home.vsLastQuarter")}</div>
+                      <div className="text-xs font-bold text-foreground">{t("home.quarterChange")}</div>
+                      <div className="text-[11px] text-muted-foreground">{t("home.vsLastQuarter")}</div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -296,16 +322,16 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             TRUST BAR — Frameworks
         ════════════════════════════════════════════════════════════════ */}
-        <section className="border-y border-slate-100 bg-slate-50/50">
+        <section className="border-y border-border bg-muted/50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10">
-              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 shrink-0">
+              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground shrink-0">
                 {t("home.frameworksLabel")}
               </span>
-              <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+              <div className="h-4 w-px bg-border hidden sm:block" />
               <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
                 {frameworks.map((fw) => (
-                  <span key={fw.name} className="text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors cursor-default">
+                  <span key={fw.name} className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors cursor-default">
                     {fw.name}
                   </span>
                 ))}
@@ -317,40 +343,39 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             FEATURES — Clean 3-col grid
         ════════════════════════════════════════════════════════════════ */}
-        <section id="features" className="py-24 sm:py-32 bg-white">
+        <section id="features" className="py-24 sm:py-32 bg-background">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             {/* Section header */}
-            <div className="max-w-2xl mb-16">
+            <FadeIn className="max-w-2xl mb-16">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-8 bg-emerald-500" />
-                <span className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">
+                <span className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
                   {t("home.capabilitiesLabel")}
                 </span>
               </div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl mb-4">
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl mb-4">
                 {t("features.title")}
               </h2>
-              <p className="text-base text-slate-500 leading-relaxed max-w-lg">
+              <p className="text-base text-muted-foreground leading-relaxed max-w-lg">
                 {t("features.subtitle")}
               </p>
-            </div>
+            </FadeIn>
 
-            <div className="grid grid-cols-1 gap-px bg-slate-100 sm:grid-cols-2 lg:grid-cols-3 rounded-2xl overflow-hidden border border-slate-100">
+            <div className="grid grid-cols-1 gap-px bg-border sm:grid-cols-2 lg:grid-cols-3 rounded-2xl overflow-hidden border border-border">
               {featureKeys.map((key, i) => (
-                <div
-                  key={key}
-                  className="bg-white p-8 group hover:bg-slate-50/50 transition-colors"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-500 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors mb-5">
-                    {featureIcons[key]}
+                <FadeIn key={key} delay={i * 0.08}>
+                  <div className="bg-card p-8 group hover:bg-muted/50 transition-colors h-full">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-muted-foreground group-hover:bg-emerald-500/10 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-5">
+                      {featureIcons[key]}
+                    </div>
+                    <h3 className="text-sm font-bold text-foreground mb-2">
+                      {t(`features.${key}.title`)}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {t(`features.${key}.desc`)}
+                    </p>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900 mb-2">
-                    {t(`features.${key}.title`)}
-                  </h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">
-                    {t(`features.${key}.desc`)}
-                  </p>
-                </div>
+                </FadeIn>
               ))}
             </div>
           </div>
@@ -359,22 +384,22 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             HOW IT WORKS — Numbered steps, horizontal
         ════════════════════════════════════════════════════════════════ */}
-        <section className="py-24 sm:py-32 bg-slate-50 border-y border-slate-100">
+        <section className="py-24 sm:py-32 bg-muted/50 border-y border-border">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mb-16">
+            <FadeIn className="max-w-2xl mb-16">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-8 bg-blue-500" />
-                <span className="text-xs font-bold uppercase tracking-[0.15em] text-blue-700">
+                <span className="text-xs font-bold uppercase tracking-[0.15em] text-blue-600 dark:text-blue-400">
                   {t("home.processLabel")}
                 </span>
               </div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl mb-4">
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl mb-4">
                 {t("home.howItWorksTitle")}
               </h2>
-              <p className="text-base text-slate-500 leading-relaxed max-w-lg">
+              <p className="text-base text-muted-foreground leading-relaxed max-w-lg">
                 {t("home.howItWorksSubtitle")}
               </p>
-            </div>
+            </FadeIn>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
@@ -396,21 +421,21 @@ export default function HomePage() {
                   title: t("home.step3Title"),
                   desc: t("home.step3Desc"),
                 },
-              ].map((item) => (
-                <div key={item.step} className="relative">
+              ].map((item, i) => (
+                <FadeIn key={item.step} delay={i * 0.15}>
                   <div className="flex items-start gap-5">
                     <div className="shrink-0">
-                      <span className="block text-5xl font-extrabold text-slate-200 leading-none">{item.step}</span>
+                      <span className="block text-5xl font-extrabold text-border leading-none">{item.step}</span>
                     </div>
                     <div className="pt-2">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 mb-4">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-card border border-border text-muted-foreground mb-4">
                         {item.icon}
                       </div>
-                      <h3 className="text-sm font-bold text-slate-900 mb-2">{item.title}</h3>
-                      <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                      <h3 className="text-sm font-bold text-foreground mb-2">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
-                </div>
+                </FadeIn>
               ))}
             </div>
           </div>
@@ -419,42 +444,44 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             METRICS BAND — Dark section with key numbers
         ════════════════════════════════════════════════════════════════ */}
-        <section className="bg-slate-900 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: "98%", label: t("home.metricAccuracy"), icon: <Zap className="h-5 w-5" /> },
-                { value: "3x", label: t("home.metricFaster"), icon: <TrendingUp className="h-5 w-5" /> },
-                { value: "150+", label: t("home.metricIndicators"), icon: <LineChart className="h-5 w-5" /> },
-                { value: "24/7", label: t("home.metricMonitoring"), icon: <Shield className="h-5 w-5" /> },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="flex items-center justify-center text-slate-600 mb-3">
-                    {stat.icon}
+        <FadeIn>
+          <section className="bg-slate-900 dark:bg-slate-950 py-20">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {[
+                  { value: "98%", label: t("home.metricAccuracy"), icon: <Zap className="h-5 w-5" /> },
+                  { value: "3x", label: t("home.metricFaster"), icon: <TrendingUp className="h-5 w-5" /> },
+                  { value: "150+", label: t("home.metricIndicators"), icon: <LineChart className="h-5 w-5" /> },
+                  { value: "24/7", label: t("home.metricMonitoring"), icon: <Shield className="h-5 w-5" /> },
+                ].map((stat) => (
+                  <div key={stat.label} className="text-center">
+                    <div className="flex items-center justify-center text-slate-600 mb-3">
+                      {stat.icon}
+                    </div>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white mb-1">{stat.value}</div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-500">{stat.label}</div>
                   </div>
-                  <div className="text-3xl sm:text-4xl font-extrabold text-white mb-1">{stat.value}</div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-500">{stat.label}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </FadeIn>
 
         {/* ════════════════════════════════════════════════════════════════
             WHY ESG360 — Split section
         ════════════════════════════════════════════════════════════════ */}
-        <section className="py-24 sm:py-32 bg-white">
+        <section className="py-24 sm:py-32 bg-background">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Left — reasons */}
-              <div>
+              <FadeIn>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-px w-8 bg-amber-500" />
-                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-amber-700">
+                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-amber-600 dark:text-amber-400">
                     {t("home.whyLabel")}
                   </span>
                 </div>
-                <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl mb-12">
+                <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl mb-12">
                   {t("home.whyTitle")}
                 </h2>
 
@@ -482,50 +509,46 @@ export default function HomePage() {
                     },
                   ].map((item) => (
                     <div key={item.title} className="flex gap-4">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                         {item.icon}
                       </div>
                       <div>
-                        <h3 className="text-sm font-bold text-slate-900 mb-1">{item.title}</h3>
-                        <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                        <h3 className="text-sm font-bold text-foreground mb-1">{item.title}</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </FadeIn>
 
               {/* Right — visual card */}
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 lg:p-10">
-                <div className="space-y-6">
-                  {/* Coverage bars */}
-                  {[
-                    { fw: "GRI Standards", pct: 94, color: "bg-emerald-500" },
-                    { fw: "SASB", pct: 88, color: "bg-blue-500" },
-                    { fw: "TCFD", pct: 91, color: "bg-amber-500" },
-                    { fw: "CDP", pct: 76, color: "bg-violet-500" },
-                    { fw: "ISSB", pct: 82, color: "bg-teal-500" },
-                  ].map((item) => (
-                    <div key={item.fw}>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-semibold text-slate-700">{item.fw}</span>
-                        <span className="text-sm font-extrabold text-slate-900">{item.pct}%</span>
+              <FadeIn delay={0.2}>
+                <div className="rounded-2xl border border-border bg-muted/50 p-8 lg:p-10">
+                  <div className="space-y-6">
+                    {/* Coverage bars */}
+                    {coverageBars.map((item) => (
+                      <div key={item.key}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-semibold text-foreground/80">{t(`home.${item.key}`)}</span>
+                          <span className="text-sm font-extrabold text-foreground">{item.pct}%</span>
+                        </div>
+                        <div className="h-2 w-full rounded-full bg-border overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${item.color}`}
+                            style={{ width: `${item.pct}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${item.color}`}
-                          style={{ width: `${item.pct}%` }}
-                        />
-                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-8 pt-6 border-t border-border">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("home.averageCoverage")}</span>
+                      <span className="text-lg font-extrabold text-foreground">86.2%</span>
                     </div>
-                  ))}
-                </div>
-                <div className="mt-8 pt-6 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{t("home.averageCoverage")}</span>
-                    <span className="text-lg font-extrabold text-slate-900">86.2%</span>
                   </div>
                 </div>
-              </div>
+              </FadeIn>
             </div>
           </div>
         </section>
@@ -533,102 +556,106 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             PRICING
         ════════════════════════════════════════════════════════════════ */}
-        <section className="py-24 sm:py-32 bg-slate-50 border-y border-slate-100">
+        <section className="py-24 sm:py-32 bg-muted/50 border-y border-border">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto text-center mb-16">
+            <FadeIn className="max-w-2xl mx-auto text-center mb-16">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div className="h-px w-8 bg-emerald-500" />
-                <span className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">
+                <span className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
                   {t("home.pricingLabel")}
                 </span>
                 <div className="h-px w-8 bg-emerald-500" />
               </div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl mb-4">
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl mb-4">
                 {t("pricing.title")}
               </h2>
-              <p className="text-base text-slate-500 leading-relaxed">{t("pricing.subtitle")}</p>
-            </div>
+              <p className="text-base text-muted-foreground leading-relaxed">{t("pricing.subtitle")}</p>
+            </FadeIn>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {/* Professional */}
-              <div className="relative rounded-2xl bg-white border-2 border-emerald-500 shadow-xl shadow-emerald-100/50 overflow-hidden">
-                <div className="bg-emerald-500 px-8 py-3 text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-white">
-                    {t("pricing.popular")}
-                  </span>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-lg font-extrabold text-slate-900 mb-1">
-                    {t("pricing.professional.name")}
-                  </h3>
-                  <p className="text-sm text-slate-500 mb-6">
-                    {t("pricing.professional.desc")}
-                  </p>
-                  <div className="flex items-baseline gap-1 mb-8">
-                    <span className="text-4xl font-extrabold text-slate-900 tracking-tight">
-                      {t("pricing.professional.price")}
+              <FadeIn>
+                <div className="relative rounded-2xl bg-card border-2 border-emerald-500 shadow-xl shadow-emerald-500/10 overflow-hidden h-full">
+                  <div className="bg-emerald-500 px-8 py-3 text-center">
+                    <span className="text-xs font-bold uppercase tracking-wider text-white">
+                      {t("pricing.popular")}
                     </span>
-                    <span className="text-sm text-slate-400 font-medium">{t("pricing.professional.period")}</span>
                   </div>
-                  <Link href="/register" className="block mb-8">
-                    <Button className="w-full h-11 font-bold text-sm rounded-lg">
-                      {t("pricing.professional.cta")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Separator className="mb-6" />
-                  <ul className="space-y-3">
-                    {Array.from({ length: 7 }, (_, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                        <span className="text-sm text-slate-600">
-                          {t(`pricing.professional.feature${i + 1}`)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="p-8">
+                    <h3 className="text-lg font-extrabold text-foreground mb-1">
+                      {t("pricing.professional.name")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6">
+                      {t("pricing.professional.desc")}
+                    </p>
+                    <div className="flex items-baseline gap-1 mb-8">
+                      <span className="text-4xl font-extrabold text-foreground tracking-tight">
+                        {t("pricing.professional.price")}
+                      </span>
+                      <span className="text-sm text-muted-foreground font-medium">{t("pricing.professional.period")}</span>
+                    </div>
+                    <Link href="/register" className="block mb-8">
+                      <Button className="w-full h-11 font-bold text-sm rounded-lg">
+                        {t("pricing.professional.cta")}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <Separator className="mb-6" />
+                    <ul className="space-y-3">
+                      {Array.from({ length: 7 }, (_, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
+                          <span className="text-sm text-muted-foreground">
+                            {t(`pricing.professional.feature${i + 1}`)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              </FadeIn>
 
               {/* Enterprise */}
-              <div className="rounded-2xl bg-white border border-slate-200 overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all">
-                <div className="bg-slate-100 px-8 py-3 text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Enterprise
-                  </span>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-lg font-extrabold text-slate-900 mb-1">
-                    {t("pricing.enterprise.name")}
-                  </h3>
-                  <p className="text-sm text-slate-500 mb-6">
-                    {t("pricing.enterprise.desc")}
-                  </p>
-                  <div className="flex items-baseline gap-1 mb-8">
-                    <span className="text-4xl font-extrabold text-slate-900 tracking-tight">
-                      {t("pricing.enterprise.price")}
+              <FadeIn delay={0.1}>
+                <div className="rounded-2xl bg-card border border-border overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all h-full">
+                  <div className="bg-muted px-8 py-3 text-center">
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      {t("pricing.enterprise.name")}
                     </span>
-                    <span className="text-sm text-slate-400 font-medium">{t("pricing.enterprise.period")}</span>
                   </div>
-                  <Link href="/register" className="block mb-8">
-                    <Button variant="outline" className="w-full h-11 font-bold text-sm rounded-lg border-slate-300">
-                      {t("pricing.enterprise.cta")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Separator className="mb-6" />
-                  <ul className="space-y-3">
-                    {Array.from({ length: 8 }, (_, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <CheckCircle2 className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
-                        <span className="text-sm text-slate-600">
-                          {t(`pricing.enterprise.feature${i + 1}`)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="p-8">
+                    <h3 className="text-lg font-extrabold text-foreground mb-1">
+                      {t("pricing.enterprise.name")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6">
+                      {t("pricing.enterprise.desc")}
+                    </p>
+                    <div className="flex items-baseline gap-1 mb-8">
+                      <span className="text-4xl font-extrabold text-foreground tracking-tight">
+                        {t("pricing.enterprise.price")}
+                      </span>
+                      <span className="text-sm text-muted-foreground font-medium">{t("pricing.enterprise.period")}</span>
+                    </div>
+                    <Link href="/register" className="block mb-8">
+                      <Button variant="outline" className="w-full h-11 font-bold text-sm rounded-lg">
+                        {t("pricing.enterprise.cta")}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <Separator className="mb-6" />
+                    <ul className="space-y-3">
+                      {Array.from({ length: 8 }, (_, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <CheckCircle2 className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                          <span className="text-sm text-muted-foreground">
+                            {t(`pricing.enterprise.feature${i + 1}`)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              </FadeIn>
             </div>
           </div>
         </section>
@@ -636,12 +663,12 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             FINAL CTA
         ════════════════════════════════════════════════════════════════ */}
-        <section className="py-24 sm:py-32 bg-white">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl mb-6">
+        <section className="py-24 sm:py-32 bg-background">
+          <FadeIn className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl mb-6">
               {t("cta.title")}
             </h2>
-            <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl mx-auto">
               {t("cta.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
@@ -652,7 +679,7 @@ export default function HomePage() {
                 </Button>
               </Link>
               <Link href="/pricing">
-                <Button variant="ghost" size="lg" className="h-12 px-8 text-sm font-semibold text-slate-600 hover:text-slate-900">
+                <Button variant="ghost" size="lg" className="h-12 px-8 text-sm font-semibold text-muted-foreground hover:text-foreground">
                   {t("home.viewPlans")}
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
@@ -660,23 +687,23 @@ export default function HomePage() {
             </div>
 
             {/* Trust signals */}
-            <div className="flex items-center justify-center gap-6 text-xs font-medium text-slate-400">
+            <div className="flex items-center justify-center gap-6 text-xs font-medium text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Shield className="h-3.5 w-3.5" />
                 <span>{t("home.trustSoc2")}</span>
               </div>
-              <div className="h-3 w-px bg-slate-200" />
+              <div className="h-3 w-px bg-border" />
               <div className="flex items-center gap-1.5">
                 <Lock className="h-3.5 w-3.5" />
                 <span>{t("home.trustEncrypted")}</span>
               </div>
-              <div className="h-3 w-px bg-slate-200" />
+              <div className="h-3 w-px bg-border" />
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5" />
                 <span>{t("home.trustUptime99")}</span>
               </div>
             </div>
-          </div>
+          </FadeIn>
         </section>
       </main>
 

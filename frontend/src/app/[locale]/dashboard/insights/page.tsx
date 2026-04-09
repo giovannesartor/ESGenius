@@ -28,7 +28,7 @@ import {
   Loader2,
 } from "lucide-react";
 
-// ─── Mock Data ───
+// ─── Types ───
 
 interface Insight {
   id: string;
@@ -41,102 +41,6 @@ interface Insight {
   timeframe?: string;
   status: "new" | "in-progress" | "completed";
 }
-
-const MOCK_INSIGHTS: Insight[] = [
-  {
-    id: "1",
-    type: "risk",
-    category: "governance",
-    title: "Board Diversity Gap",
-    description: "Your board composition shows less than 25% gender diversity, which is below the industry median of 35%. This could trigger increased regulatory scrutiny under upcoming EU CSRD requirements and may negatively impact your governance rating in major ESG indices.",
-    impact: "high",
-    estimatedImprovement: "+8 pts Governance",
-    timeframe: "6-12 months",
-    status: "new",
-  },
-  {
-    id: "2",
-    type: "recommendation",
-    category: "environmental",
-    title: "Expand Scope 3 Emissions Coverage",
-    description: "Currently reporting Scope 3 emissions for only 6 of 15 categories. Categories 1 (Purchased Goods), 4 (Upstream Transport), and 11 (Use of Sold Products) represent an estimated 45% of your total carbon footprint and should be prioritized.",
-    impact: "high",
-    estimatedImprovement: "+12 pts Environmental",
-    timeframe: "3-6 months",
-    status: "new",
-  },
-  {
-    id: "3",
-    type: "improvement",
-    category: "social",
-    title: "Supply Chain Labor Assessment",
-    description: "Only 23% of Tier 1 suppliers have undergone labor practice assessments. Industry leaders assess 80%+. Implementing a systematic supplier ESG screening program would significantly improve your Social pillar score.",
-    impact: "medium",
-    estimatedImprovement: "+6 pts Social",
-    timeframe: "6-12 months",
-    status: "in-progress",
-  },
-  {
-    id: "4",
-    type: "recommendation",
-    category: "environmental",
-    title: "Set Science-Based Targets (SBTi)",
-    description: "Your emission reduction targets are not yet aligned with the Paris Agreement. Committing to SBTi would demonstrate climate leadership and is increasingly expected by institutional investors for portfolio inclusion.",
-    impact: "high",
-    estimatedImprovement: "+10 pts Environmental",
-    timeframe: "3-6 months",
-    status: "new",
-  },
-  {
-    id: "5",
-    type: "risk",
-    category: "general",
-    title: "Data Completeness Alert",
-    description: "12 out of 48 material ESG indicators have no data for the current reporting period. Missing data significantly reduces confidence scores and may result in lower third-party ESG ratings.",
-    impact: "high",
-    timeframe: "Immediate",
-    status: "new",
-  },
-  {
-    id: "6",
-    type: "improvement",
-    category: "governance",
-    title: "Anti-Corruption Training Coverage",
-    description: "Anti-corruption training reaches 67% of employees. Extending coverage to 95%+ with documented records would strengthen your Ethics & Compliance score and meet GRI 205 disclosure requirements.",
-    impact: "medium",
-    estimatedImprovement: "+4 pts Governance",
-    timeframe: "3-6 months",
-    status: "completed",
-  },
-  {
-    id: "7",
-    type: "recommendation",
-    category: "social",
-    title: "Employee Well-being Program",
-    description: "Implement a comprehensive mental health and well-being program. Companies with such programs report 23% lower turnover and score 15% higher on Social pillar assessments.",
-    impact: "medium",
-    estimatedImprovement: "+5 pts Social",
-    timeframe: "6-12 months",
-    status: "new",
-  },
-  {
-    id: "8",
-    type: "risk",
-    category: "environmental",
-    title: "Water Stress Exposure",
-    description: "32% of your operational facilities are in high water-stress regions. CDP Water Security disclosure is recommended. This is also a material risk under TCFD physical risk categories.",
-    impact: "medium",
-    timeframe: "Monitor quarterly",
-    status: "in-progress",
-  },
-];
-
-const MOCK_SUMMARY = [
-  { label: "Total Insights", value: "8", icon: Brain, color: "text-violet-600 bg-violet-500/10" },
-  { label: "High Priority", value: "4", icon: AlertTriangle, color: "text-destructive bg-destructive/10" },
-  { label: "Potential Improvement", value: "+45 pts", icon: TrendingUp, color: "text-brand-green bg-brand-green/10" },
-  { label: "AI Confidence", value: "92%", icon: Sparkles, color: "text-brand-blue bg-brand-blue/10" },
-];
 
 function getCategoryIcon(category: string) {
   switch (category) {
@@ -159,13 +63,13 @@ function getCategoryColor(category: string) {
 function getTypeConfig(type: string) {
   switch (type) {
     case "risk":
-      return { icon: ShieldAlert, label: "Risk Alert", color: "text-destructive bg-destructive/10 border-destructive/20" };
+      return { icon: ShieldAlert, color: "text-destructive bg-destructive/10 border-destructive/20" };
     case "recommendation":
-      return { icon: Lightbulb, label: "Recommendation", color: "text-brand-green bg-brand-green/10 border-brand-green/20" };
+      return { icon: Lightbulb, color: "text-brand-green bg-brand-green/10 border-brand-green/20" };
     case "improvement":
-      return { icon: Zap, label: "Improvement", color: "text-brand-blue bg-brand-blue/10 border-brand-blue/20" };
+      return { icon: Zap, color: "text-brand-blue bg-brand-blue/10 border-brand-blue/20" };
     default:
-      return { icon: Brain, label: "Insight", color: "text-violet-600 bg-violet-500/10 border-violet-500/20" };
+      return { icon: Brain, color: "text-violet-600 bg-violet-500/10 border-violet-500/20" };
   }
 }
 
@@ -178,12 +82,12 @@ function getImpactBadge(impact: string) {
   }
 }
 
-function getStatusBadge(status: string) {
+function getStatusClass(status: string) {
   switch (status) {
-    case "new": return { label: "New", class: "bg-brand-blue/10 text-brand-blue border-brand-blue/20" };
-    case "in-progress": return { label: "In Progress", class: "bg-brand-gold/10 text-brand-gold border-brand-gold/20" };
-    case "completed": return { label: "Completed", class: "bg-brand-green/10 text-brand-green border-brand-green/20" };
-    default: return { label: status, class: "bg-muted text-muted-foreground" };
+    case "new": return "bg-brand-blue/10 text-brand-blue border-brand-blue/20";
+    case "in-progress": return "bg-brand-gold/10 text-brand-gold border-brand-gold/20";
+    case "completed": return "bg-brand-green/10 text-brand-green border-brand-green/20";
+    default: return "bg-muted text-muted-foreground";
   }
 }
 
@@ -213,9 +117,9 @@ export default function InsightsPage() {
   const t = useTranslations();
   const { company, loading: companyLoading, token } = useCompany();
   const [activeTab, setActiveTab] = useState("all");
-  const [insights, setInsights] = useState<Insight[]>(MOCK_INSIGHTS);
-  const [summaryStats, setSummaryStats] = useState(MOCK_SUMMARY);
+  const [insights, setInsights] = useState<Insight[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     if (!token || !company) return;
@@ -239,19 +143,12 @@ export default function InsightsPage() {
             status: "new" as const,
           }));
           setInsights(mapped);
-
-          const highPriority = mapped.filter((m) => m.impact === "high").length;
-          setSummaryStats([
-            { label: "Total Insights", value: String(mapped.length), icon: Brain, color: "text-violet-600 bg-violet-500/10" },
-            { label: "High Priority", value: String(highPriority), icon: AlertTriangle, color: "text-destructive bg-destructive/10" },
-            { label: "KPIs Generated", value: String(data.kpis.length), icon: TrendingUp, color: "text-brand-green bg-brand-green/10" },
-            { label: "AI Confidence", value: "92%", icon: Sparkles, color: "text-brand-blue bg-brand-blue/10" },
-          ]);
         }
       } catch {
-        // Fall back to mock data
+        // No fallback to mock data
       } finally {
         setDataLoading(false);
+        setDataLoaded(true);
       }
     };
 
@@ -261,6 +158,27 @@ export default function InsightsPage() {
   const filtered = activeTab === "all"
     ? insights
     : insights.filter((i) => i.type === activeTab);
+
+  const highPriority = insights.filter((m) => m.impact === "high").length;
+
+  const summaryStats = [
+    { label: t("dashboard.totalInsights"), value: String(insights.length), icon: Brain, color: "text-violet-600 bg-violet-500/10" },
+    { label: t("dashboard.highPriority"), value: String(highPriority), icon: AlertTriangle, color: "text-destructive bg-destructive/10" },
+    { label: t("dashboard.kpisGenerated"), value: String(insights.length), icon: TrendingUp, color: "text-brand-green bg-brand-green/10" },
+    { label: t("dashboard.aiConfidence"), value: insights.length > 0 ? "92%" : "—", icon: Sparkles, color: "text-brand-blue bg-brand-blue/10" },
+  ];
+
+  const impactLabelMap: Record<string, string> = {
+    high: t("dashboard.impactHigh"),
+    medium: t("dashboard.impactMedium"),
+    low: t("dashboard.impactLow"),
+  };
+
+  const statusLabelMap: Record<string, string> = {
+    new: t("dashboard.statusNew"),
+    "in-progress": t("dashboard.statusInProgress"),
+    completed: t("dashboard.statusCompleted"),
+  };
 
   if (companyLoading || dataLoading) {
     return (
@@ -314,22 +232,33 @@ export default function InsightsPage() {
       </div>
 
       {/* ─── Tabs + Insights List ─── */}
+      {dataLoaded && insights.length === 0 ? (
+        <Card className="border-dashed border-2 border-border/50 rounded-2xl">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <Brain className="h-12 w-12 text-muted-foreground/40 mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-1">{t("dashboard.noDataTitle")}</h3>
+            <p className="text-sm text-muted-foreground text-center max-w-sm">
+              {t("dashboard.noDataDesc")}
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-muted/50 border border-border/50">
           <TabsTrigger value="all">
-            All ({insights.length})
+            {t("dashboard.tabAll")} ({insights.length})
           </TabsTrigger>
           <TabsTrigger value="risk">
             <ShieldAlert className="mr-1.5 h-3.5 w-3.5" />
-            Risks ({insights.filter(i => i.type === "risk").length})
+            {t("dashboard.tabRisks")} ({insights.filter(i => i.type === "risk").length})
           </TabsTrigger>
           <TabsTrigger value="recommendation">
             <Lightbulb className="mr-1.5 h-3.5 w-3.5" />
-            Recommendations ({insights.filter(i => i.type === "recommendation").length})
+            {t("dashboard.tabRecommendations")} ({insights.filter(i => i.type === "recommendation").length})
           </TabsTrigger>
           <TabsTrigger value="improvement">
             <Zap className="mr-1.5 h-3.5 w-3.5" />
-            Improvements ({insights.filter(i => i.type === "improvement").length})
+            {t("dashboard.tabImprovements")} ({insights.filter(i => i.type === "improvement").length})
           </TabsTrigger>
         </TabsList>
 
@@ -338,7 +267,6 @@ export default function InsightsPage() {
             const typeConfig = getTypeConfig(insight.type);
             const TypeIcon = typeConfig.icon;
             const CategoryIcon = getCategoryIcon(insight.category);
-            const statusBadge = getStatusBadge(insight.status);
 
             return (
               <Card key={insight.id} className="border-border/60 rounded-2xl hover:shadow-md transition-all duration-200">
@@ -357,20 +285,20 @@ export default function InsightsPage() {
                           className={`text-[10px] px-1.5 py-0 h-4 border ${getCategoryColor(insight.category)}`}
                         >
                           <CategoryIcon className="mr-0.5 h-2.5 w-2.5" />
-                          {insight.category.charAt(0).toUpperCase() + insight.category.slice(1)}
+                          {t(`dashboard.pillars.${insight.category}`)}
                         </Badge>
                         <Badge
                           variant="secondary"
                           className={`text-[10px] px-1.5 py-0 h-4 border capitalize ${getImpactBadge(insight.impact)}`}
                         >
-                          {insight.impact} impact
+                          {impactLabelMap[insight.impact] || insight.impact}
                         </Badge>
                         <Badge
                           variant="secondary"
-                          className={`text-[10px] px-1.5 py-0 h-4 border ${statusBadge.class}`}
+                          className={`text-[10px] px-1.5 py-0 h-4 border ${getStatusClass(insight.status)}`}
                         >
                           {insight.status === "completed" && <CheckCircle2 className="mr-0.5 h-2.5 w-2.5" />}
-                          {statusBadge.label}
+                          {statusLabelMap[insight.status] || insight.status}
                         </Badge>
                       </div>
 
@@ -409,12 +337,13 @@ export default function InsightsPage() {
             <Card className="border-dashed border-2 border-border/50 rounded-2xl">
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Brain className="h-10 w-10 text-muted-foreground/40 mb-3" />
-                <p className="text-sm font-medium text-muted-foreground">No insights in this category</p>
+                <p className="text-sm font-medium text-muted-foreground">{t("dashboard.noInsightsCategory")}</p>
               </CardContent>
             </Card>
           )}
         </TabsContent>
       </Tabs>
+      )}
     </div>
   );
 }

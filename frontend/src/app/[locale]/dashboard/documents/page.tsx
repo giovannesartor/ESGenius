@@ -29,12 +29,12 @@ interface Document {
   page_count?: number;
 }
 
-const statusConfig: Record<string, { icon: typeof CheckCircle2; label: string; className: string; spin?: boolean }> = {
-  processing: { icon: Loader2, label: "Processing", className: "text-amber-600 bg-amber-50", spin: true },
-  processed: { icon: CheckCircle2, label: "Completed", className: "text-emerald-600 bg-emerald-50" },
-  completed: { icon: CheckCircle2, label: "Completed", className: "text-emerald-600 bg-emerald-50" },
-  failed: { icon: AlertCircle, label: "Failed", className: "text-destructive bg-destructive/10" },
-  uploaded: { icon: Clock, label: "Uploaded", className: "text-blue-600 bg-blue-50" },
+const statusConfig: Record<string, { icon: typeof CheckCircle2; labelKey: string; className: string; spin?: boolean }> = {
+  processing: { icon: Loader2, labelKey: "statusProcessing", className: "text-amber-600 bg-amber-50", spin: true },
+  processed: { icon: CheckCircle2, labelKey: "statusCompleted", className: "text-emerald-600 bg-emerald-50" },
+  completed: { icon: CheckCircle2, labelKey: "statusCompleted", className: "text-emerald-600 bg-emerald-50" },
+  failed: { icon: AlertCircle, labelKey: "statusFailed", className: "text-destructive bg-destructive/10" },
+  uploaded: { icon: Clock, labelKey: "statusUploaded", className: "text-blue-600 bg-blue-50" },
 };
 
 export default function DocumentsPage() {
@@ -70,10 +70,10 @@ export default function DocumentsPage() {
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <Building2 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No company found</h3>
-          <p className="text-sm text-muted-foreground mb-6">Create a company first.</p>
+          <h3 className="text-lg font-semibold mb-2">{t("dashboard.noCompanyTitle")}</h3>
+          <p className="text-sm text-muted-foreground mb-6">{t("dashboard.noCompanyGenericDesc")}</p>
           <Link href="/dashboard/companies/new">
-            <Button className="font-semibold">Create Company</Button>
+            <Button className="font-semibold">{t("dashboard.createCompany")}</Button>
           </Link>
         </div>
       </div>
@@ -86,13 +86,13 @@ export default function DocumentsPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t("dashboard.nav.documents")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            View and manage uploaded ESG documents — <span className="font-medium text-foreground">{company.name}</span>
+            {t("dashboard.documentsSubtitle")} — <span className="font-medium text-foreground">{company.name}</span>
           </p>
         </div>
         <Link href="/dashboard/upload">
           <Button className="font-semibold">
             <UploadIcon className="mr-2 h-4 w-4" />
-            Upload Document
+            {t("dashboard.uploadDocument")}
           </Button>
         </Link>
       </div>
@@ -101,7 +101,7 @@ export default function DocumentsPage() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search documents..."
+          placeholder={t("dashboard.searchDocuments")}
           className="pl-10 h-10"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -117,14 +117,14 @@ export default function DocumentsPage() {
         <Card className="border-dashed border-2 border-border/50">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <FileText className="h-12 w-12 text-muted-foreground/40 mb-4" />
-            <h3 className="text-lg font-semibold mb-1">No documents yet</h3>
+            <h3 className="text-lg font-semibold mb-1">{t("dashboard.noDocumentsTitle")}</h3>
             <p className="text-sm text-muted-foreground mb-6 text-center max-w-sm">
-              Upload your first ESG document to get started
+              {t("dashboard.noDocumentsDesc")}
             </p>
             <Link href="/dashboard/upload">
               <Button className="font-semibold">
                 <UploadIcon className="mr-2 h-4 w-4" />
-                Upload Document
+                {t("dashboard.uploadDocument")}
               </Button>
             </Link>
           </CardContent>
@@ -159,13 +159,13 @@ export default function DocumentsPage() {
                           {new Date(doc.created_at).toLocaleDateString()}
                         </span>
                         {doc.page_count ? (
-                          <span className="text-xs text-muted-foreground">{doc.page_count} pages</span>
+                          <span className="text-xs text-muted-foreground">{doc.page_count} {t("dashboard.pagesLabel")}</span>
                         ) : null}
                       </div>
                     </div>
                     <Badge variant="secondary" className={`text-xs ${status.className}`}>
                       <StatusIcon className={`mr-1 h-3 w-3 ${status.spin ? "animate-spin" : ""}`} />
-                      {status.label}
+                      {t(`dashboard.${status.labelKey}`)}
                     </Badge>
                   </div>
                 );

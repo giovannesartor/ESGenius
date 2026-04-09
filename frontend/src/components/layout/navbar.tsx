@@ -7,6 +7,7 @@ import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu, X, ChevronRight } from "lucide-react";
 
 export function Navbar() {
@@ -53,6 +54,7 @@ export function Navbar() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-2">
           <LanguageSwitcher />
+          <ThemeToggle />
           <Separator orientation="vertical" className="h-5 mx-1" />
           <Link href="/login">
             <Button variant="ghost" size="sm" className="h-8 px-3 text-sm font-medium">
@@ -101,7 +103,10 @@ export function Navbar() {
           </div>
           <Separator />
           <div className="mx-auto max-w-7xl px-4 py-4 space-y-2">
-            <LanguageSwitcher />
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
             <Link href="/login" className="block" onClick={() => setMobileOpen(false)}>
               <Button variant="outline" size="sm" className="w-full h-9 text-sm font-medium">
                 {t("nav.login")}

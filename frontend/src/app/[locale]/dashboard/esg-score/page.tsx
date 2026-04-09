@@ -37,90 +37,13 @@ import {
 import { useCompany } from "@/hooks/useCompany";
 import { analyticsApi } from "@/services/api";
 
-// ─── Fallback Mock Data ───
-
-const MOCK_OVERALL = {
-  value: 72,
-  change: "+4.2%",
-  trend: "up" as const,
-  rating: "B+",
-  percentile: 78,
-};
+// ─── Meta ───
 
 const PILLAR_META = {
   E: { key: "environmental", icon: Leaf, color: "#16a34a", bgClass: "bg-brand-green/10", textClass: "text-brand-green" },
   S: { key: "social", icon: Users, color: "#2563eb", bgClass: "bg-brand-blue/10", textClass: "text-brand-blue" },
   G: { key: "governance", icon: Activity, color: "#f59e0b", bgClass: "bg-brand-gold/10", textClass: "text-brand-gold" },
 };
-
-const MOCK_PILLARS = [
-  {
-    key: "environmental",
-    score: 68,
-    change: "+2.1%",
-    trend: "up" as const,
-    icon: Leaf,
-    color: "#16a34a",
-    bgClass: "bg-brand-green/10",
-    textClass: "text-brand-green",
-    indicators: [
-      { name: "Emissions", score: 72, status: "good" },
-      { name: "Energy Usage", score: 65, status: "fair" },
-      { name: "Waste Management", score: 58, status: "fair" },
-      { name: "Resource Efficiency", score: 45, status: "poor" },
-    ],
-  },
-  {
-    key: "social",
-    score: 75,
-    change: "+5.8%",
-    trend: "up" as const,
-    icon: Users,
-    color: "#2563eb",
-    bgClass: "bg-brand-blue/10",
-    textClass: "text-brand-blue",
-    indicators: [
-      { name: "Workforce", score: 80, status: "good" },
-      { name: "Diversity & Inclusion", score: 72, status: "good" },
-      { name: "Health & Safety", score: 85, status: "excellent" },
-      { name: "Community Impact", score: 62, status: "fair" },
-    ],
-  },
-  {
-    key: "governance",
-    score: 73,
-    change: "-1.2%",
-    trend: "down" as const,
-    icon: Activity,
-    color: "#f59e0b",
-    bgClass: "bg-brand-gold/10",
-    textClass: "text-brand-gold",
-    indicators: [
-      { name: "Board Structure", score: 78, status: "good" },
-      { name: "Ethics & Compliance", score: 82, status: "good" },
-      { name: "Transparency & Reporting", score: 70, status: "fair" },
-      { name: "Risk Management", score: 65, status: "fair" },
-    ],
-  },
-];
-
-const MOCK_RADAR = [
-  { subject: "Emissions", A: 72, fullMark: 100 },
-  { subject: "Energy", A: 65, fullMark: 100 },
-  { subject: "Workforce", A: 80, fullMark: 100 },
-  { subject: "Diversity", A: 72, fullMark: 100 },
-  { subject: "Board", A: 78, fullMark: 100 },
-  { subject: "Ethics", A: 82, fullMark: 100 },
-  { subject: "Safety", A: 85, fullMark: 100 },
-  { subject: "Risk Mgmt", A: 65, fullMark: 100 },
-];
-
-const MOCK_BENCHMARK = [
-  { name: "Your Company", score: 72, color: "#16a34a" },
-  { name: "Industry Avg", score: 58, color: "#94a3b8" },
-  { name: "Top 10%", score: 88, color: "#2563eb" },
-  { name: "Peer Median", score: 65, color: "#f59e0b" },
-];
 
 // ─── Helpers ───
 
@@ -184,11 +107,23 @@ export default function ESGScorePage() {
   const t = useTranslations();
   const { company, loading: companyLoading, token } = useCompany();
 
-  const [overallScore, setOverallScore] = useState(MOCK_OVERALL);
-  const [pillarScores, setPillarScores] = useState(MOCK_PILLARS);
-  const [radarData, setRadarData] = useState(MOCK_RADAR);
-  const [benchmarkData, setBenchmarkData] = useState(MOCK_BENCHMARK);
+  const [overallScore, setOverallScore] = useState<{ value: number; change: string; trend: "up" | "down"; rating: string; percentile: number } | null>(null);
+  const [pillarScores, setPillarScores] = useState<Array<{
+    key: string; score: number; change: string; trend: "up" | "down";
+    icon: typeof Leaf; color: string; bgClass: string; textClass: string;
+    indicators: Array<{ name: string; score: number; status: string }>;
+  }>>([]);
+  const [radarData, setRadarData] = useState<Array<{ subject: string; A: number; fullMark: number }>>([]);
+  const [benchmarkData, setBenchmarkData] = useState<Array<{ name: string; score: number; color: string }>>([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const statusLabelMap: Record<string, string> = {
+    excellent: t("dashboard.statusExcellent"),
+    good: t("dashboard.statusGood"),
+    fair: t("dashboard.statusFair"),
+    poor: t("dashboard.statusPoor"),
+  };
 
   useEffect(() => {
     if (!token || !company) return;
@@ -261,9 +196,10 @@ export default function ESGScorePage() {
           );
         }
       } catch {
-        // Silently fall back to mock data
+        // No fallback to mock data
       } finally {
         setDataLoading(false);
+        setDataLoaded(true);
       }
     };
 
@@ -292,6 +228,19 @@ export default function ESGScorePage() {
           {t("dashboard.esgScoreSubtitle")}
         </p>
       </div>
+
+      {dataLoaded && !overallScore ? (
+        <Card className="border-dashed border-2 border-border/50 rounded-2xl">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <Target className="h-12 w-12 text-muted-foreground/40 mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-1">{t("dashboard.noScoreTitle")}</h3>
+            <p className="text-sm text-muted-foreground text-center max-w-sm">
+              {t("dashboard.noScoreDesc")}
+            </p>
+          </CardContent>
+        </Card>
+      ) : overallScore ? (
+      <>
 
       {/* ─── Overall Score Card ─── */}
       <Card className="border-border/60 rounded-2xl overflow-hidden">
@@ -489,7 +438,7 @@ export default function ESGScorePage() {
                       variant="secondary"
                       className={`text-[10px] px-1.5 py-0 h-4 border capitalize ${getStatusColor(indicator.status)}`}
                     >
-                      {indicator.status}
+                      {statusLabelMap[indicator.status] || indicator.status}
                     </Badge>
                   </div>
                 ))}
@@ -498,6 +447,9 @@ export default function ESGScorePage() {
           </Card>
         ))}
       </div>
+
+      </>
+      ) : null}
     </div>
   );
 }
