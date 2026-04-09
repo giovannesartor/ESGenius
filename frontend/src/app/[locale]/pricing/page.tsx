@@ -11,16 +11,16 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowRight, CheckCircle2, X, HelpCircle } from "lucide-react";
 
 const comparisonFeatures = [
+  { key: "companies", pro: "Up to 5", ent: "Unlimited" },
   { key: "frameworks", pro: "GRI, SASB, TCFD", ent: "All + Custom" },
-  { key: "companies", pro: "Up to 10", ent: "Unlimited" },
-  { key: "users", pro: "Up to 25", ent: "Unlimited" },
-  { key: "aiCredits", pro: "5,000/mo", ent: "Unlimited" },
-  { key: "reports", pro: "Standard", ent: "Custom + White-label" },
-  { key: "support", pro: "Email", ent: "Priority + Dedicated CSM" },
+  { key: "reports", pro: "4/year (PDF)", ent: "Unlimited + White-label" },
+  { key: "aiExtraction", pro: true, ent: true },
+  { key: "esgScoring", pro: "Quarterly", ent: "Real-time" },
+  { key: "support", pro: "AI 24/7 + Email", ent: "AI 24/7 + Priority" },
   { key: "api", pro: false, ent: true },
   { key: "sso", pro: false, ent: true },
-  { key: "audit", pro: false, ent: true },
-  { key: "onboarding", pro: false, ent: true },
+  { key: "whiteLabelOpt", pro: false, ent: true },
+  { key: "extraReports", pro: "$600 each", ent: "Included" },
 ];
 
 export default function PricingPage() {
@@ -61,9 +61,12 @@ export default function PricingPage() {
                   <p className="mt-2 text-sm text-muted-foreground">{t("pricing.professional.desc")}</p>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                  <div className="mt-6 flex items-baseline gap-1">
-                    <span className="text-5xl font-bold text-foreground">{t("pricing.professional.price")}</span>
-                    <span className="text-muted-foreground text-sm">{t("pricing.professional.period")}</span>
+                  <div className="mt-6">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-5xl font-bold text-foreground">{t("pricing.professional.price")}</span>
+                      <span className="text-muted-foreground text-sm">{t("pricing.professional.period")}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{t("pricing.professional.monthlyNote")}</p>
                   </div>
                   <Link href="/register" className="block mt-8">
                     <Button className="w-full h-12 font-semibold text-base shadow-lg shadow-primary/25">
@@ -73,10 +76,10 @@ export default function PricingPage() {
                   </Link>
                   <Separator className="my-8" />
                   <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-4">
-                    What&apos;s included
+                    {t("pricing.includedLabel")}
                   </p>
                   <ul className="space-y-3">
-                    {Array.from({ length: 7 }, (_, i) => (
+                    {Array.from({ length: 8 }, (_, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                         <span className="text-sm text-foreground">
@@ -85,6 +88,10 @@ export default function PricingPage() {
                       </li>
                     ))}
                   </ul>
+                  <div className="mt-6 rounded-xl border border-border/60 bg-muted/30 px-4 py-3">
+                    <p className="text-xs font-semibold text-muted-foreground mb-1.5">{t("pricing.professional.extrasLabel")}</p>
+                    <p className="text-sm text-foreground">{t("pricing.professional.extrasReport")}</p>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -95,9 +102,12 @@ export default function PricingPage() {
                   <p className="mt-2 text-sm text-muted-foreground">{t("pricing.enterprise.desc")}</p>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                  <div className="mt-6 flex items-baseline gap-1">
-                    <span className="text-5xl font-bold text-foreground">{t("pricing.enterprise.price")}</span>
-                    <span className="text-muted-foreground text-sm">{t("pricing.enterprise.period")}</span>
+                  <div className="mt-6">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-5xl font-bold text-foreground">{t("pricing.enterprise.price")}</span>
+                      <span className="text-muted-foreground text-sm">{t("pricing.enterprise.period")}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{t("pricing.enterprise.monthlyNote")}</p>
                   </div>
                   <Link href="/register" className="block mt-8">
                     <Button variant="outline" className="w-full h-12 font-semibold text-base">
@@ -107,7 +117,7 @@ export default function PricingPage() {
                   </Link>
                   <Separator className="my-8" />
                   <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-4">
-                    Everything in Professional, plus
+                    {t("pricing.includedLabel")}
                   </p>
                   <ul className="space-y-3">
                     {Array.from({ length: 8 }, (_, i) => (
@@ -119,6 +129,9 @@ export default function PricingPage() {
                       </li>
                     ))}
                   </ul>
+                  <div className="mt-6 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
+                    <p className="text-sm font-semibold text-accent">{t("pricing.enterprise.noExtras")}</p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
