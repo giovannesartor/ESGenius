@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Eye, EyeOff, Loader2, Mail, User, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, Eye, EyeOff, Loader2, Mail, User, CheckCircle2 } from "lucide-react";
 import { authApi } from "@/services/api";
 
 export default function RegisterPage() {
@@ -54,6 +54,15 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen">
+      {/* Back to home */}
+      <Link
+        href="/"
+        className="fixed top-4 left-4 z-50 flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm rounded-lg px-3 py-2 border border-border/60 shadow-sm"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        {t("nav.backToHome")}
+      </Link>
+
       {/* Left panel - branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-green/5 via-background to-brand-blue/10 items-center justify-center p-12">
         <div className="max-w-md flex flex-col items-center lg:items-start">

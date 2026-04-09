@@ -7,7 +7,8 @@
     "login": "Sign In",
     "register": "Sign Up",
     "logout": "Sign Out",
-    "admin": "Administration"
+    "admin": "Administration",
+    "backToHome": "Back to Home"
   },
 
   "hero": {
