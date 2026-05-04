@@ -10,14 +10,12 @@
     "admin": "Administration",
     "backToHome": "Back to Home"
   },
-
   "hero": {
     "title": "Professional ESG reports. Fully automated.",
     "subtitle": "The first platform that takes your data from zero to finished report. No consulting, no spreadsheets, no months of waiting.",
     "cta": "Start Now",
     "cta2": "View Plans"
   },
-
   "home": {
     "heroBadge": "ESG Intelligence Platform",
     "trustCompanies": "Companies",
@@ -57,7 +55,7 @@
     "multiFrameworkTitle": "Multi-Framework Coverage",
     "multiFrameworkDesc": "GRI, SASB, TCFD, CDP, ISSB — all automatically mapped from a single dataset.",
     "securityTitle": "Enterprise Security",
-    "securityDesc": "SOC 2 compliant, data encrypted at rest and in transit, granular access controls.",
+    "securityDesc": "Protect sensitive corporate data with end-to-end encryption, granular access controls, and enterprise-grade security.",
     "teamTitle": "Team Collaboration",
     "teamDesc": "Roles and permissions per company, complete audit trails, approval workflows.",
     "multiCompanyTitle": "Multi-Company Management",
@@ -70,11 +68,12 @@
     "fwIssb": "ISSB",
     "pricingLabel": "Pricing",
     "viewPlans": "View plans",
-    "trustSoc2": "SOC 2",
+    "trustSoc2": "Secure",
     "trustEncrypted": "Encrypted",
     "trustUptime99": "99.9% Uptime",
     "frameworkCoverageTitle": "Framework Coverage",
     "frameworkCoverageDesc": "Average coverage across ESG frameworks",
+    "contactSales": "Contact Sales",
     "ctaLabel": "Get Started",
     "faqLabel": "FAQ",
     "faqTitle": "Frequently Asked Questions",
@@ -90,26 +89,41 @@
     "faq5q": "Are the generated reports audit-ready?",
     "faq5a": "Absolutely. Reports are generated following official framework guidelines and include all required disclosures, data sources, and methodology references. They are ready for external auditors and regulatory submissions.",
     "faq6q": "Is my data secure?",
-    "faq6a": "Your data is encrypted at rest and in transit. We follow SOC 2 compliance standards, implement role-based access controls, and maintain complete audit trails for every action on the platform."
+    "faq6a": "Your data is encrypted at rest and in transit using enterprise-grade security standards. We implement role-based access controls and maintain complete audit trails for every action on the platform."
   },
-
   "features": {
     "title": "Everything you need for ESG management",
     "subtitle": "A comprehensive suite of tools designed to streamline your sustainability reporting and compliance workflows.",
-    "ai": { "title": "AI-Powered Extraction", "desc": "Automatically extract and classify ESG data points from corporate documents using advanced natural language processing models." },
-    "frameworks": { "title": "Multi-Framework Support", "desc": "Seamlessly report across GRI, SASB, TCFD, CDP, CSRD, and other major ESG frameworks from a single platform." },
-    "scoring": { "title": "Real-time ESG Scoring", "desc": "Receive continuous, data-driven ESG scores with transparent methodology and granular environmental, social, and governance breakdowns." },
-    "reports": { "title": "Audit-Ready Reports", "desc": "Generate professional, regulation-compliant reports ready for external auditors, investors, and regulatory bodies." },
-    "dashboard": { "title": "Interactive Dashboards", "desc": "Visualize performance trends, benchmark against industry peers, and monitor progress toward sustainability targets in real time." },
-    "security": { "title": "Enterprise Security", "desc": "Protect sensitive corporate data with end-to-end encryption, role-based access controls, and full SOC 2 compliance." }
+    "ai": {
+      "title": "AI-Powered Extraction",
+      "desc": "Automatically extract and classify ESG data points from corporate documents using advanced natural language processing models."
+    },
+    "frameworks": {
+      "title": "Multi-Framework Support",
+      "desc": "Seamlessly report across GRI, SASB, TCFD, CDP, CSRD, and other major ESG frameworks from a single platform."
+    },
+    "scoring": {
+      "title": "Real-time ESG Scoring",
+      "desc": "Receive continuous, data-driven ESG scores with transparent methodology and granular environmental, social, and governance breakdowns."
+    },
+    "reports": {
+      "title": "Audit-Ready Reports",
+      "desc": "Generate professional, regulation-compliant reports ready for external auditors, investors, and regulatory bodies."
+    },
+    "dashboard": {
+      "title": "Interactive Dashboards",
+      "desc": "Visualize performance trends, benchmark against industry peers, and monitor progress toward sustainability targets in real time."
+    },
+    "security": {
+      "title": "Enterprise Security",
+      "desc": "Protect sensitive corporate data with end-to-end encryption, granular access controls, and enterprise-grade security."
+    }
   },
-
   "cta": {
     "title": "Ready to transform your ESG reporting?",
     "subtitle": "Join leading organizations that trust ESG360 to streamline their sustainability strategy and regulatory compliance.",
     "button": "Get Started Today"
   },
-
   "footer": {
     "desc": "AI-powered ESG management platform for data extraction, scoring, and regulatory reporting.",
     "product": "Product",
@@ -128,7 +142,6 @@
     "cookies": "Cookie Policy",
     "rights": "All rights reserved."
   },
-
   "pricing": {
     "title": "Simple, transparent pricing",
     "subtitle": "Choose the plan that fits your organization. No hidden fees, no surprises.",
@@ -141,7 +154,7 @@
       "period": "/ year",
       "monthlyNote": "(~$300/month)",
       "desc": "Ideal for growing companies that need to structure and publish ESG reports consistently.",
-      "feature1": "Up to 5 companies",
+      "feature1": "1 company included",
       "feature2": "Frameworks: GRI, SASB and TCFD support",
       "feature3": "AI-powered data extraction",
       "feature4": "Quarterly ESG scoring",
@@ -150,7 +163,7 @@
       "feature7": "Standard reports (PDF)",
       "feature8": "ESG AI assistant 24/7",
       "extrasLabel": "Additional charges:",
-      "extrasReport": "Extra report: $600 each",
+      "extrasReport": "Extra report: $300 each",
       "cta": "Get Started"
     },
     "enterprise": {
@@ -171,7 +184,6 @@
       "cta": "Contact Sales"
     }
   },
-
   "auth": {
     "loginTitle": "Sign in to your account",
     "loginSubtitle": "Enter your credentials to access your ESG dashboard.",
@@ -221,7 +233,6 @@
     "forgotSuccess": "If that email is registered, you'll receive reset instructions shortly.",
     "backToLogin": "Back to login"
   },
-
   "dashboard": {
     "welcome": "Welcome back",
     "subtitle": "Here's an overview of your ESG portfolio performance.",
@@ -406,7 +417,6 @@
     "noEvolutionData": "Score evolution will appear here once you have historical data.",
     "cancelLabel": "Cancel"
   },
-
   "admin": {
     "title": "Administration",
     "nav": {
@@ -418,7 +428,6 @@
       "settings": "Settings"
     }
   },
-
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -433,7 +442,6 @@
     "confirm": "Confirm",
     "back": "Back"
   },
-
   "terms": {
     "title": "Terms of Service",
     "lastUpdated": "Last updated: April 8, 2026",
@@ -454,7 +462,6 @@
     "contactTitle": "Questions?",
     "contactText": "If you have any questions about these Terms, please contact us at contact@esg360.digital."
   },
-
   "privacy": {
     "title": "Privacy Policy",
     "lastUpdated": "Last updated: April 8, 2026",
@@ -475,7 +482,6 @@
     "contactTitle": "Data Protection Contact",
     "contactText": "For privacy-related inquiries or to exercise your rights, contact us at privacy@esg360.digital."
   },
-
   "lang": {
     "en": "English",
     "pt": "Português",

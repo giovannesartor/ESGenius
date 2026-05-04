@@ -6,6 +6,8 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import httpx
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.core.config import settings
 from app.core.database import get_db
@@ -28,10 +30,16 @@ from app.domain.schemas.auth import (
 from app.services.auth_service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+limiter = Limiter(key_func=get_remote_address)
 
 
 @router.post("/register", response_model=UserResponse, status_code=201)
-async def register(data: UserRegister, db: AsyncSession = Depends(get_db)):
+@limiter.limit("5/minute")
+async def register(
+    request: Request,
+    data: UserRegister,
+    db: AsyncSession = Depends(get_db)
+):
     """Register a new user with email and password."""
     service = AuthService(db)
     return await service.register(
@@ -40,7 +48,12 @@ async def register(data: UserRegister, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(data: UserLogin, db: AsyncSession = Depends(get_db)):
+@limiter.limit("10/minute")
+async def login(
+    request: Request,
+    data: UserLogin,
+    db: AsyncSession = Depends(get_db)
+):
     """Login with email and password."""
     service = AuthService(db)
     return await service.login(email=data.email, password=data.password)
@@ -63,8 +76,11 @@ async def verify_email(
 
 
 @router.post("/password-reset/request", response_model=MessageResponse)
+@limiter.limit("5/minute")
 async def request_password_reset(
-    data: PasswordResetRequest, db: AsyncSession = Depends(get_db)
+    request: Request,
+    data: PasswordResetRequest,
+    db: AsyncSession = Depends(get_db)
 ):
     """Request a password reset email."""
     service = AuthService(db)

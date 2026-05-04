@@ -38,6 +38,7 @@ interface Insight {
   description: string;
   impact: "high" | "medium" | "low";
   estimatedImprovement?: string;
+  pointsImprovement?: number;
   timeframe?: string;
   status: "new" | "in-progress" | "completed";
 }
@@ -53,11 +54,36 @@ function getCategoryIcon(category: string) {
 
 function getCategoryColor(category: string) {
   switch (category) {
-    case "environmental": return "text-brand-green bg-brand-green/10";
-    case "social": return "text-brand-blue bg-brand-blue/10";
-    case "governance": return "text-brand-gold bg-brand-gold/10";
-    default: return "text-violet-600 bg-violet-500/10";
+    case "environmental": return "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
+    case "social": return "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/20";
+    case "governance": return "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20";
+    default: return "text-violet-600 bg-violet-500/10 border-violet-500/20";
   }
+}
+
+function getCategoryDotColor(category: string) {
+  switch (category) {
+    case "environmental": return "#10b981";
+    case "social": return "#3b82f6";
+    case "governance": return "#f59e0b";
+    default: return "#8b5cf6";
+  }
+}
+
+function getPillarLabel(category: string) {
+  switch (category) {
+    case "environmental": return "E";
+    case "social": return "S";
+    case "governance": return "G";
+    default: return "—";
+  }
+}
+
+// Simulated point improvement based on priority
+function getEstimatedPoints(priority: number): number {
+  if (priority >= 8) return Math.floor(8 + (priority - 8) * 2);
+  if (priority >= 5) return Math.floor(3 + (priority - 5));
+  return 1 + Math.floor(priority * 0.5);
 }
 
 function getTypeConfig(type: string) {
@@ -139,6 +165,7 @@ export default function InsightsPage() {
             description: kpi.description,
             impact: kpi.priority >= 8 ? "high" : kpi.priority >= 5 ? "medium" : "low",
             estimatedImprovement: `Target: ${kpi.target}`,
+            pointsImprovement: getEstimatedPoints(kpi.priority),
             timeframe: kpi.timeframe,
             status: "new" as const,
           }));
@@ -182,8 +209,24 @@ export default function InsightsPage() {
 
   if (companyLoading || dataLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+        {/* Skeleton header */}
+        <div className="flex flex-col gap-3">
+          <div className="h-8 w-48 rounded-xl bg-muted animate-pulse" />
+          <div className="h-4 w-72 rounded-lg bg-muted animate-pulse" />
+        </div>
+        {/* Skeleton stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-20 rounded-2xl border border-border/60 bg-muted animate-pulse" />
+          ))}
+        </div>
+        {/* Skeleton cards */}
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-24 rounded-2xl border border-border/60 bg-muted/40 animate-pulse" style={{ animationDelay: `${i * 0.08}s` }} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -266,7 +309,6 @@ export default function InsightsPage() {
           {filtered.map((insight) => {
             const typeConfig = getTypeConfig(insight.type);
             const TypeIcon = typeConfig.icon;
-            const CategoryIcon = getCategoryIcon(insight.category);
 
             return (
               <Card key={insight.id} className="border-border/60 rounded-2xl hover:shadow-md transition-all duration-200">
@@ -279,14 +321,19 @@ export default function InsightsPage() {
                     <div className="flex-1 min-w-0">
                       {/* Title row */}
                       <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <h3 className="text-sm font-semibold text-foreground">{insight.title}</h3>
-                        <Badge
-                          variant="secondary"
-                          className={`text-[10px] px-1.5 py-0 h-4 border ${getCategoryColor(insight.category)}`}
+                        {/* Pillar dot */}
+                        <span
+                          className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-black border"
+                          style={{
+                            color: getCategoryDotColor(insight.category),
+                            backgroundColor: `${getCategoryDotColor(insight.category)}18`,
+                            borderColor: `${getCategoryDotColor(insight.category)}30`,
+                          }}
                         >
-                          <CategoryIcon className="mr-0.5 h-2.5 w-2.5" />
-                          {t(`dashboard.pillars.${insight.category}`)}
-                        </Badge>
+                          <span className="h-1.5 w-1.5 rounded-full inline-block" style={{ backgroundColor: getCategoryDotColor(insight.category) }} />
+                          {getPillarLabel(insight.category)}
+                        </span>
+                        <h3 className="text-sm font-semibold text-foreground">{insight.title}</h3>
                         <Badge
                           variant="secondary"
                           className={`text-[10px] px-1.5 py-0 h-4 border capitalize ${getImpactBadge(insight.impact)}`}
@@ -309,10 +356,10 @@ export default function InsightsPage() {
 
                       {/* Meta row */}
                       <div className="flex flex-wrap items-center gap-4 text-[11px]">
-                        {insight.estimatedImprovement && (
-                          <span className="flex items-center gap-1 text-brand-green font-medium">
+                        {insight.pointsImprovement !== undefined && (
+                          <span className="flex items-center gap-1 font-semibold" style={{ color: getCategoryDotColor(insight.category) }}>
                             <TrendingUp className="h-3 w-3" />
-                            {insight.estimatedImprovement}
+                            pode melhorar +{insight.pointsImprovement} pts
                           </span>
                         )}
                         {insight.timeframe && (

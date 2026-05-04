@@ -98,6 +98,64 @@ class EmailService:
             """,
         )
 
+    async def send_report_completed_email(
+        self, email: str, name: str, report_title: str, company_name: str
+    ) -> None:
+        """Send notification when ESG report is ready."""
+        dashboard_url = f"{settings.FRONTEND_URL}/dashboard/reports"
+        await self._send_email(
+            to=email,
+            subject=f"Your ESG report '{report_title}' is ready",
+            html=f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="background: linear-gradient(135deg, #16a34a 0%, #059669 100%); padding: 32px; border-radius: 12px; text-align: center; margin-bottom: 32px;">
+                    <h1 style="color: white; margin: 0; font-size: 24px;">✅ Report Ready</h1>
+                </div>
+                <p style="color: #374151;">Hi {name},</p>
+                <p style="color: #374151;">Your ESG report <strong>"{report_title}"</strong> for <strong>{company_name}</strong> has been generated successfully and is ready for download.</p>
+                <div style="text-align: center; margin: 32px 0;">
+                    <a href="{dashboard_url}"
+                       style="background-color: #16a34a; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                        View Report
+                    </a>
+                </div>
+                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0;">
+                <p style="color: #9ca3af; font-size: 12px; text-align: center;">ESG360 — AI-Powered ESG Reporting Platform</p>
+            </div>
+            """,
+        )
+
+    async def send_document_processed_email(
+        self, email: str, name: str, document_name: str, company_name: str, data_points_found: int
+    ) -> None:
+        """Send notification when a document has been processed."""
+        dashboard_url = f"{settings.FRONTEND_URL}/dashboard/documents"
+        await self._send_email(
+            to=email,
+            subject=f"Document '{document_name}' processed — {data_points_found} ESG data points found",
+            html=f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 32px; border-radius: 12px; text-align: center; margin-bottom: 32px;">
+                    <h1 style="color: white; margin: 0; font-size: 24px;">📄 Document Processed</h1>
+                </div>
+                <p style="color: #374151;">Hi {name},</p>
+                <p style="color: #374151;">Your document <strong>"{document_name}"</strong> for <strong>{company_name}</strong> has been analyzed by our AI engine.</p>
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
+                    <div style="font-size: 36px; font-weight: bold; color: #16a34a;">{data_points_found}</div>
+                    <div style="color: #374151; font-weight: 500;">ESG data points extracted</div>
+                </div>
+                <div style="text-align: center; margin: 32px 0;">
+                    <a href="{dashboard_url}"
+                       style="background-color: #2563eb; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                        View Documents
+                    </a>
+                </div>
+                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0;">
+                <p style="color: #9ca3af; font-size: 12px; text-align: center;">ESG360 — AI-Powered ESG Reporting Platform</p>
+            </div>
+            """,
+        )
+
     async def _send_email(
         self,
         to: str,

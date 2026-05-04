@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Navbar } from "@/components/layout/navbar";
@@ -131,15 +131,80 @@ function Sparkline() {
   );
 }
 
+/* ── Typewriter headline ─────────────────────────────────────────── */
+function TypewriterHeadline({
+  text,
+  className,
+  highlightLast = 2,
+  speed = 38,
+}: {
+  text: string;
+  className?: string;
+  highlightLast?: number;
+  speed?: number;
+}) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    setDisplayed("");
+    setDone(false);
+    let i = 0;
+    const timer = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) {
+        clearInterval(timer);
+        setDone(true);
+      }
+    }, speed);
+    return () => clearInterval(timer);
+  }, [text, speed]);
+
+  const words = text.split(" ");
+  const mainWords = words.slice(0, -highlightLast).join(" ");
+  const hlWords = words.slice(-highlightLast).join(" ");
+  const mainLen = mainWords.length;
+
+  if (done) {
+    return (
+      <h1 className={className}>
+        {mainWords}{" "}
+        <span className="text-gradient-emerald">{hlWords}</span>
+      </h1>
+    );
+  }
+
+  const visibleMain = displayed.slice(0, mainLen);
+  const visibleHl = displayed.length > mainLen + 1 ? displayed.slice(mainLen + 1) : "";
+
+  return (
+    <h1 className={className}>
+      {visibleMain}
+      {displayed.length <= mainLen ? (
+        <span className="animate-pulse text-emerald-500">|</span>
+      ) : (
+        <>
+          {" "}
+          <span className="text-gradient-emerald">
+            {visibleHl}
+            <span className="animate-pulse">|</span>
+          </span>
+        </>
+      )}
+    </h1>
+  );
+}
+
 const frameworks = [
-  { name: "GRI", full: "Global Reporting Initiative" },
-  { name: "SASB", full: "Sustainability Accounting" },
-  { name: "TCFD", full: "Climate Disclosures" },
-  { name: "CDP", full: "Carbon Disclosure Project" },
-  { name: "SDGs", full: "UN Sustainable Goals" },
-  { name: "ISSB", full: "Sustainability Standards" },
-  { name: "CSRD", full: "Corporate Sustainability" },
-  { name: "GHG Protocol", full: "Greenhouse Gas Protocol" },
+  { name: "GRI", full: "Global Reporting Initiative", pct: 94, color: "#10b981" },
+  { name: "SASB", full: "Sustainability Accounting Standards", pct: 88, color: "#3b82f6" },
+  { name: "TCFD", full: "Climate-related Disclosures", pct: 91, color: "#f59e0b" },
+  { name: "CDP", full: "Carbon Disclosure Project", pct: 76, color: "#8b5cf6" },
+  { name: "ISSB", full: "Sustainability Standards Board", pct: 82, color: "#06b6d4" },
+  { name: "CSRD", full: "Corporate Sustainability Reporting", pct: 85, color: "#ec4899" },
+  { name: "GHG", full: "Greenhouse Gas Protocol", pct: 79, color: "#f97316" },
+  { name: "SDGs", full: "UN Sustainable Dev. Goals", pct: 71, color: "#84cc16" },
 ];
 
 /* ─── Bento Feature Card ─── */
@@ -231,11 +296,13 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* Headline */}
-                <h1 className="text-4xl font-black tracking-tight leading-[1.06] text-foreground dark:text-white sm:text-5xl lg:text-[3.6rem] mb-6">
-                  {t("hero.title").split(" ").slice(0, -2).join(" ")}{" "}
-                  <span className="text-gradient-emerald">{t("hero.title").split(" ").slice(-2).join(" ")}</span>
-                </h1>
+                {/* Headline — typewriter */}
+                <TypewriterHeadline
+                  text={t("hero.title")}
+                  className="text-4xl font-black tracking-tight leading-[1.06] text-foreground dark:text-white sm:text-5xl lg:text-[3.6rem] mb-6"
+                  highlightLast={2}
+                  speed={38}
+                />
 
                 <p className="text-lg text-muted-foreground dark:text-slate-400 leading-relaxed mb-10 max-w-[480px]">
                   {t("hero.subtitle")}
@@ -263,10 +330,9 @@ export default function HomePage() {
                   </Link>
                 </div>
 
-                {/* Trust badges */}
+                {/* Trust — minimal, no empty social proof */}
                 <div className="flex flex-wrap items-center gap-4">
                   {[
-                    { icon: <Shield className="h-3.5 w-3.5" />, text: t("home.trustSoc2") },
                     { icon: <Lock className="h-3.5 w-3.5" />, text: t("home.trustEncrypted") },
                     { icon: <CheckCircle2 className="h-3.5 w-3.5" />, text: t("home.trustUptime99") },
                   ].map((b) => (
@@ -384,28 +450,44 @@ export default function HomePage() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            FRAMEWORKS MARQUEE
+            FRAMEWORKS GRID
         ════════════════════════════════════════════════════════════════ */}
-        <section className="border-b border-border/60 bg-muted/30 py-5 overflow-hidden">
-          <div className="flex items-center gap-8 mb-0">
-            <div className="shrink-0 pl-8">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 whitespace-nowrap">
+        <section className="border-b border-border/60 bg-muted/30 py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <FadeIn className="text-center mb-10">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                 {t("home.frameworksLabel")}
               </span>
-            </div>
-            <div className="flex-1 overflow-hidden mask-image-gradient">
-              <div className="flex gap-3 marquee-track" style={{ width: "max-content" }}>
-                {[...frameworks, ...frameworks].map((fw, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-[11px] font-bold text-muted-foreground whitespace-nowrap shrink-0"
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/60" />
-                    {fw.name}
-                    <span className="text-muted-foreground/40 font-normal">— {fw.full}</span>
-                  </span>
-                ))}
-              </div>
+            </FadeIn>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+              {frameworks.map((fw, i) => (
+                <FadeIn key={fw.name} delay={i * 0.05}>
+                  <div className="group flex flex-col items-center gap-2.5 rounded-xl border border-border/60 bg-card p-4 hover:border-border hover:shadow-sm transition-all duration-200">
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-lg text-[11px] font-black"
+                      style={{ background: `${fw.color}18`, color: fw.color, border: `1px solid ${fw.color}28` }}
+                    >
+                      {fw.name.slice(0, 3)}
+                    </div>
+                    <div className="text-center">
+                      <div className="text-[11px] font-bold text-foreground">{fw.name}</div>
+                      <div className="text-[9px] text-muted-foreground/60 mt-0.5 leading-tight line-clamp-2">{fw.full}</div>
+                    </div>
+                    <div className="w-full">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[9px] font-bold" style={{ color: fw.color }}>{fw.pct}%</span>
+                        <span className="text-[9px] text-muted-foreground/50">coverage</span>
+                      </div>
+                      <div className="h-1 w-full rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-1000"
+                          style={{ width: `${fw.pct}%`, backgroundColor: fw.color }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
             </div>
           </div>
         </section>
@@ -553,7 +635,7 @@ export default function HomePage() {
                   className="h-full"
                   extra={
                     <div className="space-y-1.5">
-                      {["SOC 2 Type II", "End-to-end encryption", "Granular permissions"].map((item) => (
+                      {["Enterprise-grade security", "End-to-end encryption", "Granular permissions"].map((item) => (
                         <div key={item} className="flex items-center gap-2 text-[11px] text-muted-foreground">
                           <Lock className="h-3 w-3 text-rose-500 shrink-0" />
                           {item}
@@ -889,21 +971,20 @@ export default function HomePage() {
                     <ArrowRight className="ml-2.5 h-4.5 w-4.5" />
                   </Button>
                 </Link>
-                <Link href="/pricing">
+                <a href="mailto:sales@esg360.digital">
                   <Button
                     variant="outline"
                     size="lg"
                     className="h-13 px-8 text-base font-semibold rounded-xl border-white/10 text-slate-300 hover:bg-white/5 hover:text-white hover:border-white/20 bg-transparent transition-all duration-200"
                   >
-                    {t("hero.cta2")}
+                    {t("home.contactSales") || "Contact Sales"}
                   </Button>
-                </Link>
+                </a>
               </div>
 
-              {/* Trust row */}
+              {/* Minimal trust */}
               <div className="flex flex-wrap items-center justify-center gap-6 mt-10">
                 {[
-                  { icon: <Shield className="h-3.5 w-3.5" />, text: t("home.trustSoc2") },
                   { icon: <Lock className="h-3.5 w-3.5" />, text: t("home.trustEncrypted") },
                   { icon: <CheckCircle2 className="h-3.5 w-3.5" />, text: t("home.trustUptime99") },
                 ].map((b) => (

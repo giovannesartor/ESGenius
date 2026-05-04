@@ -208,8 +208,35 @@ export default function ESGScorePage() {
 
   if (companyLoading || dataLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+        {/* Header skeleton */}
+        <div className="flex flex-col gap-3">
+          <div className="h-8 w-52 rounded-xl bg-muted animate-pulse" />
+          <div className="h-4 w-80 rounded-lg bg-muted animate-pulse" />
+        </div>
+        {/* Pillar score bar skeletons */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {["#10b981", "#3b82f6", "#f59e0b"].map((color, i) => (
+            <div key={i} className="rounded-2xl border border-border/60 p-5 space-y-4 animate-pulse" style={{ animationDelay: `${i * 0.1}s` }}>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl" style={{ backgroundColor: `${color}20` }} />
+                <div className="h-4 w-28 rounded-lg bg-muted" />
+              </div>
+              <div className="h-8 w-16 rounded-lg bg-muted" />
+              <div className="h-2 w-full rounded-full bg-muted" />
+              <div className="grid grid-cols-4 gap-2">
+                {[...Array(4)].map((_, j) => (
+                  <div key={j} className="h-12 rounded-xl bg-muted" />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Chart skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="h-72 rounded-2xl border border-border/60 bg-muted/30 animate-pulse" />
+          <div className="h-72 rounded-2xl border border-border/60 bg-muted/30 animate-pulse" style={{ animationDelay: "0.15s" }} />
+        </div>
       </div>
     );
   }

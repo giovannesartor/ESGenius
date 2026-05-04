@@ -10,14 +10,12 @@
     "admin": "Administración",
     "backToHome": "Volver al Inicio"
   },
-
   "hero": {
     "title": "Informes ESG profesionales. Totalmente automáticos.",
     "subtitle": "La primera plataforma que lleva sus datos de cero al informe listo. Sin consultoría, sin hojas de cálculo, sin meses de espera.",
     "cta": "Comience Ahora",
     "cta2": "Ver Planes"
   },
-
   "home": {
     "heroBadge": "Plataforma ESG Inteligente",
     "trustCompanies": "Empresas",
@@ -57,7 +55,7 @@
     "multiFrameworkTitle": "Cobertura Multi-Framework",
     "multiFrameworkDesc": "GRI, SASB, TCFD, CDP, ISSB — todos mapeados automáticamente desde un único dataset.",
     "securityTitle": "Seguridad Empresarial",
-    "securityDesc": "SOC 2 compliant, datos encriptados en reposo y en tránsito, controles de acceso granulares.",
+    "securityDesc": "Proteja datos corporativos sensibles con cifrado de extremo a extremo, controles de acceso granulares y seguridad de nivel empresarial.",
     "teamTitle": "Colaboración en Equipo",
     "teamDesc": "Roles y permisos por empresa, audit trails completos, workflows de aprobación.",
     "multiCompanyTitle": "Gestión Multi-Empresa",
@@ -70,11 +68,12 @@
     "fwIssb": "ISSB",
     "pricingLabel": "Precios",
     "viewPlans": "Ver planes",
-    "trustSoc2": "SOC 2",
+    "trustSoc2": "Seguro",
     "trustEncrypted": "Encriptado",
     "trustUptime99": "99.9% Uptime",
     "frameworkCoverageTitle": "Cobertura de Frameworks",
     "frameworkCoverageDesc": "Cobertura promedio por framework ESG",
+    "contactSales": "Contactar Ventas",
     "ctaLabel": "Comenzar Ahora",
     "faqLabel": "Preguntas Frecuentes",
     "faqTitle": "Preguntas Frecuentes",
@@ -90,26 +89,41 @@
     "faq5q": "¿Los informes generados están listos para auditoría?",
     "faq5a": "Absolutamente. Los informes se generan siguiendo las directrices oficiales de los marcos e incluyen todas las divulgaciones requeridas, fuentes de datos y referencias de metodología. Están listos para auditores externos y envíos regulatorios.",
     "faq6q": "¿Mis datos están seguros?",
-    "faq6a": "Sus datos están encriptados en reposo y en tránsito. Seguimos estándares de cumplimiento SOC 2, implementamos controles de acceso basados en roles y mantenemos registros de auditoría completos para cada acción en la plataforma."
+    "faq6a": "Sus datos se cifran en reposo y en tránsito utilizando estándares de seguridad de nivel empresarial. Implementamos controles de acceso basados en funciones y mantenemos auditorías completas para cada acción en la plataforma."
   },
-
   "features": {
     "title": "Todo lo que necesita para la gestión ESG",
     "subtitle": "Un conjunto integral de herramientas diseñado para optimizar sus flujos de informes de sostenibilidad y cumplimiento.",
-    "ai": { "title": "Extracción con IA", "desc": "Extraiga y clasifique automáticamente puntos de datos ESG de documentos corporativos utilizando modelos avanzados de procesamiento de lenguaje natural." },
-    "frameworks": { "title": "Soporte Multi-Framework", "desc": "Reporte en GRI, SASB, TCFD, CDP, CSRD y otros marcos ESG principales desde una única plataforma." },
-    "scoring": { "title": "Puntuación ESG en Tiempo Real", "desc": "Reciba puntuaciones ESG continuas basadas en datos, con metodología transparente y desgloses granulares ambientales, sociales y de gobernanza." },
-    "reports": { "title": "Informes Listos para Auditoría", "desc": "Genere informes profesionales y conformes con la regulación, listos para auditores externos, inversores y organismos reguladores." },
-    "dashboard": { "title": "Paneles Interactivos", "desc": "Visualice tendencias de rendimiento, compare con pares del sector y monitoree el progreso hacia los objetivos de sostenibilidad en tiempo real." },
-    "security": { "title": "Seguridad Empresarial", "desc": "Proteja datos corporativos sensibles con cifrado de extremo a extremo, controles de acceso basados en roles y cumplimiento total con SOC 2." }
+    "ai": {
+      "title": "Extracción con IA",
+      "desc": "Extraiga y clasifique automáticamente puntos de datos ESG de documentos corporativos utilizando modelos avanzados de procesamiento de lenguaje natural."
+    },
+    "frameworks": {
+      "title": "Soporte Multi-Framework",
+      "desc": "Reporte en GRI, SASB, TCFD, CDP, CSRD y otros marcos ESG principales desde una única plataforma."
+    },
+    "scoring": {
+      "title": "Puntuación ESG en Tiempo Real",
+      "desc": "Reciba puntuaciones ESG continuas basadas en datos, con metodología transparente y desgloses granulares ambientales, sociales y de gobernanza."
+    },
+    "reports": {
+      "title": "Informes Listos para Auditoría",
+      "desc": "Genere informes profesionales y conformes con la regulación, listos para auditores externos, inversores y organismos reguladores."
+    },
+    "dashboard": {
+      "title": "Paneles Interactivos",
+      "desc": "Visualice tendencias de rendimiento, compare con pares del sector y monitoree el progreso hacia los objetivos de sostenibilidad en tiempo real."
+    },
+    "security": {
+      "title": "Seguridad Empresarial",
+      "desc": "Proteja datos corporativos sensibles con cifrado de extremo a extremo, controles de acceso granulares y seguridad de nivel empresarial."
+    }
   },
-
   "cta": {
     "title": "¿Listo para transformar sus informes ESG?",
     "subtitle": "Únase a las organizaciones líderes que confían en ESG360 para optimizar su estrategia de sostenibilidad y cumplimiento regulatorio.",
     "button": "Comience Hoy"
   },
-
   "footer": {
     "desc": "Plataforma de gestión ESG impulsada por IA para extracción de datos, puntuación e informes regulatorios.",
     "product": "Producto",
@@ -128,7 +142,6 @@
     "cookies": "Política de Cookies",
     "rights": "Todos los derechos reservados."
   },
-
   "pricing": {
     "title": "Precios simples y transparentes",
     "subtitle": "Elija el plan ideal para su organización. Sin tarifas ocultas, sin sorpresas.",
@@ -141,7 +154,7 @@
       "period": "/ año",
       "monthlyNote": "(~$300/mes)",
       "desc": "Ideal para empresas en crecimiento que necesitan estructurar y publicar informes ESG con consistencia.",
-      "feature1": "Hasta 5 empresas",
+      "feature1": "1 empresa incluida",
       "feature2": "Frameworks: GRI, SASB y soporte TCFD",
       "feature3": "Extracción de datos con IA",
       "feature4": "Puntuación ESG trimestral",
@@ -150,7 +163,7 @@
       "feature7": "Informes estándar (PDF)",
       "feature8": "Asistente IA ESG 24/7",
       "extrasLabel": "Cargos adicionales:",
-      "extrasReport": "Informe extra: $600 cada uno",
+      "extrasReport": "Informe extra: $300 cada uno",
       "cta": "Empezar"
     },
     "enterprise": {
@@ -171,7 +184,6 @@
       "cta": "Contactar Ventas"
     }
   },
-
   "auth": {
     "loginTitle": "Acceda a su cuenta",
     "loginSubtitle": "Ingrese sus credenciales para acceder a su panel ESG.",
@@ -221,7 +233,6 @@
     "forgotSuccess": "Si ese correo está registrado, recibirá las instrucciones en breve.",
     "backToLogin": "Volver al inicio de sesión"
   },
-
   "dashboard": {
     "welcome": "Bienvenido de nuevo",
     "subtitle": "Aquí tiene una visión general del rendimiento de su portafolio ESG.",
@@ -406,7 +417,6 @@
     "noEvolutionData": "La evolución del score aparecerá aquí cuando haya datos históricos.",
     "cancelLabel": "Cancelar"
   },
-
   "admin": {
     "title": "Administración",
     "nav": {
@@ -418,7 +428,6 @@
       "settings": "Configuración"
     }
   },
-
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",
@@ -433,7 +442,6 @@
     "confirm": "Confirmar",
     "back": "Volver"
   },
-
   "terms": {
     "title": "Términos de Servicio",
     "lastUpdated": "Última actualización: 8 de abril de 2026",
@@ -454,7 +462,6 @@
     "contactTitle": "¿Preguntas?",
     "contactText": "Si tiene alguna pregunta sobre estos Términos, contáctenos en contact@esg360.digital."
   },
-
   "privacy": {
     "title": "Política de Privacidad",
     "lastUpdated": "Última actualización: 8 de abril de 2026",
@@ -475,7 +482,6 @@
     "contactTitle": "Contacto de Protección de Datos",
     "contactText": "Para consultas relacionadas con la privacidad o para ejercer sus derechos, contáctenos en privacy@esg360.digital."
   },
-
   "lang": {
     "en": "English",
     "pt": "Português",

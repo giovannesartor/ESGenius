@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowRight, CheckCircle2, X, HelpCircle } from "lucide-react";
 
 const comparisonFeatures = [
-  { key: "companies", pro: "Up to 5", ent: "Unlimited" },
+  { key: "companies", pro: "1 company", ent: "Unlimited" },
   { key: "frameworks", pro: "GRI, SASB, TCFD", ent: "All + Custom" },
   { key: "reports", pro: "4/year (PDF)", ent: "Unlimited + White-label" },
   { key: "aiExtraction", pro: true, ent: true },
@@ -20,7 +20,7 @@ const comparisonFeatures = [
   { key: "api", pro: false, ent: true },
   { key: "sso", pro: false, ent: true },
   { key: "whiteLabelOpt", pro: false, ent: true },
-  { key: "extraReports", pro: "$600 each", ent: "Included" },
+  { key: "extraReports", pro: "$300 each", ent: "Included" },
 ];
 
 export default function PricingPage() {
@@ -206,9 +206,11 @@ export default function PricingPage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="ghost" size="lg" className="h-12 px-8 font-semibold">
-                Contact Sales
-              </Button>
+              <a href="mailto:sales@esg360.digital">
+                <Button variant="ghost" size="lg" className="h-12 px-8 font-semibold">
+                  Contact Sales
+                </Button>
+              </a>
             </div>
           </div>
         </section>

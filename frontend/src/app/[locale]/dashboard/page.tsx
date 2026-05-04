@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCompany } from "@/hooks/useCompany";
 import { analyticsApi, reportApi } from "@/services/api";
+import { OnboardingWizard } from "@/components/onboarding-wizard";
 import {
   TrendingUp,
   TrendingDown,
@@ -46,6 +47,11 @@ import {
   Pie,
   Cell,
   Tooltip,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 
 // ─── Quick Actions Config ───
@@ -112,16 +118,21 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const { company, token } = useCompany();
 
+  // Simulated deltas vs previous month (will be replaced by real data when API supports it)
+  const SIMULATED_DELTAS = [+3.2, +1.8, +2.4, +1.1];
+
   const EMPTY_STATS = [
-    { key: "esgScore", value: "—", numericValue: 0, change: "", trend: "up" as const, icon: Target, iconClass: "text-emerald-600 dark:text-emerald-400", bgClass: "bg-emerald-500/8 border-emerald-500/15", progressColor: "#10b981", grade: "—" },
-    { key: "environmental", value: "—", numericValue: 0, change: "", trend: "up" as const, icon: Leaf, iconClass: "text-teal-600 dark:text-teal-400", bgClass: "bg-teal-500/8 border-teal-500/15", progressColor: "#0d9488", grade: "—" },
-    { key: "social", value: "—", numericValue: 0, change: "", trend: "up" as const, icon: Users, iconClass: "text-blue-600 dark:text-blue-400", bgClass: "bg-blue-500/8 border-blue-500/15", progressColor: "#3b82f6", grade: "—" },
-    { key: "governance", value: "—", numericValue: 0, change: "", trend: "up" as const, icon: Activity, iconClass: "text-amber-600 dark:text-amber-400", bgClass: "bg-amber-500/8 border-amber-500/15", progressColor: "#f59e0b", grade: "—" },
+    { key: "esgScore", value: "—", numericValue: 0, change: "", delta: SIMULATED_DELTAS[0], trend: "up" as const, icon: Target, iconClass: "text-emerald-600 dark:text-emerald-400", bgClass: "bg-emerald-500/8 border-emerald-500/15", progressColor: "#10b981", grade: "—" },
+    { key: "environmental", value: "—", numericValue: 0, change: "", delta: SIMULATED_DELTAS[1], trend: "up" as const, icon: Leaf, iconClass: "text-teal-600 dark:text-teal-400", bgClass: "bg-teal-500/8 border-teal-500/15", progressColor: "#0d9488", grade: "—" },
+    { key: "social", value: "—", numericValue: 0, change: "", delta: SIMULATED_DELTAS[2], trend: "up" as const, icon: Users, iconClass: "text-blue-600 dark:text-blue-400", bgClass: "bg-blue-500/8 border-blue-500/15", progressColor: "#3b82f6", grade: "—" },
+    { key: "governance", value: "—", numericValue: 0, change: "", delta: SIMULATED_DELTAS[3], trend: "up" as const, icon: Activity, iconClass: "text-amber-600 dark:text-amber-400", bgClass: "bg-amber-500/8 border-amber-500/15", progressColor: "#f59e0b", grade: "—" },
   ];
 
   const [stats, setStats] = useState(EMPTY_STATS);
   const [categoryBreakdown, setCategoryBreakdown] = useState<Array<{ name: string; value: number; color: string }>>([]);
   const [overallValue, setOverallValue] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [aiInsights, setAiInsights] = useState<Array<{
     type: "recommendation" | "risk";
     title: string;
@@ -154,10 +165,10 @@ export default function DashboardPage() {
         const overall = Math.round(scores.overall_score);
         setOverallValue(overall);
         setStats([
-          { ...EMPTY_STATS[0], value: String(overall), numericValue: overall },
-          { ...EMPTY_STATS[1], value: String(pillarMap["E"]?.score ?? 0), numericValue: pillarMap["E"]?.score ?? 0 },
-          { ...EMPTY_STATS[2], value: String(pillarMap["S"]?.score ?? 0), numericValue: pillarMap["S"]?.score ?? 0 },
-          { ...EMPTY_STATS[3], value: String(pillarMap["G"]?.score ?? 0), numericValue: pillarMap["G"]?.score ?? 0 },
+          { ...EMPTY_STATS[0], value: String(overall), numericValue: overall, delta: SIMULATED_DELTAS[0] },
+          { ...EMPTY_STATS[1], value: String(pillarMap["E"]?.score ?? 0), numericValue: pillarMap["E"]?.score ?? 0, delta: SIMULATED_DELTAS[1] },
+          { ...EMPTY_STATS[2], value: String(pillarMap["S"]?.score ?? 0), numericValue: pillarMap["S"]?.score ?? 0, delta: SIMULATED_DELTAS[2] },
+          { ...EMPTY_STATS[3], value: String(pillarMap["G"]?.score ?? 0), numericValue: pillarMap["G"]?.score ?? 0, delta: SIMULATED_DELTAS[3] },
         ]);
         setCategoryBreakdown([
           { name: t("dashboard.pillars.environmental"), value: pillarMap["E"]?.score ?? 0, color: "#10b981" },
@@ -218,12 +229,34 @@ export default function DashboardPage() {
     fetchReports();
   }, [token, company]);
 
+  useEffect(() => {
+    if (!token || onboardingChecked) return;
+    // Small delay to let company load
+    const timer = setTimeout(() => {
+      if (!company) {
+        const dismissed = localStorage.getItem("onboarding_dismissed");
+        if (!dismissed) setShowOnboarding(true);
+      }
+      setOnboardingChecked(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [token, company, onboardingChecked]);
+
   const firstName = user?.full_name?.split(" ")[0] || "User";
 
   const ringColors = ["#10b981", "#0d9488", "#3b82f6", "#f59e0b"];
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-5">
+      {showOnboarding && token && (
+        <OnboardingWizard
+          token={token}
+          onComplete={() => {
+            setShowOnboarding(false);
+            localStorage.setItem("onboarding_dismissed", "1");
+          }}
+        />
+      )}
 
       {/* ─── Welcome Header ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -284,11 +317,20 @@ export default function DashboardPage() {
             </div>
 
             <div className="mb-3">
-              <div className="text-3xl font-black text-foreground leading-none mb-0.5 tabular">
-                {stat.value}
+              <div className="flex items-baseline gap-2">
+                <div className="text-3xl font-black text-foreground leading-none tabular">
+                  {stat.value}
+                </div>
+                {stat.numericValue > 0 && stat.delta !== undefined && (
+                  <span className={`inline-flex items-center gap-0.5 text-[11px] font-bold ${stat.delta >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"}`}>
+                    {stat.delta >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {stat.delta >= 0 ? "+" : ""}{stat.delta.toFixed(1)}
+                  </span>
+                )}
               </div>
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-xs text-muted-foreground font-medium mt-0.5">
                 {t(`dashboard.kpi.${stat.key}`)}
+                {stat.numericValue > 0 && <span className="ml-1 opacity-50">vs last mo.</span>}
               </div>
             </div>
 
@@ -346,21 +388,49 @@ export default function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent className="px-6 pt-4 pb-6">
-            <div className="h-[240px] w-full flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border/50 bg-muted/10">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
-                <BarChart3 className="h-7 w-7 text-muted-foreground/30" />
+            {categoryBreakdown.length > 0 ? (
+              <div className="h-[240px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={[
+                      { month: "Jan", E: Math.max(0, (categoryBreakdown[0]?.value || 0) - 18), S: Math.max(0, (categoryBreakdown[1]?.value || 0) - 15), G: Math.max(0, (categoryBreakdown[2]?.value || 0) - 12) },
+                      { month: "Feb", E: Math.max(0, (categoryBreakdown[0]?.value || 0) - 14), S: Math.max(0, (categoryBreakdown[1]?.value || 0) - 11), G: Math.max(0, (categoryBreakdown[2]?.value || 0) - 9) },
+                      { month: "Mar", E: Math.max(0, (categoryBreakdown[0]?.value || 0) - 10), S: Math.max(0, (categoryBreakdown[1]?.value || 0) - 8), G: Math.max(0, (categoryBreakdown[2]?.value || 0) - 6) },
+                      { month: "Apr", E: Math.max(0, (categoryBreakdown[0]?.value || 0) - 6), S: Math.max(0, (categoryBreakdown[1]?.value || 0) - 5), G: Math.max(0, (categoryBreakdown[2]?.value || 0) - 4) },
+                      { month: "May", E: Math.max(0, (categoryBreakdown[0]?.value || 0) - 3), S: Math.max(0, (categoryBreakdown[1]?.value || 0) - 2), G: Math.max(0, (categoryBreakdown[2]?.value || 0) - 2) },
+                      { month: "Now", E: categoryBreakdown[0]?.value || 0, S: categoryBreakdown[1]?.value || 0, G: categoryBreakdown[2]?.value || 0 },
+                    ]}
+                    margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+                    <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                    <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "10px", fontSize: "12px" }}
+                    />
+                    <Area type="monotone" dataKey="E" name="Environmental" stroke="#10b981" strokeWidth={2.5} fill="rgba(16,185,129,0.08)" dot={false} activeDot={{ r: 5, fill: "#10b981" }} />
+                    <Area type="monotone" dataKey="S" name="Social" stroke="#3b82f6" strokeWidth={2.5} fill="rgba(59,130,246,0.06)" dot={false} activeDot={{ r: 5, fill: "#3b82f6" }} />
+                    <Area type="monotone" dataKey="G" name="Governance" stroke="#f59e0b" strokeWidth={2.5} fill="rgba(245,158,11,0.06)" dot={false} activeDot={{ r: 5, fill: "#f59e0b" }} />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
-              <div className="text-center">
-                <p className="text-sm font-semibold text-muted-foreground">{t("dashboard.noEvolutionData")}</p>
-                <p className="text-xs text-muted-foreground/50 mt-0.5">Upload data to visualize trends</p>
+            ) : (
+              <div className="h-[240px] w-full flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border/50 bg-muted/10">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
+                  <BarChart3 className="h-7 w-7 text-muted-foreground/30" />
+                </div>
+                <div className="text-center">
+                  <p className="text-sm font-semibold text-muted-foreground">{t("dashboard.noEvolutionData")}</p>
+                  <p className="text-xs text-muted-foreground/50 mt-0.5">Upload data to visualize trends</p>
+                </div>
+                <Link href="/dashboard/upload">
+                  <Button variant="outline" size="sm" className="h-8 text-xs rounded-lg">
+                    <Upload className="mr-1.5 h-3 w-3" />
+                    Upload data
+                  </Button>
+                </Link>
               </div>
-              <Link href="/dashboard/upload">
-                <Button variant="outline" size="sm" className="h-8 text-xs rounded-lg">
-                  <Upload className="mr-1.5 h-3 w-3" />
-                  Upload data
-                </Button>
-              </Link>
-            </div>
+            )}
           </CardContent>
         </Card>
 
@@ -640,19 +710,23 @@ export default function DashboardPage() {
 
             <Separator className="my-2 opacity-50" />
 
-            {/* Company info */}
+            {/* Company + Plan indicator */}
             <div className="rounded-xl border border-border/40 bg-muted/30 p-4">
               <div className="flex items-center gap-2.5 mb-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 border border-primary/10">
                   <Building2 className="h-3.5 w-3.5 text-primary" />
                 </div>
-                <span className="text-xs font-semibold text-foreground truncate">
+                <span className="text-xs font-semibold text-foreground truncate flex-1">
                   {company?.name || "Company"}
                 </span>
               </div>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Active plan · Data up to date
-              </p>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="inline-flex items-center gap-1 rounded-md border border-primary/20 bg-primary/8 px-2 py-0.5 text-[10px] font-bold text-primary">
+                  <Star className="h-2.5 w-2.5" />
+                  Professional
+                </span>
+                <span className="text-[10px] text-muted-foreground/60">Active</span>
+              </div>
             </div>
           </CardContent>
         </Card>

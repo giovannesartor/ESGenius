@@ -1,7 +1,7 @@
 """Celery tasks for report generation."""
 
-import asyncio
 import logging
+from asgiref.sync import async_to_sync
 
 from app.core.celery_app import celery_app
 from app.core.database import AsyncSessionLocal
@@ -12,19 +12,23 @@ logger = logging.getLogger(__name__)
 
 @celery_app.task(name="app.workers.report_tasks.generate_report_task", bind=True, max_retries=2)
 def generate_report_task(self, report_id: str) -> dict:
-    """Generate an ESG report asynchronously."""
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+    """Generate an ESG report asynchronously using asgiref."""
     try:
-        return loop.run_until_complete(_generate_report(report_id))
-    finally:
-        loop.close()
+        return async_to_sync(_generate_report)(report_id)
+    except Exception as exc:
+        logger.error(f"Report task failed for {report_id}: {exc}")
+        raise self.retry(exc=exc, countdown=30)
 
 
 async def _generate_report(report_id: str) -> dict:
-    """Async report generation."""
+    """Async report generation — runs inside async_to_sync wrapper."""
     async with AsyncSessionLocal() as db:
-        service = ReportService(db)
-        await service.process_report(report_id)
-        await db.commit()
-        return {"status": "completed", "report_id": report_id}
+        try:
+            service = ReportService(db)
+            await service.process_report(report_id)
+            await db.commit()
+            return {"status": "completed", "report_id": report_id}
+        except Exception as exc:
+            await db.rollback()
+            logger.error(f"Failed to generate report {report_id}: {exc}")
+            raise

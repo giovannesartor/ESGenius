@@ -1,8 +1,10 @@
 """Report API endpoints."""
 
+import os
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -95,3 +97,35 @@ async def get_report(
     if not report or report.company_id != company_id:
         raise NotFoundException("Report not found")
     return ReportResponse.model_validate(report)
+
+
+@router.get("/{report_id}/download")
+async def download_report(
+    company_id: UUID,
+    report_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Download the generated PDF/DOCX report file."""
+    if not current_user.is_superadmin:
+        service = CompanyService(db)
+        role = await service.get_user_role(company_id, current_user.id)
+        if not role:
+            raise PermissionDeniedException("No access to this company")
+
+    repo = ReportRepository(db)
+    report = await repo.get_by_id(report_id)
+    if not report or report.company_id != company_id:
+        raise NotFoundException("Report not found")
+
+    if not report.file_path or not os.path.exists(report.file_path):
+        raise NotFoundException("Report file not found. The report may still be generating.")
+
+    filename = f"{report.title or 'esg-report'}.{report.format or 'pdf'}"
+    media_type = "application/pdf" if report.format == "pdf" else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+    return FileResponse(
+        path=report.file_path,
+        filename=filename,
+        media_type=media_type,
+    )
