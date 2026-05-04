@@ -330,7 +330,7 @@ export default function DashboardPage() {
               </div>
               <div className="text-xs text-muted-foreground font-medium mt-0.5">
                 {t(`dashboard.kpi.${stat.key}`)}
-                {stat.numericValue > 0 && <span className="ml-1 opacity-50">vs last mo.</span>}
+                {stat.numericValue > 0 && <span className="ml-1 opacity-50">{t("dashboard.vsLastMonth")}</span>}
               </div>
             </div>
 
@@ -421,12 +421,12 @@ export default function DashboardPage() {
                 </div>
                 <div className="text-center">
                   <p className="text-sm font-semibold text-muted-foreground">{t("dashboard.noEvolutionData")}</p>
-                  <p className="text-xs text-muted-foreground/50 mt-0.5">Upload data to visualize trends</p>
+                  <p className="text-xs text-muted-foreground/50 mt-0.5">{t("dashboard.uploadDataHint")}</p>
                 </div>
                 <Link href="/dashboard/upload">
                   <Button variant="outline" size="sm" className="h-8 text-xs rounded-lg">
                     <Upload className="mr-1.5 h-3 w-3" />
-                    Upload data
+                    {t("dashboard.uploadData")}
                   </Button>
                 </Link>
               </div>
@@ -465,7 +465,7 @@ export default function DashboardPage() {
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     <span className="text-2xl font-black text-foreground tabular">{overallValue}</span>
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Score</span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("dashboard.scoreLabel")}</span>
                   </div>
                 </div>
                 <div className="w-full space-y-2.5 mt-4">
@@ -533,12 +533,12 @@ export default function DashboardPage() {
               </div>
               <div className="text-center">
                 <p className="text-sm font-semibold text-muted-foreground">{t("dashboard.noReportsYet")}</p>
-                <p className="text-xs text-muted-foreground/50 mt-0.5">Your reports will appear here</p>
+                <p className="text-xs text-muted-foreground/50 mt-0.5">{t("dashboard.reportsEmptyHint")}</p>
               </div>
               <Link href="/dashboard/upload">
                 <Button variant="outline" size="sm" className="h-8 text-xs rounded-lg mt-1">
                   <Upload className="mr-1.5 h-3 w-3" />
-                  Upload first report
+                  {t("dashboard.uploadFirstReport")}
                 </Button>
               </Link>
             </div>
@@ -639,7 +639,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="text-center">
                   <p className="text-sm font-semibold text-muted-foreground">{t("dashboard.noDataTitle")}</p>
-                  <p className="text-xs text-muted-foreground/50 mt-0.5">AI insights will appear here after upload</p>
+                  <p className="text-xs text-muted-foreground/50 mt-0.5">{t("dashboard.insightsEmptyHint")}</p>
                 </div>
               </div>
             ) : (

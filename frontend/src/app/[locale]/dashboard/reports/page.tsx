@@ -74,7 +74,7 @@ export default function ReportsPage() {
       setFormData({ title: "", report_type: "GRI", format: "pdf", year: new Date().getFullYear() });
       fetchReports();
     } catch (e: unknown) {
-      setGenError(e instanceof Error ? e.message : "Failed to generate report");
+      setGenError(e instanceof Error ? e.message : t("dashboard.reportsForm.failedGenerate"));
     } finally {
       setGenerating(false);
     }
@@ -99,7 +99,7 @@ export default function ReportsPage() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch {
-      alert("Could not download report. It may still be generating.");
+      alert(t("dashboard.downloadFailed"));
     }
   };
 
@@ -156,22 +156,22 @@ export default function ReportsPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />
-              Generate ESG Report
+              {t("dashboard.reportsForm.dialogTitle")}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-1.5">
-              <Label htmlFor="report-title">Report Title</Label>
+              <Label htmlFor="report-title">{t("dashboard.reportsForm.titleLabel")}</Label>
               <Input
                 id="report-title"
-                placeholder="e.g. ESG Annual Report 2025"
+                placeholder={t("dashboard.reportsForm.titlePlaceholder")}
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>Framework</Label>
+                <Label>{t("dashboard.reportsForm.frameworkLabel")}</Label>
                 <Select value={formData.report_type} onValueChange={(v) => setFormData({ ...formData, report_type: v })}>
                   <SelectTrigger>
                     <SelectValue />
@@ -182,12 +182,12 @@ export default function ReportsPage() {
                     <SelectItem value="TCFD">TCFD</SelectItem>
                     <SelectItem value="CDP">CDP</SelectItem>
                     <SelectItem value="CSRD">CSRD</SelectItem>
-                    <SelectItem value="MULTI">Multi-Framework</SelectItem>
+                    <SelectItem value="MULTI">{t("dashboard.reportsForm.frameworkMulti")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label>Format</Label>
+                <Label>{t("dashboard.reportsForm.formatLabel")}</Label>
                 <Select value={formData.format} onValueChange={(v) => setFormData({ ...formData, format: v })}>
                   <SelectTrigger>
                     <SelectValue />
@@ -200,7 +200,7 @@ export default function ReportsPage() {
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Reporting Year</Label>
+              <Label>{t("dashboard.reportsForm.yearLabel")}</Label>
               <Select value={String(formData.year)} onValueChange={(v) => setFormData({ ...formData, year: Number(v) })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -219,14 +219,14 @@ export default function ReportsPage() {
               </div>
             )}
             <p className="text-xs text-muted-foreground">
-              The AI will analyze your uploaded documents and generate a comprehensive ESG report. This may take 1–3 minutes.
+              {t("dashboard.reportsForm.aiHint")}
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>{t("dashboard.reportsForm.cancel")}</Button>
             <Button onClick={handleGenerate} disabled={generating || !formData.title.trim()}>
               {generating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <BarChart3 className="mr-2 h-4 w-4" />}
-              {generating ? "Generating..." : "Generate Report"}
+              {generating ? t("dashboard.reportsForm.generating") : t("dashboard.reportsForm.generate")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -247,7 +247,7 @@ export default function ReportsPage() {
             </p>
             <Button onClick={() => setDialogOpen(true)} className="font-semibold">
               <Plus className="mr-2 h-4 w-4" />
-              Generate First Report
+              {t("dashboard.reportsForm.generateFirst")}
             </Button>
           </CardContent>
         </Card>
@@ -307,7 +307,7 @@ export default function ReportsPage() {
                         onClick={() => handleDownload(report)}
                       >
                         <Download className="mr-1.5 h-3 w-3" />
-                        Download {report.format?.toUpperCase() || "PDF"}
+                        {t("dashboard.download")} {report.format?.toUpperCase() || "PDF"}
                       </Button>
                     )}
                   </div>
@@ -320,13 +320,13 @@ export default function ReportsPage() {
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2">
               <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page === 0}>
-                Previous
+                {t("dashboard.previousPage")}
               </Button>
               <span className="text-sm text-muted-foreground">
-                Page {page + 1} of {totalPages}
+                {t("dashboard.pageOf", { current: page + 1, total: totalPages })}
               </span>
               <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages - 1}>
-                Next
+                {t("dashboard.nextPage")}
               </Button>
             </div>
           )}

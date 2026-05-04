@@ -142,7 +142,7 @@ export default function DashboardLayout({
         {!collapsed && (
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] px-3 mb-2"
             style={{ color: "#2e4a6a" }}>
-            Navigation
+            {t("dashboard.navSectionNavigation")}
           </p>
         )}
 
@@ -175,7 +175,7 @@ export default function DashboardLayout({
             {!collapsed && (
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] px-3 mb-2"
                 style={{ color: "#2e4a6a" }}>
-                Admin
+                {t("dashboard.navSectionAdmin")}
               </p>
             )}
             <nav className="space-y-0.5">
@@ -195,7 +195,7 @@ export default function DashboardLayout({
                         variant="secondary"
                         className="text-[9px] px-1.5 py-0 h-4 font-mono bg-amber-500/10 text-amber-400 border-0"
                       >
-                        Admin
+                        {t("dashboard.adminBadge")}
                       </Badge>
                     </span>
                   )}
@@ -217,8 +217,8 @@ export default function DashboardLayout({
               <Star className="h-3 w-3 text-emerald-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold text-emerald-400 leading-none">Professional</p>
-              <p className="text-[10px] mt-0.5 leading-none" style={{ color: "#3a5a7a" }}>Active plan</p>
+              <p className="text-[11px] font-bold text-emerald-400 leading-none">{t("dashboard.planProfessional")}</p>
+              <p className="text-[10px] mt-0.5 leading-none" style={{ color: "#3a5a7a" }}>{t("dashboard.planActive")}</p>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ export default function DashboardLayout({
           <button
             onClick={handleLogout}
             className="flex h-9 w-9 items-center justify-center rounded-xl text-[#4a6380] hover:bg-red-500/10 hover:text-red-400 transition-colors"
-            title="Sign out"
+            title={t("dashboard.signOut")}
           >
             <LogOut className="h-4 w-4" />
           </button>
@@ -253,7 +253,7 @@ export default function DashboardLayout({
             <button
               onClick={handleLogout}
               className="text-[#2e4a6a] hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
-              title="Sign out"
+              title={t("dashboard.signOut")}
             >
               <LogOut className="h-3.5 w-3.5" />
             </button>
