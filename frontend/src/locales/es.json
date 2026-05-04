@@ -416,6 +416,28 @@
     "noReportsYet": "Ningún informe generado aún",
     "noEvolutionData": "La evolución del score aparecerá aquí cuando haya datos históricos.",
     "cancelLabel": "Cancelar",
+    "requiredDocsTitle": "¿Qué documentos necesito?",
+    "requiredDocsSubtitle": "Suba cualquiera de estos para dar a la IA contexto suficiente para construir un informe ESG.",
+    "requiredDocsTip": "Consejo:",
+    "requiredDocsTipBody": "No necesita subir todos. Cuantos más documentos, más preciso será el informe. Incluso un solo informe de sostenibilidad es suficiente para comenzar.",
+    "requiredDocs": {
+      "environmental": {
+        "title": "Ambiental (E)",
+        "examples": "Consumo de energía y agua, inventario de emisiones GEI, informes de residuos y reciclaje, certificaciones ambientales (ISO 14001)."
+      },
+      "social": {
+        "title": "Social (S)",
+        "examples": "Datos de diversidad e inclusión, plantilla y rotación, horas de formación, registros de salud y seguridad, programas comunitarios."
+      },
+      "governance": {
+        "title": "Gobernanza (G)",
+        "examples": "Composición del consejo, código de ética, políticas de cumplimiento y anticorrupción, retribución de directivos, gestión de riesgos."
+      },
+      "general": {
+        "title": "Informes consolidados",
+        "examples": "Informe anual de sostenibilidad, informe integrado, respuestas GRI/SASB/TCFD/CDP, cuestionarios ESG de inversores."
+      }
+    },
     "navSectionNavigation": "Navegación",
     "navSectionAdmin": "Administración",
     "planProfessional": "Professional",

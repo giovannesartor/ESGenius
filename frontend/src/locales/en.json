@@ -416,6 +416,28 @@
     "noReportsYet": "No reports generated yet",
     "noEvolutionData": "Score evolution will appear here once you have historical data.",
     "cancelLabel": "Cancel",
+    "requiredDocsTitle": "What documents do I need?",
+    "requiredDocsSubtitle": "Upload any of these to give the AI enough context to build an ESG report.",
+    "requiredDocsTip": "Tip:",
+    "requiredDocsTipBody": "You don't need every document. The more you upload, the more accurate the report. Even a single sustainability report is enough to start.",
+    "requiredDocs": {
+      "environmental": {
+        "title": "Environmental (E)",
+        "examples": "Energy & water consumption, GHG emissions inventory, waste & recycling reports, environmental certifications (ISO 14001)."
+      },
+      "social": {
+        "title": "Social (S)",
+        "examples": "Diversity & inclusion data, headcount & turnover, training hours, health & safety records, community programs."
+      },
+      "governance": {
+        "title": "Governance (G)",
+        "examples": "Board composition, code of ethics, compliance & anti-corruption policies, executive compensation, risk management."
+      },
+      "general": {
+        "title": "Consolidated reports",
+        "examples": "Annual sustainability report, integrated report, GRI/SASB/TCFD/CDP responses, ESG questionnaires from investors."
+      }
+    },
     "navSectionNavigation": "Navigation",
     "navSectionAdmin": "Admin",
     "planProfessional": "Professional",

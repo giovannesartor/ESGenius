@@ -416,6 +416,28 @@
     "noReportsYet": "Nenhum relatório gerado ainda",
     "noEvolutionData": "A evolução do score aparecerá aqui quando houver dados históricos.",
     "cancelLabel": "Cancelar",
+    "requiredDocsTitle": "Quais documentos eu preciso?",
+    "requiredDocsSubtitle": "Envie qualquer um destes para dar à IA contexto suficiente para construir um relatório ESG.",
+    "requiredDocsTip": "Dica:",
+    "requiredDocsTipBody": "Você não precisa enviar todos. Quanto mais documentos, mais preciso será o relatório. Apenas um relatório de sustentabilidade já é suficiente para começar.",
+    "requiredDocs": {
+      "environmental": {
+        "title": "Ambiental (E)",
+        "examples": "Consumo de energia e água, inventário de emissões de GEE, relatórios de resíduos e reciclagem, certificações ambientais (ISO 14001)."
+      },
+      "social": {
+        "title": "Social (S)",
+        "examples": "Dados de diversidade e inclusão, número de funcionários e turnover, horas de treinamento, registros de saúde e segurança, programas comunitários."
+      },
+      "governance": {
+        "title": "Governança (G)",
+        "examples": "Composição do conselho, código de ética, políticas de compliance e anticorrupção, remuneração de executivos, gestão de riscos."
+      },
+      "general": {
+        "title": "Relatórios consolidados",
+        "examples": "Relatório anual de sustentabilidade, relatório integrado, respostas GRI/SASB/TCFD/CDP, questionários ESG de investidores."
+      }
+    },
     "navSectionNavigation": "Navegação",
     "navSectionAdmin": "Administração",
     "planProfessional": "Professional",

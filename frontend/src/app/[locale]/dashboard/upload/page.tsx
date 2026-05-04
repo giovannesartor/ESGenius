@@ -17,6 +17,11 @@ import {
   CloudUpload,
   Loader2,
   Building2,
+  Leaf,
+  Users,
+  Scale,
+  ClipboardList,
+  Info,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
@@ -258,6 +263,51 @@ export default function UploadPage() {
           </Badge>
         ))}
       </div>
+
+      {/* Recommended Documents Guide */}
+      <Card className="border-border/50">
+        <CardHeader className="pb-3">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <Info className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-base font-semibold">{t("dashboard.requiredDocsTitle")}</CardTitle>
+              <p className="text-xs text-muted-foreground mt-1">{t("dashboard.requiredDocsSubtitle")}</p>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { icon: Leaf, color: "text-emerald-600 bg-emerald-500/10", key: "environmental" },
+            { icon: Users, color: "text-blue-600 bg-blue-500/10", key: "social" },
+            { icon: Scale, color: "text-amber-600 bg-amber-500/10", key: "governance" },
+            { icon: ClipboardList, color: "text-violet-600 bg-violet-500/10", key: "general" },
+          ].map((cat) => (
+            <div key={cat.key} className="flex gap-3 rounded-xl border border-border/50 p-4">
+              <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${cat.color}`}>
+                <cat.icon className="h-4 w-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">
+                  {t(`dashboard.requiredDocs.${cat.key}.title`)}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                  {t(`dashboard.requiredDocs.${cat.key}.examples`)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+        <CardContent className="pt-0">
+          <div className="rounded-lg bg-muted/40 border border-border/50 px-4 py-3">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-foreground">{t("dashboard.requiredDocsTip")}</span>{" "}
+              {t("dashboard.requiredDocsTipBody")}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
