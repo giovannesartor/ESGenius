@@ -37,6 +37,12 @@ import {
   ChevronRight,
   Activity,
   Target,
+  Quote,
+  X,
+  Check,
+  Upload,
+  Cpu,
+  FileBarChart,
 } from "lucide-react";
 
 /* ── Scroll-animated wrapper ─────────────────────────────────────── */
@@ -252,6 +258,245 @@ const coverageBars = [
   { key: "fwCdp", pct: 76, color: "#8b5cf6" },
   { key: "fwIssb", pct: 82, color: "#06b6d4" },
 ];
+
+/* ─── Product Showcase — Interactive tabs ─── */
+function ProductShowcase() {
+  const t = useTranslations();
+  const [active, setActive] = useState(0);
+
+  const tabs = [
+    {
+      label: t("home.showcaseTab1"),
+      title: t("home.showcase1Title"),
+      desc: t("home.showcase1Desc"),
+      icon: <Upload className="h-4 w-4" />,
+      accent: "emerald",
+    },
+    {
+      label: t("home.showcaseTab2"),
+      title: t("home.showcase2Title"),
+      desc: t("home.showcase2Desc"),
+      icon: <Cpu className="h-4 w-4" />,
+      accent: "blue",
+    },
+    {
+      label: t("home.showcaseTab3"),
+      title: t("home.showcase3Title"),
+      desc: t("home.showcase3Desc"),
+      icon: <Activity className="h-4 w-4" />,
+      accent: "amber",
+    },
+    {
+      label: t("home.showcaseTab4"),
+      title: t("home.showcase4Title"),
+      desc: t("home.showcase4Desc"),
+      icon: <FileBarChart className="h-4 w-4" />,
+      accent: "violet",
+    },
+  ];
+
+  const accentMap: Record<string, { bg: string; text: string; border: string; ring: string; bar: string }> = {
+    emerald: { bg: "bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", border: "border-emerald-500/20", ring: "ring-emerald-500/30", bar: "bg-emerald-500" },
+    blue:    { bg: "bg-blue-500/10",    text: "text-blue-600 dark:text-blue-400",       border: "border-blue-500/20",    ring: "ring-blue-500/30",    bar: "bg-blue-500" },
+    amber:   { bg: "bg-amber-500/10",   text: "text-amber-600 dark:text-amber-400",     border: "border-amber-500/20",   ring: "ring-amber-500/30",   bar: "bg-amber-500" },
+    violet:  { bg: "bg-violet-500/10",  text: "text-violet-600 dark:text-violet-400",   border: "border-violet-500/20",  ring: "ring-violet-500/30",  bar: "bg-violet-500" },
+  };
+
+  return (
+    <section className="py-28 sm:py-36 bg-muted/30 border-y border-border/60">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <FadeIn className="mb-14 max-w-3xl">
+          <div className="mb-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-violet-600 dark:text-violet-400">
+              <Sparkles className="h-3 w-3" />
+              {t("home.showcaseLabel")}
+            </span>
+          </div>
+          <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl lg:text-5xl mb-4">
+            {t("home.showcaseTitle")}
+          </h2>
+          <p className="text-base text-muted-foreground leading-relaxed">{t("home.showcaseSub")}</p>
+        </FadeIn>
+
+        <FadeIn>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Tabs (left) */}
+            <div className="lg:col-span-4 space-y-2">
+              {tabs.map((tab, i) => {
+                const a = accentMap[tab.accent];
+                const isActive = active === i;
+                return (
+                  <button
+                    key={tab.label}
+                    onClick={() => setActive(i)}
+                    className={`w-full text-left rounded-xl border px-5 py-4 transition-all duration-200 ${
+                      isActive
+                        ? `${a.bg} ${a.border} ring-1 ${a.ring} shadow-md`
+                        : "bg-card border-border/60 hover:border-border hover:bg-muted/50"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${isActive ? `${a.bg} ${a.text} ${a.border}` : "bg-muted text-muted-foreground border-border/60"}`}>
+                        {tab.icon}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className={`text-[11px] font-bold uppercase tracking-[0.12em] mb-1 ${isActive ? a.text : "text-muted-foreground/60"}`}>
+                          {tab.label}
+                        </div>
+                        <div className={`text-sm font-bold ${isActive ? "text-foreground" : "text-foreground/80"}`}>
+                          {tab.title}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Visual (right) */}
+            <div className="lg:col-span-8">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="rounded-2xl border border-border/60 bg-card p-8 shadow-xl shadow-black/5 dark:shadow-black/20 min-h-[420px] flex flex-col"
+              >
+                <div className="flex items-center justify-between mb-6 pb-5 border-b border-border/40">
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground mb-1">{tabs[active].title}</h3>
+                    <p className="text-sm text-muted-foreground max-w-xl">{tabs[active].desc}</p>
+                  </div>
+                  <div className={`shrink-0 ml-4 h-10 w-10 rounded-lg flex items-center justify-center ${accentMap[tabs[active].accent].bg} ${accentMap[tabs[active].accent].text} border ${accentMap[tabs[active].accent].border}`}>
+                    {tabs[active].icon}
+                  </div>
+                </div>
+
+                {/* Visualizations per tab */}
+                <div className="flex-1">
+                  {active === 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {[
+                        { name: "sustainability_2025.pdf", size: "4.2 MB", type: "PDF", color: "text-emerald-500" },
+                        { name: "scope1_2_emissions.xlsx", size: "812 KB", type: "XLSX", color: "text-blue-500" },
+                        { name: "diversity_report.pdf", size: "1.8 MB", type: "PDF", color: "text-emerald-500" },
+                        { name: "energy_invoices.csv", size: "318 KB", type: "CSV", color: "text-amber-500" },
+                      ].map((f) => (
+                        <div key={f.name} className="flex items-center gap-3 rounded-lg border border-border/60 bg-muted/40 px-4 py-3">
+                          <FileText className={`h-5 w-5 ${f.color}`} />
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs font-semibold text-foreground truncate">{f.name}</div>
+                            <div className="text-[10px] text-muted-foreground">{f.type} · {f.size}</div>
+                          </div>
+                          <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                        </div>
+                      ))}
+                      <div className="sm:col-span-2 rounded-lg border-2 border-dashed border-emerald-500/30 bg-emerald-500/5 px-4 py-6 text-center">
+                        <Upload className="h-5 w-5 text-emerald-500 mx-auto mb-2" />
+                        <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Drop more files</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {active === 1 && (
+                    <div className="space-y-2">
+                      {[
+                        { metric: "Scope 1 GHG emissions", value: "12,480 tCO₂e", framework: "GRI 305-1", confidence: 98 },
+                        { metric: "Scope 2 GHG emissions", value: "8,920 tCO₂e", framework: "GRI 305-2", confidence: 96 },
+                        { metric: "Female board representation", value: "42%", framework: "GRI 405-1", confidence: 99 },
+                        { metric: "Water consumption", value: "184,300 m³", framework: "SASB EM-IS-140a.1", confidence: 94 },
+                        { metric: "Workplace injuries (TRIR)", value: "0.84", framework: "GRI 403-9", confidence: 92 },
+                      ].map((d) => (
+                        <div key={d.metric} className="grid grid-cols-12 gap-3 items-center rounded-lg border border-border/60 bg-muted/40 px-4 py-2.5">
+                          <div className="col-span-5">
+                            <div className="text-xs font-semibold text-foreground truncate">{d.metric}</div>
+                            <div className="text-[10px] text-muted-foreground">{d.framework}</div>
+                          </div>
+                          <div className="col-span-3 text-sm font-black text-blue-600 dark:text-blue-400 tabular">{d.value}</div>
+                          <div className="col-span-4 flex items-center gap-2">
+                            <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
+                              <div className="h-full bg-blue-500" style={{ width: `${d.confidence}%` }} />
+                            </div>
+                            <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 w-7 text-right">{d.confidence}%</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {active === 2 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {[
+                        { label: "Environmental", value: 87, color: "#10b981" },
+                        { label: "Social", value: 72, color: "#3b82f6" },
+                        { label: "Governance", value: 91, color: "#f59e0b" },
+                      ].map((s) => (
+                        <div key={s.label} className="rounded-xl border border-border/60 bg-muted/40 p-5 text-center">
+                          <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">{s.label}</div>
+                          <div className="text-4xl font-black tabular mb-2" style={{ color: s.color }}>{s.value}</div>
+                          <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                            <div className="h-full rounded-full" style={{ width: `${s.value}%`, backgroundColor: s.color }} />
+                          </div>
+                        </div>
+                      ))}
+                      <div className="sm:col-span-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Target className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                          <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">Top gaps to close</span>
+                        </div>
+                        <div className="space-y-2">
+                          {[
+                            "GRI 305-3 — Scope 3 emissions disclosure missing",
+                            "TCFD — Scenario analysis not yet documented",
+                            "SASB — Workforce health & safety incidents incomplete",
+                          ].map((g) => (
+                            <div key={g} className="flex items-start gap-2 text-[11px] text-foreground/80">
+                              <ChevronRight className="h-3 w-3 text-amber-500 mt-0.5 shrink-0" />
+                              {g}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {active === 3 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {[
+                        { name: "Executive Summary", pages: "12 pages", desc: "Investor & board-ready overview", icon: <FileText className="h-5 w-5" />, color: "violet" },
+                        { name: "Full Compliance Report", pages: "98 pages", desc: "Audit-ready with evidence trail", icon: <FileCheck className="h-5 w-5" />, color: "emerald" },
+                      ].map((p) => (
+                        <div key={p.name} className={`rounded-xl border-2 ${p.color === "violet" ? "border-violet-500/20 bg-violet-500/5" : "border-emerald-500/20 bg-emerald-500/5"} p-6`}>
+                          <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl mb-4 ${p.color === "violet" ? "bg-violet-500/15 text-violet-600 dark:text-violet-400 border border-violet-500/20" : "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"}`}>
+                            {p.icon}
+                          </div>
+                          <div className="text-sm font-black text-foreground mb-1">{p.name}</div>
+                          <div className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground mb-3">{p.pages} · PDF</div>
+                          <p className="text-xs text-muted-foreground leading-relaxed mb-4">{p.desc}</p>
+                          <div className="flex items-center gap-2 text-[11px] font-semibold text-foreground/80">
+                            <CheckCircle2 className={`h-3.5 w-3.5 ${p.color === "violet" ? "text-violet-500" : "text-emerald-500"}`} />
+                            Audit trail included
+                          </div>
+                        </div>
+                      ))}
+                      <div className="sm:col-span-2 rounded-xl bg-muted/40 border border-border/60 px-5 py-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                          <span className="text-xs font-semibold text-foreground">Both PDFs generated in under 60 seconds</span>
+                        </div>
+                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">READY</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
 
 /* ─── Main Page ─── */
 export default function HomePage() {
@@ -491,6 +736,74 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            VALUE PROPS — 3 columns
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-24 sm:py-32 bg-background">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <FadeIn className="mb-16 max-w-3xl">
+              <div className="mb-4">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
+                  <Sparkles className="h-3 w-3" />
+                  {t("home.valuePropsLabel")}
+                </span>
+              </div>
+              <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+                {t("home.valuePropsTitle")}
+              </h2>
+            </FadeIn>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {[
+                {
+                  icon: <Zap className="h-5 w-5" />,
+                  title: t("home.valueProp1Title"),
+                  desc: t("home.valueProp1Desc"),
+                  stat: "80%",
+                  statLabel: "time saved",
+                  accent: { bg: "bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", border: "border-emerald-500/15", ring: "from-emerald-500/40" },
+                },
+                {
+                  icon: <Shield className="h-5 w-5" />,
+                  title: t("home.valueProp2Title"),
+                  desc: t("home.valueProp2Desc"),
+                  stat: "6+",
+                  statLabel: "frameworks",
+                  accent: { bg: "bg-blue-500/10", text: "text-blue-600 dark:text-blue-400", border: "border-blue-500/15", ring: "from-blue-500/40" },
+                },
+                {
+                  icon: <Target className="h-5 w-5" />,
+                  title: t("home.valueProp3Title"),
+                  desc: t("home.valueProp3Desc"),
+                  stat: "Live",
+                  statLabel: "scoring & gaps",
+                  accent: { bg: "bg-amber-500/10", text: "text-amber-600 dark:text-amber-400", border: "border-amber-500/15", ring: "from-amber-500/40" },
+                },
+              ].map((vp, i) => (
+                <FadeIn key={vp.title} delay={i * 0.08}>
+                  <div className={`group relative h-full rounded-2xl border ${vp.accent.border} bg-card p-7 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden`}>
+                    <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r ${vp.accent.ring} via-transparent to-transparent opacity-60`} />
+                    <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl border ${vp.accent.bg} ${vp.accent.text} ${vp.accent.border} mb-6 transition-transform duration-300 group-hover:scale-110`}>
+                      {vp.icon}
+                    </div>
+                    <div className="flex items-baseline gap-2 mb-3">
+                      <span className={`text-3xl font-black tabular ${vp.accent.text}`}>{vp.stat}</span>
+                      <span className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground/60">{vp.statLabel}</span>
+                    </div>
+                    <h3 className="text-base font-bold text-foreground mb-2.5">{vp.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{vp.desc}</p>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            PRODUCT SHOWCASE — Interactive tabs
+        ════════════════════════════════════════════════════════════════ */}
+        <ProductShowcase />
 
         {/* ════════════════════════════════════════════════════════════════
             FEATURES — Bento Grid
@@ -866,11 +1179,122 @@ export default function HomePage() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
+            COMPARISON TABLE — Spreadsheets vs Consultants vs ESG360
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-28 sm:py-36 bg-background">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <FadeIn className="mb-14 text-center max-w-3xl mx-auto">
+              <div className="mb-4 flex justify-center">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-rose-600 dark:text-rose-400">
+                  <Sparkles className="h-3 w-3" />
+                  {t("home.compareLabel")}
+                </span>
+              </div>
+              <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl lg:text-5xl mb-4">
+                {t("home.compareTitle")}
+              </h2>
+              <p className="text-base text-muted-foreground">{t("home.compareSub")}</p>
+            </FadeIn>
+
+            <FadeIn>
+              <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-xl shadow-black/5 dark:shadow-black/20">
+                {/* Header */}
+                <div className="grid grid-cols-12 bg-muted/40 border-b border-border/60">
+                  <div className="col-span-4 px-6 py-5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                    &nbsp;
+                  </div>
+                  <div className="col-span-3 px-4 py-5 text-center border-l border-border/40">
+                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide">{t("home.compareCol1")}</div>
+                  </div>
+                  <div className="col-span-2 px-4 py-5 text-center border-l border-border/40">
+                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide">{t("home.compareCol2")}</div>
+                  </div>
+                  <div className="col-span-3 px-4 py-5 text-center border-l border-emerald-500/20 bg-emerald-500/5 relative">
+                    <div className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide flex items-center justify-center gap-1.5">
+                      <Sparkles className="h-3 w-3" />
+                      {t("home.compareCol3")}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rows */}
+                {[1, 2, 3, 4, 5].map((n, idx) => (
+                  <div key={n} className={`grid grid-cols-12 ${idx < 4 ? "border-b border-border/40" : ""}`}>
+                    <div className="col-span-4 px-6 py-5 text-sm font-semibold text-foreground/90 flex items-center">
+                      {t(`home.compareRow${n}`)}
+                    </div>
+                    <div className="col-span-3 px-4 py-5 text-center border-l border-border/40 flex items-center justify-center gap-2">
+                      <X className="h-3.5 w-3.5 text-rose-500/70 shrink-0" />
+                      <span className="text-xs text-muted-foreground">{t(`home.compareRow${n}a`)}</span>
+                    </div>
+                    <div className="col-span-2 px-4 py-5 text-center border-l border-border/40 flex items-center justify-center">
+                      <span className="text-xs text-muted-foreground">{t(`home.compareRow${n}b`)}</span>
+                    </div>
+                    <div className="col-span-3 px-4 py-5 text-center border-l border-emerald-500/20 bg-emerald-500/[0.03] flex items-center justify-center gap-2">
+                      <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                      <span className="text-xs font-bold text-foreground">{t(`home.compareRow${n}c`)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            TESTIMONIALS
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-28 sm:py-36 bg-muted/30 border-y border-border/60">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <FadeIn className="mb-14 max-w-3xl">
+              <div className="mb-4">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
+                  <Quote className="h-3 w-3" />
+                  {t("home.testimonialsLabel")}
+                </span>
+              </div>
+              <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+                {t("home.testimonialsTitle")}
+              </h2>
+            </FadeIn>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {[1, 2, 3].map((n, i) => (
+                <FadeIn key={n} delay={i * 0.08}>
+                  <div className="group h-full rounded-2xl border border-border/60 bg-card p-7 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
+                    <div className="flex items-center gap-1 mb-5">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star key={s} className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+                      ))}
+                    </div>
+                    <Quote className="h-6 w-6 text-amber-500/40 mb-3" />
+                    <p className="text-sm text-foreground/90 leading-relaxed mb-6 flex-1">
+                      “{t(`home.testimonial${n}Quote`)}”
+                    </p>
+                    <div className="flex items-center gap-3 pt-5 border-t border-border/40">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/20 to-blue-500/20 border border-border/60 text-sm font-black text-foreground">
+                        {t(`home.testimonial${n}Name`).charAt(0)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-bold text-foreground truncate">{t(`home.testimonial${n}Name`)}</div>
+                        <div className="text-[11px] text-muted-foreground truncate">
+                          {t(`home.testimonial${n}Role`)} · {t(`home.testimonial${n}Company`)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
             PRICING TEASER
         ════════════════════════════════════════════════════════════════ */}
-        <section className="py-24 sm:py-32 bg-muted/30 border-y border-border/60">
+        <section className="py-24 sm:py-32 bg-background border-y border-border/60">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <FadeIn className="text-center mb-16">
+            <FadeIn className="text-center mb-14">
               <div className="mb-4 flex justify-center">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
                   <Sparkles className="h-3 w-3" />
@@ -884,6 +1308,46 @@ export default function HomePage() {
                 {t("pricing.subtitle")}
               </p>
             </FadeIn>
+
+            {/* Pricing teaser cards */}
+            <FadeIn delay={0.05}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto mb-10">
+                {([
+                  { tier: "professional", border: "border-border/60", glow: "" },
+                  { tier: "enterprise", border: "border-emerald-500/30", glow: "shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-500/10" },
+                ] as const).map((p) => (
+                  <div key={p.tier} className={`relative rounded-2xl border ${p.border} bg-card p-7 ${p.glow}`}>
+                    {p.tier === "enterprise" && (
+                      <span className="absolute -top-3 right-6 inline-flex items-center rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-white">
+                        {t("pricing.popular")}
+                      </span>
+                    )}
+                    <div className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">
+                      {t(`pricing.${p.tier}.name`)}
+                    </div>
+                    <div className="flex items-baseline gap-2 mb-2">
+                      <span className="text-4xl font-black text-foreground tabular">{t(`pricing.${p.tier}.price`)}</span>
+                      <span className="text-sm font-semibold text-muted-foreground">{t(`pricing.${p.tier}.period`)}</span>
+                    </div>
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mb-5">
+                      <CheckCircle2 className="h-3 w-3" />
+                      {t("pricing.oneTime")}
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+                        <FileText className="h-3.5 w-3.5 text-violet-500 shrink-0" />
+                        {t("pricing.deliverable1")}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+                        <FileCheck className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        {t("pricing.deliverable2")}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+
             <FadeIn className="text-center" delay={0.1}>
               <Link href="/pricing">
                 <Button

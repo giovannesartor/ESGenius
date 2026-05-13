@@ -8,23 +8,23 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, CheckCircle2, X, HelpCircle } from "lucide-react";
-
-const comparisonFeatures = [
-  { key: "companies", pro: "1 company", ent: "Unlimited" },
-  { key: "frameworks", pro: "GRI, SASB, TCFD", ent: "All + Custom" },
-  { key: "reports", pro: "4/year (PDF)", ent: "Unlimited + White-label" },
-  { key: "aiExtraction", pro: true, ent: true },
-  { key: "esgScoring", pro: "Quarterly", ent: "Real-time" },
-  { key: "support", pro: "AI 24/7 + Email", ent: "AI 24/7 + Priority" },
-  { key: "api", pro: false, ent: true },
-  { key: "sso", pro: false, ent: true },
-  { key: "whiteLabelOpt", pro: false, ent: true },
-  { key: "extraReports", pro: "$300 each", ent: "Included" },
-];
+import {
+  ArrowRight,
+  CheckCircle2,
+  HelpCircle,
+  Sparkles,
+  FileText,
+  FileCheck,
+  Shield,
+} from "lucide-react";
 
 export default function PricingPage() {
   const t = useTranslations();
+
+  const tiers = [
+    { key: "professional" as const, featured: false, icon: <FileText className="h-5 w-5" /> },
+    { key: "enterprise" as const, featured: true, icon: <Shield className="h-5 w-5" /> },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -37,178 +37,175 @@ export default function PricingPage() {
             <div className="mx-auto max-w-2xl text-center">
               <Badge variant="secondary" className="mb-6">
                 <HelpCircle className="mr-1.5 h-3 w-3" />
-                {t("pricing.badge") || "Pricing"}
+                {t("pricing.badge")}
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+              <h1 className="text-4xl font-black tracking-tight text-foreground sm:text-5xl">
                 {t("pricing.title")}
               </h1>
-              <p className="mt-4 text-lg text-muted-foreground">
-                {t("pricing.subtitle")}
-              </p>
+              <p className="mt-4 text-lg text-muted-foreground">{t("pricing.subtitle")}</p>
+
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
+                  <Sparkles className="h-3 w-3" />
+                  {t("pricing.oneTime")}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-violet-600 dark:text-violet-400">
+                  <FileText className="h-3 w-3" />
+                  {t("pricing.deliverables")}
+                </span>
+              </div>
             </div>
 
             {/* Plans */}
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* Professional Plan */}
-              <Card className="relative border-2 border-primary shadow-xl shadow-primary/10">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground px-4 py-1 text-xs font-semibold shadow-md">
-                    {t("pricing.popular")}
-                  </Badge>
-                </div>
-                <CardHeader className="pb-0 pt-8 px-8">
-                  <h2 className="text-2xl font-bold text-foreground">{t("pricing.professional.name")}</h2>
-                  <p className="mt-2 text-sm text-muted-foreground">{t("pricing.professional.desc")}</p>
-                </CardHeader>
-                <CardContent className="px-8 pb-8">
-                  <div className="mt-6">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-5xl font-bold text-foreground">{t("pricing.professional.price")}</span>
-                      <span className="text-muted-foreground text-sm">{t("pricing.professional.period")}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">{t("pricing.professional.monthlyNote")}</p>
-                  </div>
-                  <Link href="/register" className="block mt-8">
-                    <Button className="w-full h-12 font-semibold text-base shadow-lg shadow-primary/25">
-                      {t("pricing.professional.cta")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Separator className="my-8" />
-                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-4">
-                    {t("pricing.includedLabel")}
-                  </p>
-                  <ul className="space-y-3">
-                    {Array.from({ length: 8 }, (_, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                        <span className="text-sm text-foreground">
-                          {t(`pricing.professional.feature${i + 1}`)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-6 rounded-xl border border-border/60 bg-muted/30 px-4 py-3">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1.5">{t("pricing.professional.extrasLabel")}</p>
-                    <p className="text-sm text-foreground">{t("pricing.professional.extrasReport")}</p>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              {tiers.map((tier) => {
+                const isEnt = tier.key === "enterprise";
+                return (
+                  <Card
+                    key={tier.key}
+                    className={`relative ${
+                      tier.featured
+                        ? "border-2 border-emerald-500/40 shadow-2xl shadow-emerald-500/10 ring-1 ring-emerald-500/10"
+                        : "border border-border/60"
+                    }`}
+                  >
+                    {tier.featured && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                        <Badge className="bg-emerald-500 hover:bg-emerald-500 text-white px-4 py-1 text-xs font-black uppercase tracking-wide shadow-md">
+                          {t("pricing.popular")}
+                        </Badge>
+                      </div>
+                    )}
+                    <CardHeader className="pb-0 pt-9 px-8">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div
+                          className={`flex h-10 w-10 items-center justify-center rounded-xl border ${
+                            isEnt
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                              : "bg-primary/10 text-primary border-primary/20"
+                          }`}
+                        >
+                          {tier.icon}
+                        </div>
+                        <h2 className="text-2xl font-black text-foreground">
+                          {t(`pricing.${tier.key}.name`)}
+                        </h2>
+                      </div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {t(`pricing.${tier.key}.desc`)}
+                      </p>
+                    </CardHeader>
 
-              {/* Enterprise Plan */}
-              <Card className="border border-border/60 bg-card">
-                <CardHeader className="pb-0 pt-8 px-8">
-                  <h2 className="text-2xl font-bold text-foreground">{t("pricing.enterprise.name")}</h2>
-                  <p className="mt-2 text-sm text-muted-foreground">{t("pricing.enterprise.desc")}</p>
-                </CardHeader>
-                <CardContent className="px-8 pb-8">
-                  <div className="mt-6">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-5xl font-bold text-foreground">{t("pricing.enterprise.price")}</span>
-                      <span className="text-muted-foreground text-sm">{t("pricing.enterprise.period")}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">{t("pricing.enterprise.monthlyNote")}</p>
-                  </div>
-                  <Link href="/register" className="block mt-8">
-                    <Button variant="outline" className="w-full h-12 font-semibold text-base">
-                      {t("pricing.enterprise.cta")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Separator className="my-8" />
-                  <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-4">
-                    {t("pricing.includedLabel")}
-                  </p>
-                  <ul className="space-y-3">
-                    {Array.from({ length: 8 }, (_, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
-                        <span className="text-sm text-foreground">
-                          {t(`pricing.enterprise.feature${i + 1}`)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-6 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
-                    <p className="text-sm font-semibold text-accent">{t("pricing.enterprise.noExtras")}</p>
-                  </div>
-                </CardContent>
-              </Card>
+                    <CardContent className="px-8 pb-9">
+                      <div className="mt-7">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-5xl font-black text-foreground tabular">
+                            {t(`pricing.${tier.key}.price`)}
+                          </span>
+                          <span className="text-sm font-semibold text-muted-foreground">
+                            {t(`pricing.${tier.key}.period`)}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1.5">
+                          {t(`pricing.${tier.key}.monthlyNote`)}
+                        </p>
+                      </div>
+
+                      <div
+                        className={`mt-6 rounded-xl border p-4 ${
+                          isEnt ? "border-emerald-500/20 bg-emerald-500/5" : "border-primary/20 bg-primary/5"
+                        }`}
+                      >
+                        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">
+                          {t("pricing.deliverables")}
+                        </div>
+                        <div className="space-y-2.5">
+                          <div className="flex items-start gap-2.5">
+                            <FileText className="h-4 w-4 shrink-0 mt-0.5 text-violet-500" />
+                            <span className="text-sm font-semibold text-foreground">
+                              {t("pricing.deliverable1")}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2.5">
+                            <FileCheck className="h-4 w-4 shrink-0 mt-0.5 text-emerald-500" />
+                            <span className="text-sm font-semibold text-foreground">
+                              {t("pricing.deliverable2")}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Link href={isEnt ? "/contact" : "/register"} className="block mt-6">
+                        <Button
+                          className={`w-full h-12 font-bold text-base ${
+                            isEnt
+                              ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/25"
+                              : "shadow-lg shadow-primary/25"
+                          }`}
+                        >
+                          {t(`pricing.${tier.key}.cta`)}
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+
+                      <Separator className="my-7" />
+
+                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-4">
+                        {t("pricing.includedLabel")}
+                      </p>
+                      <ul className="space-y-2.5">
+                        {Array.from({ length: 8 }, (_, i) => (
+                          <li key={i} className="flex items-start gap-2.5">
+                            <CheckCircle2
+                              className={`h-4 w-4 mt-0.5 shrink-0 ${isEnt ? "text-emerald-500" : "text-primary"}`}
+                            />
+                            <span className="text-sm text-foreground/90">
+                              {t(`pricing.${tier.key}.feature${i + 1}`)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {!isEnt && (
+                        <div className="mt-6 rounded-xl border border-border/60 bg-muted/30 px-4 py-3">
+                          <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-1.5">
+                            {t("pricing.professional.extrasLabel")}
+                          </p>
+                          <p className="text-sm font-semibold text-foreground">
+                            {t("pricing.professional.extrasReport")}
+                          </p>
+                        </div>
+                      )}
+                      {isEnt && (
+                        <div className="mt-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
+                          <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                            {t("pricing.enterprise.noExtras")}
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* Comparison Table */}
-        <section className="py-20 bg-card/50 border-y border-border/40">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-foreground text-center mb-12">
-              Feature Comparison
-            </h2>
-
-            <div className="rounded-xl border border-border/50 overflow-hidden bg-background">
-              {/* Header */}
-              <div className="grid grid-cols-3 gap-4 px-6 py-4 bg-muted/50 font-semibold text-sm">
-                <span className="text-muted-foreground">Feature</span>
-                <span className="text-center text-foreground">Professional</span>
-                <span className="text-center text-foreground">Enterprise</span>
-              </div>
-
-              {/* Rows */}
-              {comparisonFeatures.map((feature, idx) => (
-                <div
-                  key={feature.key}
-                  className={`grid grid-cols-3 gap-4 px-6 py-3.5 text-sm ${
-                    idx % 2 === 0 ? "bg-background" : "bg-muted/20"
-                  }`}
-                >
-                  <span className="text-foreground font-medium capitalize">
-                    {feature.key.replace(/([A-Z])/g, " $1").trim()}
-                  </span>
-                  <span className="text-center text-muted-foreground">
-                    {typeof feature.pro === "boolean" ? (
-                      feature.pro ? (
-                        <CheckCircle2 className="h-4 w-4 text-primary mx-auto" />
-                      ) : (
-                        <X className="h-4 w-4 text-muted-foreground/40 mx-auto" />
-                      )
-                    ) : (
-                      feature.pro
-                    )}
-                  </span>
-                  <span className="text-center text-muted-foreground">
-                    {typeof feature.ent === "boolean" ? (
-                      feature.ent ? (
-                        <CheckCircle2 className="h-4 w-4 text-accent mx-auto" />
-                      ) : (
-                        <X className="h-4 w-4 text-muted-foreground/40 mx-auto" />
-                      )
-                    ) : (
-                      feature.ent
-                    )}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ / CTA */}
-        <section className="py-20">
+        {/* CTA */}
+        <section className="py-20 bg-card/40 border-t border-border/40">
           <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-2xl font-bold text-foreground">Ready to get started?</h2>
-            <p className="mt-3 text-muted-foreground">
-              Start your 14-day free trial. No credit card required.
-            </p>
+            <h2 className="text-2xl font-black text-foreground">{t("cta.title")}</h2>
+            <p className="mt-3 text-muted-foreground">{t("cta.subtitle")}</p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/register">
-                <Button size="lg" className="h-12 px-8 font-semibold shadow-lg shadow-primary/25">
-                  Start Free Trial
+                <Button size="lg" className="h-12 px-8 font-bold shadow-lg shadow-primary/25">
+                  {t("cta.button")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <a href="mailto:sales@esg360.digital">
-                <Button variant="ghost" size="lg" className="h-12 px-8 font-semibold">
-                  Contact Sales
+                <Button variant="outline" size="lg" className="h-12 px-8 font-semibold">
+                  {t("home.contactSales")}
                 </Button>
               </a>
             </div>
