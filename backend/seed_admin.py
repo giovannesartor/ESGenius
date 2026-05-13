@@ -36,10 +36,20 @@ async def _seed_one(session, email: str, password: str, name: str):
     existing = result.scalar_one_or_none()
 
     if existing:
+        changed = False
         if not existing.is_superadmin:
             existing.is_superadmin = True
+            changed = True
+        if os.getenv("RESET_ADMIN_PASSWORD", "false").lower() in ("1", "true", "yes"):
+            existing.hashed_password = get_password_hash(password)
+            existing.is_active = True
+            existing.is_email_verified = True
+            existing.auth_provider = "local"
+            changed = True
+            print(f"[SEED] Password reset for {email}")
+        if changed:
             await session.commit()
-            print(f"[SEED] Updated {email} to superadmin")
+            print(f"[SEED] Updated {email}")
         else:
             print(f"[SEED] Superadmin {email} already exists — skipping")
     else:
