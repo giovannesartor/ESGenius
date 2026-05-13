@@ -25,6 +25,30 @@ asyncio.run(create_tables())
 " 2>&1 || echo "WARNING: Table creation had issues"
 
 echo ""
+echo "=== Patching schema (idempotent ALTER TABLE for missing columns) ==="
+python -c "
+import asyncio
+from sqlalchemy import text
+from app.core.database import engine
+
+PATCHES = [
+    'ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255) UNIQUE',
+    \"ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_plan VARCHAR(50) NOT NULL DEFAULT 'free'\",
+]
+
+async def patch():
+    async with engine.begin() as conn:
+        for sql in PATCHES:
+            try:
+                await conn.execute(text(sql))
+                print(f'OK: {sql[:60]}...')
+            except Exception as e:
+                print(f'SKIP: {sql[:60]}... -> {e}')
+
+asyncio.run(patch())
+" 2>&1 || echo "WARNING: Schema patching had issues"
+
+echo ""
 echo "=== Seeding Default Admin ==="
 python seed_admin.py 2>&1 || echo "WARNING: Admin seeding had issues"
 
