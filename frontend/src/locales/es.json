@@ -130,7 +130,7 @@
     "compareRow2": "Costo por informe ESG",
     "compareRow2a": "Costo de mano de obra oculto",
     "compareRow2b": "US$ 25k–80k+",
-    "compareRow2c": "Desde US$ 3.600",
+    "compareRow2c": "Desde US$ 7.500",
     "compareRow3": "Salida lista para auditoría",
     "compareRow3a": "Manual y propensa a errores",
     "compareRow3b": "Depende de la consultora",
@@ -242,7 +242,7 @@
     "deliverable2": "Informe Completo de Cumplimiento (60–120 páginas)",
     "professional": {
       "name": "Profesional",
-      "price": "$3.600",
+      "price": "$7.500",
       "period": "por ESG",
       "monthlyNote": "Pago único por informe",
       "desc": "Ideal para empresas en crecimiento que necesitan estructurar y publicar informes ESG con consistencia.",
@@ -255,12 +255,12 @@
       "feature7": "PDF Informe Completo (60–120 pp)",
       "feature8": "Asistente IA 24/7 + soporte por correo",
       "extrasLabel": "Cargos adicionales:",
-      "extrasReport": "Informe ESG adicional: $3.600 cada uno",
+      "extrasReport": "Informe ESG adicional: $7.500 cada uno",
       "cta": "Solicitar Informe"
     },
     "enterprise": {
       "name": "Enterprise",
-      "price": "$15.000",
+      "price": "$24.000",
       "period": "por ESG",
       "monthlyNote": "Pago único por informe",
       "desc": "Para organizaciones que tratan el ESG como área estratégica y necesitan escala, automatización y cumplimiento avanzado.",

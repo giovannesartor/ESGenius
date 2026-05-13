@@ -130,7 +130,7 @@
     "compareRow2": "Cost per ESG report",
     "compareRow2a": "Hidden labor cost",
     "compareRow2b": "$25k–$80k+",
-    "compareRow2c": "From $3,600",
+    "compareRow2c": "From $7,500",
     "compareRow3": "Audit-ready output",
     "compareRow3a": "Manual & error-prone",
     "compareRow3b": "Depends on the firm",
@@ -242,7 +242,7 @@
     "deliverable2": "Full Compliance Report (60–120 pages)",
     "professional": {
       "name": "Professional",
-      "price": "$3,600",
+      "price": "$7,500",
       "period": "per ESG",
       "monthlyNote": "One-time payment per report",
       "desc": "Ideal for growing companies that need to structure and publish ESG reports consistently.",
@@ -255,12 +255,12 @@
       "feature7": "Full Compliance Report PDF (60–120 pp)",
       "feature8": "AI assistant 24/7 + email support",
       "extrasLabel": "Additional charges:",
-      "extrasReport": "Additional ESG report: $3,600 each",
+      "extrasReport": "Additional ESG report: $7,500 each",
       "cta": "Order Report"
     },
     "enterprise": {
       "name": "Enterprise",
-      "price": "$15,000",
+      "price": "$24,000",
       "period": "per ESG",
       "monthlyNote": "One-time payment per report",
       "desc": "For organizations that treat ESG as a strategic area and need scale, automation and advanced compliance.",
