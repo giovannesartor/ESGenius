@@ -511,7 +511,7 @@ export default function HomePage() {
         {/* ════════════════════════════════════════════════════════════════
             HERO — Dark, Immersive, Editorial
         ════════════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden hero-bg min-h-screen flex items-center">
+        <section className="relative overflow-hidden hero-bg min-h-[calc(100vh-3.5rem)] flex items-center">
           {/* Background layers — only visible in dark mode */}
           <div className="absolute inset-0 dot-grid-dark hidden dark:block" />
           <div className="absolute inset-0 line-grid-dark opacity-60 hidden dark:block" />
@@ -524,8 +524,8 @@ export default function HomePage() {
           <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-40 dark:opacity-100"
             style={{ background: "radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%)" }} />
 
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-20 lg:py-0">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-screen">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-16 lg:py-20">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
               {/* LEFT — Text */}
               <motion.div
@@ -1238,54 +1238,6 @@ export default function HomePage() {
                 ))}
               </div>
             </FadeIn>
-          </div>
-        </section>
-
-        {/* ════════════════════════════════════════════════════════════════
-            TESTIMONIALS
-        ════════════════════════════════════════════════════════════════ */}
-        <section className="py-28 sm:py-36 bg-muted/30 border-y border-border/60">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <FadeIn className="mb-14 max-w-3xl">
-              <div className="mb-4">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
-                  <Quote className="h-3 w-3" />
-                  {t("home.testimonialsLabel")}
-                </span>
-              </div>
-              <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-                {t("home.testimonialsTitle")}
-              </h2>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {[1, 2, 3].map((n, i) => (
-                <FadeIn key={n} delay={i * 0.08}>
-                  <div className="group h-full rounded-2xl border border-border/60 bg-card p-7 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
-                    <div className="flex items-center gap-1 mb-5">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <Star key={s} className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                      ))}
-                    </div>
-                    <Quote className="h-6 w-6 text-amber-500/40 mb-3" />
-                    <p className="text-sm text-foreground/90 leading-relaxed mb-6 flex-1">
-                      “{t(`home.testimonial${n}Quote`)}”
-                    </p>
-                    <div className="flex items-center gap-3 pt-5 border-t border-border/40">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/20 to-blue-500/20 border border-border/60 text-sm font-black text-foreground">
-                        {t(`home.testimonial${n}Name`).charAt(0)}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm font-bold text-foreground truncate">{t(`home.testimonial${n}Name`)}</div>
-                        <div className="text-[11px] text-muted-foreground truncate">
-                          {t(`home.testimonial${n}Role`)} · {t(`home.testimonial${n}Company`)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
           </div>
         </section>
 

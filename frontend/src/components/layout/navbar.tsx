@@ -43,14 +43,14 @@ export function Navbar() {
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        {/* Logo */}
-        <Link href="/" className="relative flex items-center">
+        {/* Logo — doubled in size, overflows header without expanding it */}
+        <Link href="/" className="relative flex items-center -my-7">
           <Image
             src="/logo-icon.png"
             alt="ESG360"
             width={384}
             height={256}
-            className="h-14 w-auto object-contain"
+            className="h-28 w-auto object-contain"
             priority
           />
         </Link>
