@@ -75,6 +75,8 @@
     "frameworkCoverageDesc": "Cobertura média por framework ESG",
     "contactSales": "Falar com Vendas",
     "ctaLabel": "Começar Agora",
+    "platformByNumbers": "Plataforma em números",
+    "fwCoverageLabel": "cobertura",
     "faqLabel": "Perguntas Frequentes",
     "faqTitle": "Perguntas Frequentes",
     "faqSubtitle": "Tudo o que você precisa saber sobre a plataforma ESG360.",
@@ -96,7 +98,11 @@
     "subtitle": "Um conjunto completo de ferramentas projetado para otimizar seus fluxos de relatórios de sustentabilidade e conformidade.",
     "ai": {
       "title": "Extração com IA",
-      "desc": "Extraia e classifique automaticamente pontos de dados ESG de documentos corporativos utilizando modelos avançados de processamento de linguagem natural."
+      "desc": "Extraia e classifique automaticamente pontos de dados ESG de documentos corporativos utilizando modelos avançados de processamento de linguagem natural.",
+      "tag1": "Extração NLP",
+      "tag2": "Auto-classificação",
+      "tag3": "Mapeamento inteligente",
+      "tag4": "Análise de lacunas"
     },
     "frameworks": {
       "title": "Suporte Multi-Framework",
@@ -108,15 +114,29 @@
     },
     "reports": {
       "title": "Relatórios Prontos para Auditoria",
-      "desc": "Gere relatórios profissionais e em conformidade regulatória, prontos para auditores externos, investidores e órgãos reguladores."
+      "desc": "Gere relatórios profissionais e em conformidade regulatória, prontos para auditores externos, investidores e órgãos reguladores.",
+      "item1": "Exportação pronta para auditoria",
+      "item2": "PDF + Excel",
+      "item3": "Formato regulatório"
     },
     "dashboard": {
       "title": "Painéis Interativos",
-      "desc": "Visualize tendências de desempenho, compare com pares do setor e monitore o progresso em direção às metas de sustentabilidade em tempo real."
+      "desc": "Visualize tendências de desempenho, compare com pares do setor e monitore o progresso em direção às metas de sustentabilidade em tempo real.",
+      "eScore": "Pontuação A",
+      "sScore": "Pontuação S",
+      "gScore": "Pontuação G",
+      "overall": "Geral",
+      "reports": "Relatórios",
+      "frameworks": "Frameworks",
+      "indicators": "Indicadores",
+      "compliance": "Conformidade"
     },
     "security": {
       "title": "Segurança Corporativa",
-      "desc": "Proteja dados corporativos sensíveis com criptografia de ponta a ponta, controles de acesso baseados em função e segurança de nível enterprise."
+      "desc": "Proteja dados corporativos sensíveis com criptografia de ponta a ponta, controles de acesso baseados em função e segurança de nível enterprise.",
+      "item1": "Segurança corporativa",
+      "item2": "Criptografia de ponta a ponta",
+      "item3": "Permissões granulares"
     }
   },
   "cta": {
@@ -231,7 +251,27 @@
     "forgotSubtitle": "Digite seu e-mail e enviaremos instruções para redefinir sua senha.",
     "forgotButton": "Enviar instruções",
     "forgotSuccess": "Se esse e-mail estiver cadastrado, você receberá as instruções em breve.",
-    "backToLogin": "Voltar para o login"
+    "backToLogin": "Voltar para o login",
+    "resetTitle": "Definir nova senha",
+    "resetSubtitle": "Digite sua nova senha abaixo.",
+    "resetSuccess": "Senha atualizada! Redirecionando...",
+    "resetFailed": "Link inválido ou expirado.",
+    "resetInvalidToken": "Token inválido ou ausente.",
+    "requestNewLink": "Solicitar novo link",
+    "setNewPassword": "Definir nova senha",
+    "redirectingToLogin": "Redirecionando para o login...",
+    "newPassword": "Nova senha",
+    "confirmPassword": "Confirmar senha",
+    "passwordTooShort": "A senha deve ter pelo menos 8 caracteres.",
+    "passwordMismatch": "As senhas não coincidem.",
+    "verifyEmailTitle": "Verificar e-mail",
+    "verifyingEmail": "Verificando seu e-mail...",
+    "emailVerified": "E-mail verificado!",
+    "emailVerifiedDesc": "Seu e-mail foi verificado com sucesso.",
+    "loginNow": "Entrar agora",
+    "verifyFailed": "Falha na verificação. O link pode ter expirado.",
+    "verifyExpiredDesc": "Solicite um novo e-mail de verificação na página de login.",
+    "checkYourEmail": "Verifique sua caixa de entrada."
   },
   "dashboard": {
     "welcome": "Bem-vindo de volta",
@@ -246,6 +286,10 @@
       "settings": "Configurações",
       "esgScore": "Pontuação ESG",
       "insights": "Insights IA",
+      "dataPoints": "Dados ESG",
+      "frameworks": "Frameworks",
+      "simulate": "Simulação What-If",
+      "subscription": "Assinatura",
       "adminDashboard": "Painel Admin"
     },
     "stats": {
@@ -296,6 +340,7 @@
     "quickInsightsDesc": "Explore recomendações ESG geradas por IA",
     "quickCompany": "Gerenciar Empresas",
     "esgScoreTitle": "Análise de Pontuação ESG",
+    "historicalTrend": "Tendência Histórica",
     "esgScoreSubtitle": "Análise detalhada do seu desempenho ESG em todos os pilares e indicadores.",
     "esgScorePercentile": "Sua pontuação está no percentil {percentile} do seu setor.",
     "esgRadar": "Cobertura de Indicadores",
@@ -470,7 +515,35 @@
       "generateFirst": "Gerar Primeiro Relatório",
       "frameworkMulti": "Multi-Framework",
       "failedGenerate": "Falha ao gerar relatório"
-    }
+    },
+    "documentNotFound": "Documento não encontrado.",
+    "documentFailedToLoad": "Falha ao carregar documento.",
+    "extractedDataPoints": "Pontos de Dados Extraídos",
+    "extractionInProgress": "Extração em andamento…",
+    "extractionInProgressDesc": "Os pontos de dados aparecerão assim que o processamento for concluído.",
+    "noDataPointsExtracted": "Nenhum ponto de dados extraído",
+    "processingFailedMsg": "Processamento falhou. Tente reenviar o documento.",
+    "noEsgExtracted": "Nenhum dado ESG foi extraído deste documento.",
+    "manageAllDataPoints": "Gerenciar Todos os Dados",
+    "statusProcessed": "Processado",
+    "frameworksExplore": "Explore os frameworks ESG, categorias e indicadores usados para medir seu desempenho.",
+    "activeFrameworks": "Frameworks Ativos",
+    "totalCategories": "Total de Categorias",
+    "totalIndicators": "Total de Indicadores",
+    "noFrameworksTitle": "Nenhum framework ainda",
+    "noFrameworksDesc": "Os frameworks aparecerão aqui assim que forem configurados pelo seu administrador.",
+    "categoriesSuffix": "categorias",
+    "indicatorsSuffix": "indicadores",
+    "requiredLabel": "obrigatório",
+    "teamMembers": "Membros da Equipe",
+    "addMemberBtn": "Adicionar",
+    "memberRoleAdmin": "Admin",
+    "memberRoleViewer": "Visualizador",
+    "noTeamMembers": "Nenhum membro ainda. Convide colegas acima.",
+    "removeMemberTitle": "Remover membro?",
+    "removeMemberDesc": "Esta pessoa perderá acesso a esta empresa.",
+    "removeMemberAction": "Remover",
+    "failedAddMember": "Falha ao adicionar membro. Verifique o e-mail e tente novamente."
   },
   "onboarding": {
     "welcomeTitle": "Bem-vindo ao ESG360! 👋",

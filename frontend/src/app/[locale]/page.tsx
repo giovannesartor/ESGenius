@@ -476,7 +476,7 @@ export default function HomePage() {
                     <div className="w-full">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-[9px] font-bold" style={{ color: fw.color }}>{fw.pct}%</span>
-                        <span className="text-[9px] text-muted-foreground/50">coverage</span>
+                        <span className="text-[9px] text-muted-foreground/50">{t("home.fwCoverageLabel")}</span>
                       </div>
                       <div className="h-1 w-full rounded-full bg-muted overflow-hidden">
                         <div
@@ -535,9 +535,9 @@ export default function HomePage() {
                   className="h-full"
                   extra={
                     <div className="flex flex-wrap gap-2">
-                      {["NLP Extraction", "Auto-classification", "Smart mapping", "Gap analysis"].map((tag) => (
-                        <span key={tag} className="inline-flex items-center rounded-md bg-violet-500/8 border border-violet-500/10 px-2.5 py-1 text-[11px] font-semibold text-violet-600 dark:text-violet-400">
-                          {tag}
+                      {(["features.ai.tag1", "features.ai.tag2", "features.ai.tag3", "features.ai.tag4"] as const).map((key) => (
+                        <span key={key} className="inline-flex items-center rounded-md bg-violet-500/8 border border-violet-500/10 px-2.5 py-1 text-[11px] font-semibold text-violet-600 dark:text-violet-400">
+                          {t(key)}
                         </span>
                       ))}
                     </div>
@@ -609,10 +609,10 @@ export default function HomePage() {
                   className="h-full"
                   extra={
                     <div className="space-y-1.5">
-                      {["Audit-ready export", "PDF + Excel", "Regulator format"].map((item) => (
-                        <div key={item} className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                      {(["features.reports.item1", "features.reports.item2", "features.reports.item3"] as const).map((key) => (
+                        <div key={key} className="flex items-center gap-2 text-[11px] text-muted-foreground">
                           <CheckCircle2 className="h-3 w-3 text-amber-500 shrink-0" />
-                          {item}
+                          {t(key)}
                         </div>
                       ))}
                     </div>
@@ -635,10 +635,10 @@ export default function HomePage() {
                   className="h-full"
                   extra={
                     <div className="space-y-1.5">
-                      {["Enterprise-grade security", "End-to-end encryption", "Granular permissions"].map((item) => (
-                        <div key={item} className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                      {(["features.security.item1", "features.security.item2", "features.security.item3"] as const).map((key) => (
+                        <div key={key} className="flex items-center gap-2 text-[11px] text-muted-foreground">
                           <Lock className="h-3 w-3 text-rose-500 shrink-0" />
-                          {item}
+                          {t(key)}
                         </div>
                       ))}
                     </div>
@@ -663,18 +663,18 @@ export default function HomePage() {
                   extra={
                     <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                       {[
-                        { label: "E Score", value: "87", color: "text-emerald-600 dark:text-emerald-400" },
-                        { label: "S Score", value: "72", color: "text-blue-600 dark:text-blue-400" },
-                        { label: "G Score", value: "91", color: "text-amber-600 dark:text-amber-400" },
-                        { label: "Overall", value: "83", color: "text-cyan-600 dark:text-cyan-400" },
-                        { label: "Reports", value: "12", color: "text-violet-600 dark:text-violet-400" },
-                        { label: "Frameworks", value: "8", color: "text-rose-600 dark:text-rose-400" },
-                        { label: "Indicators", value: "156", color: "text-amber-600 dark:text-amber-400" },
-                        { label: "Compliance", value: "94%", color: "text-emerald-600 dark:text-emerald-400" },
+                        { key: "eScore", value: "87", color: "text-emerald-600 dark:text-emerald-400" },
+                        { key: "sScore", value: "72", color: "text-blue-600 dark:text-blue-400" },
+                        { key: "gScore", value: "91", color: "text-amber-600 dark:text-amber-400" },
+                        { key: "overall", value: "83", color: "text-cyan-600 dark:text-cyan-400" },
+                        { key: "reports", value: "12", color: "text-violet-600 dark:text-violet-400" },
+                        { key: "frameworks", value: "8", color: "text-rose-600 dark:text-rose-400" },
+                        { key: "indicators", value: "156", color: "text-amber-600 dark:text-amber-400" },
+                        { key: "compliance", value: "94%", color: "text-emerald-600 dark:text-emerald-400" },
                       ].map((s) => (
-                        <div key={s.label} className="rounded-lg bg-muted/60 border border-border/60 p-2 text-center">
+                        <div key={s.key} className="rounded-lg bg-muted/60 border border-border/60 p-2 text-center">
                           <div className={`text-base font-black tabular ${s.color}`}>{s.value}</div>
-                          <div className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-wide mt-0.5">{s.label}</div>
+                          <div className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-wide mt-0.5">{t(`features.dashboard.${s.key}`)}</div>
                         </div>
                       ))}
                     </div>
@@ -761,7 +761,7 @@ export default function HomePage() {
               {/* Section label */}
               <div className="text-center mb-16">
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Platform by the numbers
+                  {t("home.platformByNumbers")}
                 </span>
               </div>
 
@@ -977,7 +977,7 @@ export default function HomePage() {
                     size="lg"
                     className="h-13 px-8 text-base font-semibold rounded-xl border-white/10 text-slate-300 hover:bg-white/5 hover:text-white hover:border-white/20 bg-transparent transition-all duration-200"
                   >
-                    {t("home.contactSales") || "Contact Sales"}
+                    {t("home.contactSales")}
                   </Button>
                 </a>
               </div>

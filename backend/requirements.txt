@@ -26,6 +26,9 @@ itsdangerous==2.2.0
 # Email
 resend==2.7.0
 
+# Payments
+stripe==11.4.1
+
 # AI
 openai==1.59.3
 

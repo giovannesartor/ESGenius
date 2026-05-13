@@ -90,6 +90,13 @@ export const authApi = {
       body: { token: resetToken, new_password: newPassword },
     }),
 
+  changePassword: (token: string, currentPassword: string, newPassword: string) =>
+    apiClient("/auth/change-password", {
+      method: "POST",
+      body: { current_password: currentPassword, new_password: newPassword },
+      token,
+    }),
+
   googleLogin: () =>
     apiClient<{ authorization_url: string }>("/auth/google/login"),
 };
@@ -113,6 +120,12 @@ export const companyApi = {
 
   listMembers: (token: string, companyId: string) =>
     apiClient(`/companies/${companyId}/members`, { token }),
+
+  removeMember: (token: string, companyId: string, userId: string) =>
+    apiClient(`/companies/${companyId}/members/${userId}`, { method: "DELETE", token }),
+
+  updateMemberRole: (token: string, companyId: string, userId: string, role: string) =>
+    apiClient(`/companies/${companyId}/members/${userId}`, { method: "PATCH", body: { role }, token }),
 };
 
 // --- Data Points API ---
@@ -147,6 +160,23 @@ export const dataPointApi = {
       method: "DELETE",
       token,
     }),
+
+  exportCsv: async (token: string, companyId: string, params?: { year?: number; pillar?: string }) => {
+    const query = params ? "?" + new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
+    ).toString() : "";
+    const response = await fetch(`${API_BASE_URL}/companies/${companyId}/data-points/export/csv${query}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error("CSV export failed");
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `data-points-${companyId}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  },
 };
 
 // --- Documents API ---
@@ -254,6 +284,13 @@ export const adminApi = {
 
   deleteFramework: (token: string, frameworkId: string) =>
     apiClient(`/admin/frameworks/${frameworkId}`, { method: "DELETE", token }),
+
+  listAILogs: (token: string, params?: { status?: string; function_name?: string; limit?: number; skip?: number }) => {
+    const query = params ? "?" + new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
+    ).toString() : "";
+    return apiClient(`/admin/ai-logs${query}`, { token });
+  },
 };
 
 // --- Analytics API (ESG Engine) ---
@@ -306,5 +343,32 @@ export const analyticsApi = {
       token,
     }),
 };
+// --- Stripe / Subscription API ---
+export const stripeApi = {
+  createCheckout: (token: string, plan: string, interval: "month" | "year") =>
+    apiClient<{ checkout_url: string }>("/stripe/create-checkout", {
+      method: "POST",
+      body: { plan, interval },
+      token,
+    }),
 
+  getPortalUrl: (token: string) =>
+    apiClient<{ portal_url: string }>("/stripe/portal", { method: "POST", token }),
+
+  getSubscription: (token: string) =>
+    apiClient("/stripe/subscription", { token }),
+
+  verifySession: (token: string, sessionId: string) =>
+    apiClient("/stripe/verify-session", {
+      method: "POST",
+      body: { session_id: sessionId },
+      token,
+    }),
+
+  cancelSubscription: (token: string) =>
+    apiClient("/stripe/cancel", { method: "POST", token }),
+
+  reactivateSubscription: (token: string) =>
+    apiClient("/stripe/reactivate", { method: "POST", token }),
+};
 export default apiClient;

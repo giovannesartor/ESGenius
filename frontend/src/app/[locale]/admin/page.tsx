@@ -1,11 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Users,
   Building2,
@@ -14,7 +14,6 @@ import {
   Activity,
   CheckCircle,
   ArrowRight,
-  Clock,
   FileText,
   BarChart3,
   Shield,
@@ -22,90 +21,29 @@ import {
   Database,
   Cpu,
   Server,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { adminApi } from "@/services/api";
 
-interface StatCard {
-  label: string;
-  value: string;
-  change: string;
-  icon: React.ElementType;
-  color: string;
-  bgColor: string;
+interface AdminStats {
+  total_users: number;
+  total_companies: number;
+  total_documents: number;
+  total_reports: number;
+  total_frameworks: number;
+  active_users_30d: number;
 }
 
-const statsCards: StatCard[] = [
-  {
-    label: "Total Users",
-    value: "148",
-    change: "+12 this week",
-    icon: Users,
-    color: "text-brand-blue",
-    bgColor: "bg-brand-blue/10",
-  },
-  {
-    label: "Total Companies",
-    value: "37",
-    change: "+3 this month",
-    icon: Building2,
-    color: "text-brand-green",
-    bgColor: "bg-brand-green/10",
-  },
-  {
-    label: "AI Requests (24h)",
-    value: "1,284",
-    change: "+18% vs yesterday",
-    icon: Brain,
-    color: "text-brand-gold",
-    bgColor: "bg-brand-gold/10",
-  },
-  {
-    label: "Active Frameworks",
-    value: "5",
-    change: "All operational",
-    icon: Layers,
-    color: "text-primary",
-    bgColor: "bg-primary/10",
-  },
+const systemHealth = [
+  { name: "API Server", icon: Server, latency: "42ms" },
+  { name: "Database", icon: Database, latency: "8ms" },
+  { name: "Redis Cache", icon: Cpu, latency: "2ms" },
+  { name: "AI Engine", icon: Brain, latency: "320ms" },
 ];
 
-interface SystemStatus {
-  name: string;
-  status: "operational" | "degraded" | "down";
-  icon: React.ElementType;
-  latency: string;
-}
-
-const systemHealth: SystemStatus[] = [
-  { name: "API Server", status: "operational", icon: Server, latency: "42ms" },
-  { name: "Database", status: "operational", icon: Database, latency: "8ms" },
-  { name: "Redis Cache", status: "operational", icon: Cpu, latency: "2ms" },
-  { name: "AI Engine", status: "operational", icon: Brain, latency: "320ms" },
-];
-
-interface ActivityItem {
-  action: string;
-  user: string;
-  time: string;
-  icon: React.ElementType;
-}
-
-const recentActivity: ActivityItem[] = [
-  { action: "New user registered", user: "maria.silva@empresa.com", time: "5 min ago", icon: Users },
-  { action: "ESG Report generated", user: "Carlos Mendes", time: "18 min ago", icon: BarChart3 },
-  { action: "Document processed by AI", user: "Ana Costa", time: "32 min ago", icon: FileText },
-  { action: "Framework GRI updated", user: "System", time: "1h ago", icon: Layers },
-  { action: "Company profile created", user: "Pedro Santos", time: "2h ago", icon: Building2 },
-  { action: "AI model retrained", user: "System", time: "4h ago", icon: Brain },
-];
-
-interface QuickAction {
-  label: string;
-  href: string;
-  icon: React.ElementType;
-  description: string;
-}
-
-const quickActions: QuickAction[] = [
+const quickActions = [
   { label: "Manage Frameworks", href: "/admin/frameworks", icon: Layers, description: "Add, edit, or remove ESG frameworks" },
   { label: "View Users", href: "/admin/users", icon: Users, description: "Manage user accounts and permissions" },
   { label: "AI Logs", href: "/admin/ai-logs", icon: Brain, description: "Monitor AI processing and requests" },
@@ -113,6 +51,59 @@ const quickActions: QuickAction[] = [
 
 export default function AdminOverviewPage() {
   const t = useTranslations();
+  const { token } = useAuth();
+  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchStats = async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const data = await adminApi.getStats(token) as AdminStats;
+      setStats(data);
+    } catch {
+      // keep null
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchStats(); }, [token]);
+
+  const statsCards = [
+    {
+      label: "Total Users",
+      value: loading ? "—" : String(stats?.total_users ?? 0),
+      change: `${stats?.active_users_30d ?? 0} active (30d)`,
+      icon: Users,
+      color: "text-brand-blue",
+      bgColor: "bg-brand-blue/10",
+    },
+    {
+      label: "Total Companies",
+      value: loading ? "—" : String(stats?.total_companies ?? 0),
+      change: "All time",
+      icon: Building2,
+      color: "text-brand-green",
+      bgColor: "bg-brand-green/10",
+    },
+    {
+      label: "Documents Uploaded",
+      value: loading ? "—" : String(stats?.total_documents ?? 0),
+      change: "All time",
+      icon: FileText,
+      color: "text-brand-gold",
+      bgColor: "bg-brand-gold/10",
+    },
+    {
+      label: "Active Frameworks",
+      value: loading ? "—" : String(stats?.total_frameworks ?? 0),
+      change: "All operational",
+      icon: Layers,
+      color: "text-primary",
+      bgColor: "bg-primary/10",
+    },
+  ];
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
@@ -127,10 +118,15 @@ export default function AdminOverviewPage() {
             System overview and quick actions
           </p>
         </div>
-        <Badge variant="outline" className="w-fit text-xs">
-          <Activity className="mr-1.5 h-3 w-3 text-brand-green" />
-          All systems operational
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={fetchStats} disabled={loading}>
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          </Button>
+          <Badge variant="outline" className="w-fit text-xs">
+            <Activity className="mr-1.5 h-3 w-3 text-brand-green" />
+            All systems operational
+          </Badge>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -142,7 +138,7 @@ export default function AdminOverviewPage() {
                 <div className={`p-2.5 rounded-lg ${stat.bgColor}`}>
                   <stat.icon className={`h-5 w-5 ${stat.color}`} />
                 </div>
-                <TrendingUp className="h-4 w-4 text-brand-green" />
+                {loading ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /> : <TrendingUp className="h-4 w-4 text-brand-green" />}
               </div>
               <div className="mt-4">
                 <p className="text-2xl font-bold text-foreground">{stat.value}</p>
@@ -185,29 +181,28 @@ export default function AdminOverviewPage() {
           </CardContent>
         </Card>
 
-        {/* Recent Activity */}
+        {/* Platform Summary */}
         <Card className="lg:col-span-2 border-border/50">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Clock className="h-4 w-4 text-brand-blue" />
-              Recent Activity
+              <BarChart3 className="h-4 w-4 text-brand-blue" />
+              Platform Summary
             </CardTitle>
           </CardHeader>
           <CardContent className="px-6 pb-6">
-            <div className="space-y-3">
-              {recentActivity.map((item, idx) => (
-                <div key={idx}>
-                  <div className="flex items-start gap-3">
-                    <div className="p-1.5 rounded-md bg-muted mt-0.5">
-                      <item.icon className="h-3.5 w-3.5 text-muted-foreground" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground">{item.action}</p>
-                      <p className="text-xs text-muted-foreground truncate">{item.user}</p>
-                    </div>
-                    <span className="text-xs text-muted-foreground whitespace-nowrap">{item.time}</span>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { label: "ESG Reports", value: stats?.total_reports ?? 0, icon: BarChart3, color: "text-brand-blue" },
+                { label: "Active Users (30d)", value: stats?.active_users_30d ?? 0, icon: Users, color: "text-brand-green" },
+                { label: "Documents Processed", value: stats?.total_documents ?? 0, icon: FileText, color: "text-brand-gold" },
+                { label: "Frameworks", value: stats?.total_frameworks ?? 0, icon: Layers, color: "text-primary" },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center gap-3 p-3 rounded-lg bg-muted/40">
+                  <item.icon className={`h-5 w-5 ${item.color}`} />
+                  <div>
+                    <p className="text-lg font-bold">{loading ? "—" : item.value}</p>
+                    <p className="text-xs text-muted-foreground">{item.label}</p>
                   </div>
-                  {idx < recentActivity.length - 1 && <Separator className="mt-3" />}
                 </div>
               ))}
             </div>

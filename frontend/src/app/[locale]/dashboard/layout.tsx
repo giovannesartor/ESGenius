@@ -30,6 +30,10 @@ import {
   Shield,
   Loader2,
   Star,
+  Leaf,
+  CreditCard,
+  FlaskConical,
+  BookOpen,
 } from "lucide-react";
 
 const navItems = [
@@ -37,10 +41,14 @@ const navItems = [
   { key: "reports", href: "/dashboard/reports", icon: BarChart3 },
   { key: "upload", href: "/dashboard/upload", icon: Upload },
   { key: "esgScore", href: "/dashboard/esg-score", icon: Target },
+  { key: "dataPoints", href: "/dashboard/data-points", icon: Leaf },
+  { key: "frameworks", href: "/dashboard/frameworks", icon: BookOpen },
   { key: "insights", href: "/dashboard/insights", icon: Brain },
+  { key: "simulate", href: "/dashboard/simulate", icon: FlaskConical },
 ];
 
 const bottomNavItems = [
+  { key: "subscription", href: "/dashboard/subscription", icon: CreditCard },
   { key: "settings", href: "/dashboard/settings", icon: Settings },
 ];
 

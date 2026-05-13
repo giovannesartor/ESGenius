@@ -33,6 +33,9 @@ import {
   CartesianGrid,
   Tooltip,
   Cell,
+  LineChart,
+  Line,
+  Legend,
 } from "recharts";
 import { useCompany } from "@/hooks/useCompany";
 import { analyticsApi } from "@/services/api";
@@ -115,6 +118,7 @@ export default function ESGScorePage() {
   }>>([]);
   const [radarData, setRadarData] = useState<Array<{ subject: string; A: number; fullMark: number }>>([]);
   const [benchmarkData, setBenchmarkData] = useState<Array<{ name: string; score: number; color: string }>>([]);
+  const [historicalData, setHistoricalData] = useState<Array<{ year: number; overall: number; E: number; S: number; G: number }>>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -131,10 +135,14 @@ export default function ESGScorePage() {
 
     const fetchData = async () => {
       try {
-        // Fetch scores and benchmark in parallel
-        const [scoresRaw, benchmarkRaw] = await Promise.all([
+        const currentYear = new Date().getFullYear();
+        const years = [currentYear - 3, currentYear - 2, currentYear - 1, currentYear];
+
+        // Fetch scores, benchmark and historical data in parallel
+        const [scoresRaw, benchmarkRaw, ...historicalRaw] = await Promise.all([
           analyticsApi.getScores(token, company.id),
           analyticsApi.getBenchmark(token, company.id),
+          ...years.map((y) => analyticsApi.getScores(token, company.id, y).catch(() => null)),
         ]);
         const scores = scoresRaw as ScoreResponse;
         const benchmark = benchmarkRaw as BenchmarkResponse;
@@ -195,6 +203,20 @@ export default function ESGScorePage() {
             }))
           );
         }
+
+        // Map historical trend data
+        const trend = years.map((y, i) => {
+          const s = historicalRaw[i] as ScoreResponse | null;
+          if (!s) return null;
+          return {
+            year: y,
+            overall: Math.round(s.overall_score),
+            E: Math.round(s.pillars.find((p) => p.pillar === "E")?.score ?? 0),
+            S: Math.round(s.pillars.find((p) => p.pillar === "S")?.score ?? 0),
+            G: Math.round(s.pillars.find((p) => p.pillar === "G")?.score ?? 0),
+          };
+        }).filter(Boolean) as typeof historicalData;
+        setHistoricalData(trend);
       } catch {
         // No fallback to mock data
       } finally {
@@ -477,6 +499,35 @@ export default function ESGScorePage() {
 
       </>
       ) : null}
+
+      {/* ─── Historical Trend ─── */}
+      {historicalData.length > 1 && (
+        <Card className="border-border/50">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-primary" />
+              {t("dashboard.historicalTrend")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={260}>
+              <LineChart data={historicalData} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.15)" />
+                <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
+                <Tooltip
+                  contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
+                />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Line type="monotone" dataKey="overall" name="Overall" stroke="#16a34a" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="E" name="Environmental" stroke="#059669" strokeWidth={1.5} strokeDasharray="4 2" dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="S" name="Social" stroke="#2563eb" strokeWidth={1.5} strokeDasharray="4 2" dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="G" name="Governance" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="4 2" dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

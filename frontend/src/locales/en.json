@@ -75,6 +75,8 @@
     "frameworkCoverageDesc": "Average coverage across ESG frameworks",
     "contactSales": "Contact Sales",
     "ctaLabel": "Get Started",
+    "platformByNumbers": "Platform by the numbers",
+    "fwCoverageLabel": "coverage",
     "faqLabel": "FAQ",
     "faqTitle": "Frequently Asked Questions",
     "faqSubtitle": "Everything you need to know about the ESG360 platform.",
@@ -96,7 +98,11 @@
     "subtitle": "A comprehensive suite of tools designed to streamline your sustainability reporting and compliance workflows.",
     "ai": {
       "title": "AI-Powered Extraction",
-      "desc": "Automatically extract and classify ESG data points from corporate documents using advanced natural language processing models."
+      "desc": "Automatically extract and classify ESG data points from corporate documents using advanced natural language processing models.",
+      "tag1": "NLP Extraction",
+      "tag2": "Auto-classification",
+      "tag3": "Smart mapping",
+      "tag4": "Gap analysis"
     },
     "frameworks": {
       "title": "Multi-Framework Support",
@@ -108,15 +114,29 @@
     },
     "reports": {
       "title": "Audit-Ready Reports",
-      "desc": "Generate professional, regulation-compliant reports ready for external auditors, investors, and regulatory bodies."
+      "desc": "Generate professional, regulation-compliant reports ready for external auditors, investors, and regulatory bodies.",
+      "item1": "Audit-ready export",
+      "item2": "PDF + Excel",
+      "item3": "Regulator format"
     },
     "dashboard": {
       "title": "Interactive Dashboards",
-      "desc": "Visualize performance trends, benchmark against industry peers, and monitor progress toward sustainability targets in real time."
+      "desc": "Visualize performance trends, benchmark against industry peers, and monitor progress toward sustainability targets in real time.",
+      "eScore": "E Score",
+      "sScore": "S Score",
+      "gScore": "G Score",
+      "overall": "Overall",
+      "reports": "Reports",
+      "frameworks": "Frameworks",
+      "indicators": "Indicators",
+      "compliance": "Compliance"
     },
     "security": {
       "title": "Enterprise Security",
-      "desc": "Protect sensitive corporate data with end-to-end encryption, granular access controls, and enterprise-grade security."
+      "desc": "Protect sensitive corporate data with end-to-end encryption, granular access controls, and enterprise-grade security.",
+      "item1": "Enterprise-grade security",
+      "item2": "End-to-end encryption",
+      "item3": "Granular permissions"
     }
   },
   "cta": {
@@ -231,7 +251,27 @@
     "forgotSubtitle": "Enter your email and we'll send you instructions to reset your password.",
     "forgotButton": "Send instructions",
     "forgotSuccess": "If that email is registered, you'll receive reset instructions shortly.",
-    "backToLogin": "Back to login"
+    "backToLogin": "Back to login",
+    "resetTitle": "Set new password",
+    "resetSubtitle": "Enter your new password below.",
+    "resetSuccess": "Password updated! Redirecting to login...",
+    "resetFailed": "This reset link is invalid or has expired.",
+    "resetInvalidToken": "Invalid or missing reset token.",
+    "requestNewLink": "Request a new link",
+    "setNewPassword": "Set new password",
+    "redirectingToLogin": "Redirecting to login...",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "passwordMismatch": "Passwords do not match.",
+    "verifyEmailTitle": "Verify your email",
+    "verifyingEmail": "Verifying your email...",
+    "emailVerified": "Email verified!",
+    "emailVerifiedDesc": "Your email has been successfully verified. You can now sign in.",
+    "loginNow": "Sign in now",
+    "verifyFailed": "Verification failed. This link may have expired.",
+    "verifyExpiredDesc": "Request a new verification email from the login page.",
+    "checkYourEmail": "Check your inbox for the verification email we sent you."
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -246,6 +286,10 @@
       "settings": "Settings",
       "esgScore": "ESG Score",
       "insights": "AI Insights",
+      "dataPoints": "Data Points",
+      "frameworks": "Frameworks",
+      "simulate": "What-If Simulation",
+      "subscription": "Subscription",
       "adminDashboard": "Admin Panel"
     },
     "stats": {
@@ -296,6 +340,7 @@
     "quickInsightsDesc": "Explore AI-powered ESG recommendations",
     "quickCompany": "Manage Companies",
     "esgScoreTitle": "ESG Score Analysis",
+    "historicalTrend": "Historical Score Trend",
     "esgScoreSubtitle": "Comprehensive breakdown of your ESG performance across all pillars and indicators.",
     "esgScorePercentile": "Your score is in the {percentile}th percentile of your industry.",
     "esgRadar": "Indicator Coverage",
@@ -470,7 +515,35 @@
       "generateFirst": "Generate First Report",
       "frameworkMulti": "Multi-Framework",
       "failedGenerate": "Failed to generate report"
-    }
+    },
+    "documentNotFound": "Document not found.",
+    "documentFailedToLoad": "Failed to load document.",
+    "extractedDataPoints": "Extracted Data Points",
+    "extractionInProgress": "Extraction in progress…",
+    "extractionInProgressDesc": "Data points will appear once processing completes.",
+    "noDataPointsExtracted": "No data points extracted",
+    "processingFailedMsg": "Processing failed. Try re-uploading the document.",
+    "noEsgExtracted": "No ESG data was extracted from this document.",
+    "manageAllDataPoints": "Manage All Data Points",
+    "statusProcessed": "Processed",
+    "frameworksExplore": "Explore ESG reporting frameworks, categories and indicators used to measure your performance.",
+    "activeFrameworks": "Active Frameworks",
+    "totalCategories": "Total Categories",
+    "totalIndicators": "Total Indicators",
+    "noFrameworksTitle": "No frameworks yet",
+    "noFrameworksDesc": "Frameworks will appear here once they are configured by your administrator.",
+    "categoriesSuffix": "categories",
+    "indicatorsSuffix": "indicators",
+    "requiredLabel": "required",
+    "teamMembers": "Team Members",
+    "addMemberBtn": "Add",
+    "memberRoleAdmin": "Admin",
+    "memberRoleViewer": "Viewer",
+    "noTeamMembers": "No team members yet. Invite colleagues above.",
+    "removeMemberTitle": "Remove member?",
+    "removeMemberDesc": "This person will lose access to this company.",
+    "removeMemberAction": "Remove",
+    "failedAddMember": "Failed to add member. Check the email and try again."
   },
   "onboarding": {
     "welcomeTitle": "Welcome to ESG360! 👋",

@@ -1,9 +1,12 @@
 """ESG Data Points API endpoints."""
 
+import csv
+import io
 from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -178,3 +181,42 @@ async def delete_data_point(
 
     await repo.delete(dp)
     return MessageResponse(message="Data point deleted")
+
+
+@router.get("/export/csv")
+async def export_data_points_csv(
+    company_id: UUID,
+    year: Optional[int] = Query(None),
+    pillar: Optional[str] = Query(None),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Export all data points as CSV."""
+    await _check_company_access(company_id, current_user.id, db, current_user.is_superadmin)
+
+    repo = DataPointRepository(db)
+    dps = await repo.list_by_company(
+        company_id, year=year, pillar=pillar, limit=10000
+    )
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow([
+        "id", "pillar", "category", "value", "numeric_value", "unit",
+        "year", "period", "source", "status", "created_at",
+    ])
+    for dp in dps:
+        writer.writerow([
+            str(dp.id), dp.pillar or "", dp.category or "",
+            dp.value or "", dp.numeric_value or "", dp.unit or "",
+            dp.year, dp.period or "", dp.source or "", dp.status or "",
+            dp.created_at.isoformat() if dp.created_at else "",
+        ])
+
+    output.seek(0)
+    filename = f"data-points-{company_id}-{year or 'all'}.csv"
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

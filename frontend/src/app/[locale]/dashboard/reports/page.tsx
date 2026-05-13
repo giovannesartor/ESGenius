@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,6 +35,48 @@ export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const fetchReports = async () => {
+    if (!token || !company) return [];
+    setLoading(true);
+    try {
+      const data = await reportApi.list(token, company.id);
+      const items = (data as Report[]) || [];
+      setReports(items);
+      return items;
+    } catch {
+      setReports([]);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startPolling = () => {
+    if (pollingRef.current) return;
+    pollingRef.current = setInterval(async () => {
+      if (!token || !company) return;
+      try {
+        const data = await reportApi.list(token, company.id);
+        const items = (data as Report[]) || [];
+        setReports(items);
+        const hasGenerating = items.some((r) => r.status === "generating" || r.status === "pending");
+        if (!hasGenerating && pollingRef.current) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+        }
+      } catch { /* ignore */ }
+    }, 5000);
+  };
+
+  useEffect(() => {
+    fetchReports().then((items) => {
+      const hasGenerating = items.some((r) => r.status === "generating" || r.status === "pending");
+      if (hasGenerating) startPolling();
+    });
+    return () => { if (pollingRef.current) clearInterval(pollingRef.current); };
+  }, [token, company]);
 
   // Generate dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -46,18 +88,6 @@ export default function ReportsPage() {
     format: "pdf",
     year: new Date().getFullYear(),
   });
-
-  const fetchReports = () => {
-    if (!token || !company) return;
-    setLoading(true);
-    reportApi
-      .list(token, company.id)
-      .then((data) => setReports((data as Report[]) || []))
-      .catch(() => setReports([]))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => { fetchReports(); }, [token, company]);
 
   const handleGenerate = async () => {
     if (!token || !company || !formData.title.trim()) return;
@@ -72,7 +102,7 @@ export default function ReportsPage() {
       });
       setDialogOpen(false);
       setFormData({ title: "", report_type: "GRI", format: "pdf", year: new Date().getFullYear() });
-      fetchReports();
+      fetchReports().then(() => startPolling());
     } catch (e: unknown) {
       setGenError(e instanceof Error ? e.message : t("dashboard.reportsForm.failedGenerate"));
     } finally {

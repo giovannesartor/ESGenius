@@ -354,3 +354,76 @@ async def delete_framework(
     await db.execute(delete(Framework).where(Framework.id == framework_id))
     await db.commit()
     return {"detail": "Framework deleted"}
+
+
+# ── AI Logs ──────────────────────────────────────────────────────
+
+@router.get("/ai-logs")
+async def list_ai_logs(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    status: Optional[str] = None,
+    function_name: Optional[str] = None,
+    _current_user: User = Depends(get_current_superadmin),
+    db: AsyncSession = Depends(get_db),
+):
+    """List AI request logs for monitoring and cost tracking."""
+    from app.domain.models.ai_log import AILog
+
+    query = select(AILog).order_by(AILog.created_at.desc())
+    if status:
+        query = query.where(AILog.status == status)
+    if function_name:
+        query = query.where(AILog.function_name == function_name)
+
+    total = (await db.execute(
+        select(func.count(AILog.id))
+    )).scalar() or 0
+
+    result = await db.execute(query.offset(skip).limit(limit))
+    logs = result.scalars().all()
+
+    # Aggregate stats
+    success_count = (await db.execute(
+        select(func.count(AILog.id)).where(AILog.status == "success")
+    )).scalar() or 0
+    total_tokens = (await db.execute(
+        select(func.coalesce(func.sum(AILog.tokens_input + AILog.tokens_output), 0))
+    )).scalar() or 0
+    avg_latency = (await db.execute(
+        select(func.avg(AILog.latency_ms))
+    )).scalar() or 0
+
+    # Enrich with user info
+    items = []
+    for log in logs:
+        user_name = "System"
+        if log.user_id:
+            user_res = await db.get(User, log.user_id)
+            if user_res:
+                user_name = user_res.full_name or user_res.email
+
+        items.append({
+            "id": str(log.id),
+            "timestamp": log.created_at.isoformat() if log.created_at else None,
+            "user": user_name,
+            "type": log.function_name,
+            "status": log.status,
+            "model": log.model,
+            "tokens_input": log.tokens_input or 0,
+            "tokens_output": log.tokens_output or 0,
+            "tokens_total": (log.tokens_input or 0) + (log.tokens_output or 0),
+            "latency_ms": log.latency_ms or 0,
+            "cost_usd": round(log.cost_usd or 0, 6),
+            "error_message": log.error_message,
+        })
+
+    return {
+        "items": items,
+        "total": total,
+        "stats": {
+            "success_rate": round(success_count / max(total, 1) * 100, 1),
+            "total_tokens": total_tokens,
+            "avg_latency_ms": round(avg_latency or 0, 1),
+        },
+    }

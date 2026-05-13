@@ -8,6 +8,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { companyApi, dashboardApi, documentApi } from "@/services/api";
 import {
@@ -24,6 +37,8 @@ import {
   Leaf,
   Scale,
   Shield,
+  UserPlus,
+  Trash2,
 } from "lucide-react";
 
 interface Company {
@@ -50,28 +65,41 @@ interface Document {
   created_at: string;
 }
 
+interface Member {
+  user_id: string;
+  full_name?: string;
+  email: string;
+  role: string;
+}
+
 export default function CompanyDetailPage() {
   const t = useTranslations();
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const params = useParams();
   const companyId = params.id as string;
 
   const [company, setCompany] = useState<Company | null>(null);
   const [scores, setScores] = useState<DashboardScores | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [memberEmail, setMemberEmail] = useState("");
+  const [memberRole, setMemberRole] = useState("viewer");
+  const [addingMember, setAddingMember] = useState(false);
+  const [memberError, setMemberError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!token || !companyId) return;
 
     const fetchData = async () => {
       try {
-        const [companyData, scoresData, docsData] = await Promise.allSettled([
+        const [companyData, scoresData, docsData, membersData] = await Promise.allSettled([
           companyApi.get(token, companyId),
           dashboardApi.getScores(token, companyId),
           documentApi.list(token, companyId),
+          companyApi.listMembers(token, companyId),
         ]);
 
         if (companyData.status === "fulfilled") {
@@ -87,6 +115,10 @@ export default function CompanyDetailPage() {
 
         if (docsData.status === "fulfilled") {
           setDocuments((docsData.value as Document[]) || []);
+        }
+
+        if (membersData.status === "fulfilled") {
+          setMembers((membersData.value as Member[]) || []);
         }
       } catch {
         setError(t("dashboard.failedLoadCompany"));
@@ -131,6 +163,33 @@ export default function CompanyDetailPage() {
     if (score >= 75) return "bg-emerald-50";
     if (score >= 50) return "bg-amber-50";
     return "bg-red-50";
+  };
+
+  const handleAddMember = async () => {
+    if (!memberEmail.trim() || !token) return;
+    setAddingMember(true);
+    setMemberError(null);
+    try {
+      await companyApi.addMember(token, companyId, { email: memberEmail.trim(), role: memberRole });
+      const updated = await companyApi.listMembers(token, companyId);
+      setMembers((updated as Member[]) || []);
+      setMemberEmail("");
+      setMemberRole("viewer");
+    } catch {
+      setMemberError(t("dashboard.failedAddMember"));
+    } finally {
+      setAddingMember(false);
+    }
+  };
+
+  const handleRemoveMember = async (userId: string) => {
+    if (!token) return;
+    try {
+      await companyApi.removeMember(token, companyId, userId);
+      setMembers((prev) => prev.filter((m) => m.user_id !== userId));
+    } catch {
+      // silently fail — member list will refresh on next load
+    }
   };
 
   return (
@@ -321,6 +380,100 @@ export default function CompanyDetailPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Members */}
+      <Card className="border-border/50">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Users className="h-4 w-4 text-primary" />
+            {t("dashboard.teamMembers")}
+            {members.length > 0 && (
+              <Badge variant="secondary" className="ml-1">{members.length}</Badge>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Add member form */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input
+              placeholder="colleague@company.com"
+              value={memberEmail}
+              onChange={(e) => setMemberEmail(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAddMember()}
+              className="flex-1 h-9 text-sm"
+            />
+            <Select value={memberRole} onValueChange={setMemberRole}>
+              <SelectTrigger className="w-32 h-9 text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="admin">{t("dashboard.memberRoleAdmin")}</SelectItem>
+                <SelectItem value="viewer">{t("dashboard.memberRoleViewer")}</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button size="sm" onClick={handleAddMember} disabled={addingMember || !memberEmail.trim()}>
+              {addingMember ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
+              <span className="ml-2">{t("dashboard.addMemberBtn")}</span>
+            </Button>
+          </div>
+          {memberError && <p className="text-xs text-destructive">{memberError}</p>}
+
+          {/* Member list */}
+          {members.length === 0 ? (
+            <div className="flex flex-col items-center py-8 text-center">
+              <Users className="h-8 w-8 text-muted-foreground/30 mb-2" />
+              <p className="text-sm text-muted-foreground">{t("dashboard.noTeamMembers")}</p>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-border/50 divide-y divide-border/50">
+              {members.map((m) => (
+                <div key={m.user_id} className="flex items-center justify-between px-4 py-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                      <span className="text-xs font-semibold text-muted-foreground">
+                        {(m.full_name || m.email)[0].toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="min-w-0">
+                      {m.full_name && <p className="text-sm font-medium truncate">{m.full_name}</p>}
+                      <p className="text-xs text-muted-foreground truncate">{m.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Badge variant="outline" className="text-xs capitalize">{m.role}</Badge>
+                    {m.user_id !== user?.id && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive">
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>{t("dashboard.removeMemberTitle")}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              {t("dashboard.removeMemberDesc")}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              onClick={() => handleRemoveMember(m.user_id)}
+                            >
+                              {t("dashboard.removeMemberAction")}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

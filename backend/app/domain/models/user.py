@@ -44,6 +44,12 @@ class User(Base):
         String(500), nullable=True
     )
 
+    # Stripe
+    stripe_customer_id: Mapped[str | None] = mapped_column(
+        String(255), unique=True, nullable=True
+    )
+    subscription_plan: Mapped[str] = mapped_column(String(50), default="free")
+
     # Status
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_superadmin: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -64,6 +70,9 @@ class User(Base):
     # Relationships
     company_memberships: Mapped[list["CompanyUser"]] = relationship(
         "CompanyUser", back_populates="user", cascade="all, delete-orphan"
+    )
+    subscriptions: Mapped[list["Subscription"]] = relationship(
+        "Subscription", back_populates="user", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

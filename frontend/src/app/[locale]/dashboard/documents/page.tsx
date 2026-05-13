@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,14 +43,44 @@ export default function DocumentsPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const fetchDocuments = async (tkn: string, companyId: string) => {
+    try {
+      const data = await documentApi.list(tkn, companyId);
+      setDocuments((data as Document[]) || []);
+      return data as Document[];
+    } catch {
+      return [];
+    }
+  };
 
   useEffect(() => {
     if (!token || !company) return;
-    documentApi
-      .list(token, company.id)
-      .then((data) => setDocuments((data as Document[]) || []))
-      .catch(() => setDocuments([]))
-      .finally(() => setLoading(false));
+
+    fetchDocuments(token, company.id).finally(() => setLoading(false));
+
+    // Start polling if any document is processing
+    const startPolling = () => {
+      pollingRef.current = setInterval(async () => {
+        const docs = await fetchDocuments(token, company.id);
+        const hasProcessing = docs.some((d) => d.status === "processing" || d.status === "uploaded");
+        if (!hasProcessing && pollingRef.current) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+        }
+      }, 5000);
+    };
+
+    // Poll initially if there are processing docs
+    fetchDocuments(token, company.id).then((docs) => {
+      const hasProcessing = docs.some((d) => d.status === "processing" || d.status === "uploaded");
+      if (hasProcessing) startPolling();
+    });
+
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+    };
   }, [token, company]);
 
   const filtered = documents.filter(
@@ -142,8 +172,9 @@ export default function DocumentsPage() {
                 const status = statusConfig[doc.status] || statusConfig.uploaded;
                 const StatusIcon = status.icon;
                 return (
-                  <div
+                  <Link
                     key={doc.id}
+                    href={`/dashboard/documents/${doc.id}`}
                     className="flex items-center gap-4 px-6 py-4 hover:bg-muted/50 transition-colors"
                   >
                     <div className="p-2 rounded-lg bg-muted">
@@ -167,7 +198,7 @@ export default function DocumentsPage() {
                       <StatusIcon className={`mr-1 h-3 w-3 ${status.spin ? "animate-spin" : ""}`} />
                       {t(`dashboard.${status.labelKey}`)}
                     </Badge>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

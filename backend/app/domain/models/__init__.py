@@ -8,6 +8,7 @@ from app.domain.models.document import Document, DocumentStatus, DocumentType  #
 from app.domain.models.report import Report, ReportStatus, ReportFormat  # noqa: F401
 from app.domain.models.ai_log import AILog  # noqa: F401
 from app.domain.models.integration import Integration  # noqa: F401
+from app.domain.models.subscription import Subscription  # noqa: F401
 
 __all__ = [
     "User",
@@ -31,4 +32,5 @@ __all__ = [
     "ReportFormat",
     "AILog",
     "Integration",
+    "Subscription",
 ]
