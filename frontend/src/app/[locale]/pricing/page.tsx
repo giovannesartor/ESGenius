@@ -120,18 +120,14 @@ export default function PricingPage() {
                           {t("pricing.deliverables")}
                         </div>
                         <div className="space-y-2.5">
-                          <div className="flex items-start gap-2.5">
-                            <FileText className="h-4 w-4 shrink-0 mt-0.5 text-violet-500" />
-                            <span className="text-sm font-semibold text-foreground">
-                              {t("pricing.deliverable1")}
-                            </span>
-                          </div>
-                          <div className="flex items-start gap-2.5">
-                            <FileCheck className="h-4 w-4 shrink-0 mt-0.5 text-emerald-500" />
-                            <span className="text-sm font-semibold text-foreground">
-                              {t("pricing.deliverable2")}
-                            </span>
-                          </div>
+                          {Array.from({ length: 8 }, (_, i) => (
+                            <div key={i} className="flex items-start gap-2.5">
+                              <FileCheck className={`h-4 w-4 shrink-0 mt-0.5 ${isEnt ? "text-emerald-500" : "text-violet-500"}`} />
+                              <span className="text-sm font-semibold text-foreground">
+                                {t(`pricing.deliverable${i + 1}`)}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
 

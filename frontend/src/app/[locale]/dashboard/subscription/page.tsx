@@ -8,16 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   CheckCircle2,
-  Zap,
-  Building2,
-  CreditCard,
+  Lock,
   AlertCircle,
   Loader2,
-  Star,
+  Sparkles,
   ArrowRight,
-  Calendar,
-  XCircle,
-  RefreshCw,
+  ShieldCheck,
+  FileText,
+  FileSpreadsheet,
+  ListChecks,
+  Leaf,
+  Target,
+  Layers,
+  Globe,
+  Download,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { stripeApi } from "@/services/api";
@@ -33,44 +37,26 @@ interface Subscription {
   currency?: string;
 }
 
-const planFeatures = {
-  free: [
-    "1 company profile",
-    "Up to 50 data points/year",
-    "GRI framework only",
-    "Basic ESG score",
-    "PDF report (watermarked)",
-  ],
-  professional: [
-    "Unlimited companies",
-    "Unlimited data points",
-    "All frameworks (GRI, SASB, TCFD, CDP)",
-    "AI-powered insights & scoring",
-    "Clean PDF reports",
-    "What-if simulation",
-    "CSV data export",
-    "Priority support",
-  ],
-  enterprise: [
-    "Everything in Professional",
-    "Custom frameworks",
-    "Team management",
-    "API access",
-    "SLA & dedicated support",
-    "Custom integrations",
-  ],
-};
+const ARTIFACT_ICONS = [
+  FileText,
+  FileText,
+  FileSpreadsheet,
+  ListChecks,
+  Leaf,
+  Target,
+  Layers,
+  Globe,
+];
 
-function SubscriptionContent() {
+function EsgReportsContent() {
   const t = useTranslations();
   const { token } = useAuth();
-  const { company } = useCompany();
+  useCompany();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [interval, setInterval] = useState<"month" | "year">("month");
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -78,7 +64,7 @@ function SubscriptionContent() {
     if (!token) return;
     setLoading(true);
     try {
-      const data = await stripeApi.getSubscription(token) as Subscription;
+      const data = (await stripeApi.getSubscription(token)) as Subscription;
       setSubscription(data);
     } catch {
       setSubscription({ plan: "free", status: "active" });
@@ -89,92 +75,57 @@ function SubscriptionContent() {
 
   useEffect(() => {
     fetchSubscription();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  // Handle Stripe redirect
   useEffect(() => {
     const success = searchParams.get("success");
     const cancelled = searchParams.get("cancelled");
     const sessionId = searchParams.get("session_id");
 
     if (success === "true" && sessionId && token) {
-      stripeApi.verifySession(token, sessionId).then(() => {
-        setSuccessMsg("Subscription activated successfully!");
-        fetchSubscription();
-        router.replace(window.location.pathname);
-      }).catch(() => {
-        fetchSubscription();
-      });
+      stripeApi
+        .verifySession(token, sessionId)
+        .then(() => {
+          setSuccessMsg(t("dashboard.esgReports.unlockProcessing"));
+          fetchSubscription();
+          router.replace(window.location.pathname);
+        })
+        .catch(() => {
+          fetchSubscription();
+        });
     } else if (cancelled === "true") {
-      setErrorMsg("Checkout was cancelled. You can try again anytime.");
+      setErrorMsg(t("common.error"));
       router.replace(window.location.pathname);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, token]);
 
-  const handleUpgrade = async (plan: string) => {
+  const handleUnlock = async (plan: "professional" | "enterprise") => {
     if (!token) return;
-    setActionLoading("upgrade");
+    setActionLoading(plan);
     setErrorMsg("");
     try {
-      const res = await stripeApi.createCheckout(token, plan, interval);
+      const res = await stripeApi.createCheckout(token, plan, "month");
       window.location.href = res.checkout_url;
     } catch {
-      setErrorMsg("Failed to start checkout. Please try again.");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handlePortal = async () => {
-    if (!token) return;
-    setActionLoading("portal");
-    try {
-      const res = await stripeApi.getPortalUrl(token);
-      window.location.href = res.portal_url;
-    } catch {
-      setErrorMsg("Failed to open billing portal.");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleCancel = async () => {
-    if (!token) return;
-    setActionLoading("cancel");
-    try {
-      await stripeApi.cancelSubscription(token);
-      setSuccessMsg("Subscription will cancel at the end of the billing period.");
-      fetchSubscription();
-    } catch {
-      setErrorMsg("Failed to cancel subscription.");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleReactivate = async () => {
-    if (!token) return;
-    setActionLoading("reactivate");
-    try {
-      await stripeApi.reactivateSubscription(token);
-      setSuccessMsg("Subscription reactivated!");
-      fetchSubscription();
-    } catch {
-      setErrorMsg("Failed to reactivate subscription.");
+      setErrorMsg(t("common.error"));
     } finally {
       setActionLoading(null);
     }
   };
 
   const currentPlan = subscription?.plan ?? "free";
-  const isPro = currentPlan === "professional";
-  const isEnterprise = currentPlan === "enterprise";
+  const hasUnlocked = currentPlan === "professional" || currentPlan === "enterprise";
+
+  const proPrice = t("pricing.professional.price");
+  const entPrice = t("pricing.enterprise.price");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {successMsg && (
-        <div className="flex items-center gap-3 rounded-lg bg-brand-green/10 border border-brand-green/20 px-4 py-3">
-          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />
+        <div className="flex items-center gap-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-4 py-3">
+          <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
           <p className="text-sm">{successMsg}</p>
         </div>
       )}
@@ -185,224 +136,251 @@ function SubscriptionContent() {
         </div>
       )}
 
-      {/* Current Plan Status */}
       {loading ? (
         <Card className="border-border/50">
-          <CardContent className="p-8 flex justify-center">
+          <CardContent className="p-12 flex justify-center">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           </CardContent>
         </Card>
-      ) : (
-        <Card className="border-border/50">
+      ) : hasUnlocked ? (
+        // ============== UNLOCKED STATE ==============
+        <Card className="border-emerald-500/30 bg-emerald-500/5">
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <CreditCard className="h-4 w-4 text-brand-blue" />
-              Current Subscription
-            </CardTitle>
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5 text-emerald-500" />
+              <CardTitle className="text-base">{t("dashboard.esgReports.purchasedTitle")}</CardTitle>
+            </div>
           </CardHeader>
-          <CardContent className="px-6 pb-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className={`p-3 rounded-xl ${isPro || isEnterprise ? "bg-brand-gold/10" : "bg-muted"}`}>
-                  {isPro || isEnterprise ? (
-                    <Star className={`h-6 w-6 ${isPro ? "text-brand-gold" : "text-primary"}`} />
-                  ) : (
-                    <Zap className="h-6 w-6 text-muted-foreground" />
-                  )}
-                </div>
+          <CardContent className="px-6 pb-6 space-y-4">
+            <p className="text-sm text-muted-foreground">{t("dashboard.esgReports.purchasedDesc")}</p>
+
+            <div className="rounded-xl border border-border/60 bg-background p-5">
+              <div className="flex items-center justify-between mb-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-lg font-bold capitalize">{currentPlan}</p>
-                    <Badge
-                      variant="secondary"
-                      className={
-                        subscription?.status === "active"
-                          ? "text-brand-green bg-brand-green/10"
-                          : "text-destructive bg-destructive/10"
-                      }
-                    >
-                      {subscription?.status ?? "active"}
-                    </Badge>
+                  <div className="text-sm font-bold text-foreground capitalize">
+                    {currentPlan === "enterprise"
+                      ? t("dashboard.esgReports.tierEnterprise")
+                      : t("dashboard.esgReports.tierProfessional")}
                   </div>
-                  {subscription?.current_period_end && (
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {subscription.cancel_at_period_end ? "Cancels" : "Renews"} on{" "}
-                      {new Date(subscription.current_period_end).toLocaleDateString()}
-                    </p>
-                  )}
-                  {subscription?.cancel_at_period_end && (
-                    <p className="text-xs text-amber-600 mt-1 flex items-center gap-1">
-                      <AlertCircle className="h-3 w-3" />
-                      Scheduled to cancel — reactivate to keep access
-                    </p>
-                  )}
+                  <Badge className="mt-1.5 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-0 text-[10px]">
+                    {t("dashboard.activeBadge")}
+                  </Badge>
                 </div>
+                <Button variant="outline" size="sm">
+                  <Download className="mr-2 h-4 w-4" />
+                  {t("dashboard.esgReports.downloadAll")}
+                </Button>
               </div>
-              <div className="flex gap-2">
-                {(isPro || isEnterprise) && (
-                  <>
-                    <Button variant="outline" size="sm" onClick={handlePortal} disabled={actionLoading === "portal"}>
-                      {actionLoading === "portal" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
-                      <span className="ml-2">Manage Billing</span>
-                    </Button>
-                    {subscription?.cancel_at_period_end ? (
-                      <Button size="sm" onClick={handleReactivate} disabled={actionLoading === "reactivate"}>
-                        {actionLoading === "reactivate" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        <RefreshCw className="mr-2 h-4 w-4" />
-                        Reactivate
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {Array.from({ length: 8 }, (_, i) => {
+                  const Icon = ARTIFACT_ICONS[i];
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 rounded-lg border border-border/50 bg-card p-3 hover:border-emerald-500/30 transition-colors"
+                    >
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
+                        <Icon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-bold text-foreground truncate">
+                          {t(`dashboard.bundle.artifact${i + 1}Title`)}
+                        </div>
+                        <div className="text-[10px] text-muted-foreground truncate">
+                          {t(`dashboard.bundle.artifact${i + 1}Format`)}
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm" className="shrink-0 h-8 px-2">
+                        <Download className="h-3.5 w-3.5" />
                       </Button>
-                    ) : (
-                      <Button variant="ghost" size="sm" onClick={handleCancel} disabled={actionLoading === "cancel"} className="text-destructive hover:text-destructive">
-                        {actionLoading === "cancel" ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
-                        <span className="ml-2">Cancel Plan</span>
-                      </Button>
-                    )}
-                  </>
-                )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
+
+            <Button onClick={() => handleUnlock("professional")} disabled={actionLoading !== null} className="w-full sm:w-auto">
+              {actionLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+              {t("dashboard.esgReports.newReportCta")}
+            </Button>
           </CardContent>
         </Card>
-      )}
-
-      {/* Upgrade Plans */}
-      {!isPro && !isEnterprise && (
+      ) : (
+        // ============== PREVIEW (LOCKED) STATE ==============
         <>
-          {/* Billing interval toggle */}
-          <div className="flex items-center justify-center gap-3">
-            <Button
-              variant={interval === "month" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setInterval("month")}
-            >
-              Monthly
-            </Button>
-            <Button
-              variant={interval === "year" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setInterval("year")}
-            >
-              Yearly
-              <Badge variant="secondary" className="ml-2 text-brand-green bg-brand-green/10 text-[10px]">
-                Save 17%
-              </Badge>
-            </Button>
-          </div>
+          {/* Preview banner */}
+          <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/15">
+                  <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    <h2 className="text-base font-bold text-foreground">
+                      {t("dashboard.esgReports.previewTitle")}
+                    </h2>
+                    <Badge className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-0 text-[10px] font-bold uppercase">
+                      {t("dashboard.esgReports.previewBadge")}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{t("dashboard.esgReports.previewDesc")}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Pricing tiers */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Professional */}
-            <Card className="border-brand-green/30 shadow-md relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-green to-brand-blue" />
+            <Card className="border-emerald-500/40 ring-1 ring-emerald-500/10 shadow-lg shadow-emerald-500/5 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500" />
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Star className="h-5 w-5 text-brand-gold" />
-                    Professional
+                    <Sparkles className="h-5 w-5 text-emerald-500" />
+                    {t("dashboard.esgReports.tierProfessional")}
                   </CardTitle>
-                  <Badge className="bg-brand-green text-white">Most Popular</Badge>
+                  <Badge className="bg-emerald-500 hover:bg-emerald-500 text-white text-[10px] font-black uppercase tracking-wide">
+                    {t("dashboard.mostPopular")}
+                  </Badge>
                 </div>
-                <div className="mt-2">
-                  <span className="text-3xl font-bold">
-                    {interval === "month" ? "$299" : "$2,990"}
-                  </span>
-                  <span className="text-muted-foreground text-sm">/{interval === "month" ? "mo" : "yr"}</span>
+                <p className="text-xs text-muted-foreground mt-1">{t("dashboard.esgReports.tierProDesc")}</p>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-foreground">{proPrice}</span>
+                  <span className="text-sm font-semibold text-muted-foreground">{t("pricing.professional.period")}</span>
                 </div>
+                <p className="text-[11px] text-muted-foreground mt-1">{t("pricing.oneTime")}</p>
               </CardHeader>
               <CardContent className="px-6 pb-6 space-y-4">
-                <ul className="space-y-2">
-                  {planFeatures.professional.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
                 <Button
-                  className="w-full"
-                  onClick={() => handleUpgrade("professional")}
-                  disabled={actionLoading === "upgrade"}
+                  size="lg"
+                  className="w-full h-12 font-bold text-sm bg-emerald-500 hover:bg-emerald-400 text-white"
+                  onClick={() => handleUnlock("professional")}
+                  disabled={actionLoading !== null}
                 >
-                  {actionLoading === "upgrade" ? (
+                  {actionLoading === "professional" ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
                     <ArrowRight className="mr-2 h-4 w-4" />
                   )}
-                  Upgrade to Professional
+                  {t("dashboard.esgReports.unlockCta", { price: proPrice })}
                 </Button>
+                <p className="text-[11px] text-center text-muted-foreground">{t("dashboard.esgReports.unlockHelp")}</p>
               </CardContent>
             </Card>
 
             {/* Enterprise */}
-            <Card className="border-border/50">
+            <Card className="border-border/60">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-primary" />
-                    Enterprise
+                    <ShieldCheck className="h-5 w-5 text-primary" />
+                    {t("dashboard.esgReports.tierEnterprise")}
                   </CardTitle>
                 </div>
-                <div className="mt-2">
-                  <span className="text-3xl font-bold">Custom</span>
+                <p className="text-xs text-muted-foreground mt-1">{t("dashboard.esgReports.tierEntDesc")}</p>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-foreground">{entPrice}</span>
+                  <span className="text-sm font-semibold text-muted-foreground">{t("pricing.enterprise.period")}</span>
                 </div>
+                <p className="text-[11px] text-muted-foreground mt-1">{t("pricing.oneTime")}</p>
               </CardHeader>
               <CardContent className="px-6 pb-6 space-y-4">
-                <ul className="space-y-2">
-                  {planFeatures.enterprise.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Button variant="outline" className="w-full" asChild>
-                  <a href="mailto:contato@esg360.ai?subject=Enterprise%20Plan">
-                    Contact Sales
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full h-12 font-bold text-sm"
+                  onClick={() => handleUnlock("enterprise")}
+                  disabled={actionLoading !== null}
+                >
+                  {actionLoading === "enterprise" ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="mr-2 h-4 w-4" />
+                  )}
+                  {t("dashboard.esgReports.buyNow")}
+                </Button>
+                <Button variant="ghost" size="sm" className="w-full text-xs" asChild>
+                  <a href="mailto:contato@esg360.ai?subject=Enterprise%20ESG%20Bundle">
+                    {t("dashboard.esgReports.contactSales")}
                   </a>
                 </Button>
               </CardContent>
             </Card>
           </div>
-        </>
-      )}
 
-      {/* What's included (when on paid plan) */}
-      {(isPro || isEnterprise) && (
-        <Card className="border-border/50">
-          <CardHeader>
-            <CardTitle className="text-base">Your Plan Includes</CardTitle>
-          </CardHeader>
-          <CardContent className="px-6 pb-6">
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {planFeatures[currentPlan as keyof typeof planFeatures]?.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+          {/* 8 artifacts bundle */}
+          <Card className="border-border/60">
+            <CardHeader>
+              <CardTitle className="text-base">{t("dashboard.bundle.sectionTitle")}</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">{t("dashboard.bundle.sectionSubtitle")}</p>
+            </CardHeader>
+            <CardContent className="px-6 pb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {Array.from({ length: 8 }, (_, i) => {
+                  const Icon = ARTIFACT_ICONS[i];
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-start gap-3 rounded-xl border border-border/50 bg-card p-4 hover:border-emerald-500/30 hover:shadow-sm transition-all"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10">
+                        <Icon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-sm font-bold text-foreground">
+                            {t(`dashboard.bundle.artifact${i + 1}Title`)}
+                          </span>
+                          <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 text-[9px] font-bold">
+                            {t("dashboard.bundle.includedBadge")}
+                          </Badge>
+                        </div>
+                        <div className="text-[11px] text-muted-foreground mb-1.5">
+                          {t(`dashboard.bundle.artifact${i + 1}Format`)}
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          {t(`dashboard.bundle.artifact${i + 1}Desc`)}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-muted/50 px-4 py-3">
+                <p className="text-xs text-muted-foreground">{t("dashboard.esgReports.valueAnchor")}</p>
+                <p className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  {t("dashboard.esgReports.secureCheckout")}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </>
       )}
     </div>
   );
 }
 
-export default function SubscriptionPage() {
+export default function EsgReportsPage() {
+  const t = useTranslations();
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-6 max-w-5xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <CreditCard className="h-6 w-6 text-brand-blue" />
-          Subscription & Billing
+          <Sparkles className="h-6 w-6 text-emerald-500" />
+          {t("dashboard.esgReports.pageTitle")}
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Manage your ESG360 subscription and billing information
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">{t("dashboard.esgReports.pageSubtitle")}</p>
       </div>
-      <Suspense fallback={<div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin" /></div>}>
-        <SubscriptionContent />
+      <Suspense
+        fallback={
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin" />
+          </div>
+        }
+      >
+        <EsgReportsContent />
       </Suspense>
     </div>
   );

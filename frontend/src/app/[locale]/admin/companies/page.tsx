@@ -139,12 +139,12 @@ export default function CompaniesAdminPage() {
             {t("admin.nav.companies")}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage registered companies and their subscription plans
+            {t("dashboard.companiesSubtitle")}
           </p>
         </div>
         <Button className="font-semibold">
           <Building2 className="mr-2 h-4 w-4" />
-          Add Company
+          {t("dashboard.newCompany")}
         </Button>
       </div>
 
@@ -158,7 +158,7 @@ export default function CompaniesAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{mockCompanies.length}</p>
-                <p className="text-xs text-muted-foreground">Total Companies</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.totalCompanies")}</p>
               </div>
             </div>
           </CardContent>
@@ -171,7 +171,7 @@ export default function CompaniesAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{enterpriseCount}</p>
-                <p className="text-xs text-muted-foreground">Enterprise Plans</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.enterprisePlans")}</p>
               </div>
             </div>
           </CardContent>
@@ -184,7 +184,7 @@ export default function CompaniesAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{professionalCount}</p>
-                <p className="text-xs text-muted-foreground">Professional Plans</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.professionalPlans")}</p>
               </div>
             </div>
           </CardContent>
@@ -197,7 +197,7 @@ export default function CompaniesAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{avgScore}</p>
-                <p className="text-xs text-muted-foreground">Avg ESG Score</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.avgEsgScore")}</p>
               </div>
             </div>
           </CardContent>
@@ -208,12 +208,12 @@ export default function CompaniesAdminPage() {
       <Card className="border-border/50">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <CardTitle className="text-base">All Companies</CardTitle>
+            <CardTitle className="text-base">{t("dashboard.allCompanies")}</CardTitle>
             <div className="flex items-center gap-3">
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search companies..."
+                  placeholder={t("dashboard.searchCompanies")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-9"
@@ -226,7 +226,7 @@ export default function CompaniesAdminPage() {
                   onClick={() => setPlanFilter("all")}
                   className="text-xs"
                 >
-                  All
+                  {t("common.all")}
                 </Button>
                 <Button
                   variant={planFilter === "Enterprise" ? "default" : "outline"}
@@ -253,13 +253,13 @@ export default function CompaniesAdminPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
-                  <TableHead className="font-semibold">Company Name</TableHead>
-                  <TableHead className="font-semibold">Sector</TableHead>
-                  <TableHead className="font-semibold">Country</TableHead>
-                  <TableHead className="font-semibold text-center">Plan</TableHead>
-                  <TableHead className="font-semibold text-center">ESG Score</TableHead>
-                  <TableHead className="font-semibold text-center">Users</TableHead>
-                  <TableHead className="font-semibold text-right">Actions</TableHead>
+                  <TableHead className="font-semibold">{t("dashboard.tableCompanyName")}</TableHead>
+                  <TableHead className="font-semibold">{t("dashboard.tableSector")}</TableHead>
+                  <TableHead className="font-semibold">{t("dashboard.tableCountry")}</TableHead>
+                  <TableHead className="font-semibold text-center">{t("dashboard.tablePlan")}</TableHead>
+                  <TableHead className="font-semibold text-center">{t("dashboard.tableEsgScore")}</TableHead>
+                  <TableHead className="font-semibold text-center">{t("dashboard.tableUsers")}</TableHead>
+                  <TableHead className="font-semibold text-right">{t("dashboard.tableActions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -322,7 +322,7 @@ export default function CompaniesAdminPage() {
                 {filteredCompanies.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No companies found matching your search.
+                      {t("dashboard.noCompaniesTitle")}
                     </TableCell>
                   </TableRow>
                 )}

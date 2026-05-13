@@ -132,7 +132,7 @@ export default function AILogsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{loading ? "—" : totalRequests.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">Total Requests</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.totalRequests")}</p>
               </div>
             </div>
           </CardContent>
@@ -147,7 +147,7 @@ export default function AILogsPage() {
                 <p className="text-2xl font-bold">
                   {loading ? "—" : statsData ? `${Math.round(statsData.avg_latency_ms)}ms` : "—"}
                 </p>
-                <p className="text-xs text-muted-foreground">Avg Response Time</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.avgResponseTime")}</p>
               </div>
             </div>
           </CardContent>
@@ -162,7 +162,7 @@ export default function AILogsPage() {
                 <p className="text-2xl font-bold">
                   {loading ? "—" : statsData ? `${Math.round(statsData.success_rate)}%` : "—"}
                 </p>
-                <p className="text-xs text-muted-foreground">Success Rate</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.successRate")}</p>
               </div>
             </div>
           </CardContent>
@@ -177,7 +177,7 @@ export default function AILogsPage() {
                 <p className="text-2xl font-bold">
                   {loading ? "—" : statsData ? statsData.total_tokens.toLocaleString() : "—"}
                 </p>
-                <p className="text-xs text-muted-foreground">Tokens Used</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.tokensUsed")}</p>
               </div>
             </div>
           </CardContent>
@@ -189,7 +189,7 @@ export default function AILogsPage() {
         <CardHeader>
           <div className="flex flex-col gap-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <CardTitle className="text-base">Recent AI Requests</CardTitle>
+              <CardTitle className="text-base">{t("dashboard.recentAiRequests")}</CardTitle>
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -227,12 +227,12 @@ export default function AILogsPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/50">
-                    <TableHead className="font-semibold">Timestamp</TableHead>
-                    <TableHead className="font-semibold">User</TableHead>
-                    <TableHead className="font-semibold text-center">Function</TableHead>
-                    <TableHead className="font-semibold text-center">Status</TableHead>
-                    <TableHead className="font-semibold text-center">Latency</TableHead>
-                    <TableHead className="font-semibold text-right">Tokens</TableHead>
+                    <TableHead className="font-semibold">{t("dashboard.tableTimestamp")}</TableHead>
+                    <TableHead className="font-semibold">{t("dashboard.tableUser")}</TableHead>
+                    <TableHead className="font-semibold text-center">{t("dashboard.tableFunction")}</TableHead>
+                    <TableHead className="font-semibold text-center">{t("dashboard.tableStatus")}</TableHead>
+                    <TableHead className="font-semibold text-center">{t("dashboard.tableLatency")}</TableHead>
+                    <TableHead className="font-semibold text-right">{t("dashboard.tableTokens")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

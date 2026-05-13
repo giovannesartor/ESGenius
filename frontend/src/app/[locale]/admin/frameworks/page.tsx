@@ -184,7 +184,7 @@ export default function FrameworksAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{mockFrameworks.length}</p>
-                <p className="text-xs text-muted-foreground">Total Frameworks</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.totalFrameworksLabel")}</p>
               </div>
             </div>
           </CardContent>
@@ -199,7 +199,7 @@ export default function FrameworksAdminPage() {
                 <p className="text-2xl font-bold">
                   {mockFrameworks.filter((fw) => fw.status === "active").length}
                 </p>
-                <p className="text-xs text-muted-foreground">Active Frameworks</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.activeFrameworksLabel")}</p>
               </div>
             </div>
           </CardContent>
@@ -212,7 +212,7 @@ export default function FrameworksAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalIndicators}</p>
-                <p className="text-xs text-muted-foreground">Total Indicators</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.totalIndicatorsLabel")}</p>
               </div>
             </div>
           </CardContent>
@@ -223,7 +223,7 @@ export default function FrameworksAdminPage() {
       <Card className="border-border/50">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <CardTitle className="text-base">All Frameworks</CardTitle>
+            <CardTitle className="text-base">{t("dashboard.allFrameworks")}</CardTitle>
             <div className="relative w-full sm:w-72">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -240,12 +240,12 @@ export default function FrameworksAdminPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
-                  <TableHead className="font-semibold">Name</TableHead>
-                  <TableHead className="font-semibold">Code</TableHead>
-                  <TableHead className="font-semibold">Version</TableHead>
-                  <TableHead className="font-semibold text-center">Indicators</TableHead>
-                  <TableHead className="font-semibold text-center">Status</TableHead>
-                  <TableHead className="font-semibold text-right">Actions</TableHead>
+                  <TableHead className="font-semibold">{t("dashboard.frameworkName")}</TableHead>
+                  <TableHead className="font-semibold">{t("dashboard.frameworkCode")}</TableHead>
+                  <TableHead className="font-semibold">{t("dashboard.frameworkVersion")}</TableHead>
+                  <TableHead className="font-semibold text-center">{t("dashboard.frameworkIndicators")}</TableHead>
+                  <TableHead className="font-semibold text-center">{t("dashboard.tableStatus")}</TableHead>
+                  <TableHead className="font-semibold text-right">{t("dashboard.tableActions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

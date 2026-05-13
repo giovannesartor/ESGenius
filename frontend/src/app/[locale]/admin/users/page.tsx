@@ -138,7 +138,7 @@ export default function UsersAdminPage() {
             {t("admin.nav.users")}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage user accounts, roles, and permissions
+            {t("dashboard.usersSubtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -159,7 +159,7 @@ export default function UsersAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{mockUsers.length}</p>
-                <p className="text-xs text-muted-foreground">Total Users</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.totalUsers")}</p>
               </div>
             </div>
           </CardContent>
@@ -172,7 +172,7 @@ export default function UsersAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalAdmins}</p>
-                <p className="text-xs text-muted-foreground">Administrators</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.administrators")}</p>
               </div>
             </div>
           </CardContent>
@@ -185,7 +185,7 @@ export default function UsersAdminPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeUsers}</p>
-                <p className="text-xs text-muted-foreground">Active Users</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.activeUsers")}</p>
               </div>
             </div>
           </CardContent>
@@ -197,7 +197,7 @@ export default function UsersAdminPage() {
         <CardHeader>
           <div className="flex flex-col gap-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <CardTitle className="text-base">All Users</CardTitle>
+              <CardTitle className="text-base">{t("dashboard.allUsers")}</CardTitle>
               <div className="relative w-full sm:w-72">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
