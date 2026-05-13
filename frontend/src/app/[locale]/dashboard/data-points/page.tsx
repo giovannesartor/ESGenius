@@ -253,7 +253,7 @@ export default function DataPointsPage() {
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search data points..."
+            placeholder={t("dashboard.searchDataPoints")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -266,7 +266,7 @@ export default function DataPointsPage() {
               <SelectValue placeholder="Pillar" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Pillars</SelectItem>
+              <SelectItem value="all">{t("dashboard.allPillars")}</SelectItem>
               {PILLARS.map((p) => (
                 <SelectItem key={p} value={p}>{PILLAR_CONFIG[p].label}</SelectItem>
               ))}
@@ -284,7 +284,7 @@ export default function DataPointsPage() {
           </Select>
         </div>
         <Badge variant="secondary" className="text-xs">
-          {filtered.length} data points
+          {t("dashboard.dataPointsCount", { count: filtered.length })}
         </Badge>
       </div>
 
@@ -313,19 +313,19 @@ export default function DataPointsPage() {
                 <CardContent className="px-6 pb-6">
                   {items.length === 0 ? (
                     <div className="text-center py-6 text-muted-foreground text-sm">
-                      No {cfg.label} data points for this period.{" "}
-                      <button className="underline text-primary" onClick={openCreate}>Add one</button>.
+                      {t("dashboard.noDataPointsForPeriod", { pillar: cfg.label })}{" "}
+                      <button className="underline text-primary" onClick={openCreate}>{t("dashboard.addOne")}</button>.
                     </div>
                   ) : (
                     <div className="rounded-lg border overflow-hidden">
                       <Table>
                         <TableHeader>
                           <TableRow className="bg-muted/50">
-                            <TableHead>Category</TableHead>
-                            <TableHead>Value</TableHead>
-                            <TableHead>Unit</TableHead>
-                            <TableHead>Year</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead>{t("dashboard.tableCategory")}</TableHead>
+                            <TableHead>{t("dashboard.tableValue")}</TableHead>
+                            <TableHead>{t("dashboard.tableUnit")}</TableHead>
+                            <TableHead>{t("dashboard.tableYear")}</TableHead>
+                            <TableHead>{t("dashboard.tableStatus")}</TableHead>
                             <TableHead className="w-20" />
                           </TableRow>
                         </TableHeader>
@@ -385,11 +385,11 @@ export default function DataPointsPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editingId ? "Edit Data Point" : "Add Data Point"}</DialogTitle>
+            <DialogTitle>{editingId ? t("dashboard.editDataPoint") : t("dashboard.addDataPoint")}</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-2">
             <div className="space-y-2">
-              <Label>Pillar *</Label>
+              <Label>{t("dashboard.pillarLabel")} *</Label>
               <Select value={form.pillar} onValueChange={(v) => setForm({ ...form, pillar: v })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -402,7 +402,7 @@ export default function DataPointsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Year *</Label>
+              <Label>{t("dashboard.tableYear")} *</Label>
               <Select
                 value={String(form.year)}
                 onValueChange={(v) => setForm({ ...form, year: parseInt(v) })}
@@ -418,7 +418,7 @@ export default function DataPointsPage() {
               </Select>
             </div>
             <div className="col-span-2 space-y-2">
-              <Label>Category *</Label>
+              <Label>{t("dashboard.tableCategory")} *</Label>
               <Input
                 placeholder="e.g. Energy Consumption"
                 value={form.category}
@@ -426,7 +426,7 @@ export default function DataPointsPage() {
               />
             </div>
             <div className="col-span-2 space-y-2">
-              <Label>Value *</Label>
+              <Label>{t("dashboard.tableValue")} *</Label>
               <Input
                 placeholder="e.g. 45,000 kWh"
                 value={form.value}
@@ -434,7 +434,7 @@ export default function DataPointsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Numeric Value</Label>
+              <Label>{t("dashboard.numericValue")}</Label>
               <Input
                 type="number"
                 placeholder="e.g. 45000"
@@ -443,7 +443,7 @@ export default function DataPointsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Unit</Label>
+              <Label>{t("dashboard.unitLabel")}</Label>
               <Input
                 placeholder="e.g. kWh, tCO2e, %"
                 value={form.unit}
@@ -451,7 +451,7 @@ export default function DataPointsPage() {
               />
             </div>
             <div className="col-span-2 space-y-2">
-              <Label>Notes</Label>
+              <Label>{t("dashboard.notesLabel")}</Label>
               <Input
                 placeholder="Optional notes or source"
                 value={form.notes}
@@ -460,10 +460,10 @@ export default function DataPointsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>{t("common.cancel")}</Button>
             <Button onClick={handleSave} disabled={saving || !form.category || !form.value}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {editingId ? "Save Changes" : "Add Data Point"}
+              {editingId ? t("common.save") : t("dashboard.addDataPoint")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -473,20 +473,20 @@ export default function DataPointsPage() {
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Data Point?</AlertDialogTitle>
+            <AlertDialogTitle>{t("dashboard.deleteDataPointConfirm")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. The data point will be permanently removed.
+              {t("dashboard.deleteDataPointDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={handleDelete}
               disabled={deleting}
             >
               {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Delete
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

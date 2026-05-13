@@ -162,7 +162,7 @@ export default function SettingsPage() {
             {pwSuccess && (
               <div className="mb-3 flex items-center gap-2 rounded-lg bg-brand-green/10 border border-brand-green/20 px-3 py-2">
                 <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />
-                <p className="text-xs">Password changed successfully.</p>
+                <p className="text-xs">{t("dashboard.passwordChanged")}</p>
               </div>
             )}
             {pwError && (
@@ -174,7 +174,7 @@ export default function SettingsPage() {
 
             <div className="grid grid-cols-1 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-xs">Current Password</Label>
+                <Label className="text-xs">{t("dashboard.currentPasswordLabel")}</Label>
                 <Input
                   type="password"
                   className="h-10"
@@ -185,7 +185,7 @@ export default function SettingsPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label className="text-xs">New Password</Label>
+                  <Label className="text-xs">{t("dashboard.newPasswordLabel")}</Label>
                   <Input
                     type="password"
                     className="h-10"
@@ -195,7 +195,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs">Confirm New Password</Label>
+                  <Label className="text-xs">{t("dashboard.confirmNewPasswordLabel")}</Label>
                   <Input
                     type="password"
                     className="h-10"
@@ -213,7 +213,7 @@ export default function SettingsPage() {
               disabled={pwSaving || !currentPassword || !newPassword || !confirmPassword}
             >
               {pwSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Update Password
+              {t("dashboard.updatePassword")}
             </Button>
           </div>
 

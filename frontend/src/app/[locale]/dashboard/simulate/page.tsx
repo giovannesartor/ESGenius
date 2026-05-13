@@ -139,7 +139,7 @@ export default function SimulatePage() {
           What-If Simulation
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Model how specific improvements would impact your ESG score
+          {t("dashboard.simulateSubtitle")}
         </p>
       </div>
 
@@ -149,7 +149,7 @@ export default function SimulatePage() {
           <Card className="border-border/50">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">Simulation Actions</CardTitle>
+                <CardTitle className="text-base">{t("dashboard.simulationActions")}</CardTitle>
                 <div className="flex gap-2">
                   <Select value={String(year)} onValueChange={(v) => setYear(parseInt(v))}>
                     <SelectTrigger className="w-24 h-8 text-xs">
@@ -173,7 +173,7 @@ export default function SimulatePage() {
                 return (
                   <div key={action.id} className="border rounded-lg p-4 space-y-3 bg-muted/20">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-muted-foreground">Action {idx + 1}</span>
+                      <span className="text-xs font-semibold text-muted-foreground">{t("dashboard.actionLabel", { idx: idx + 1 })}</span>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -186,7 +186,7 @@ export default function SimulatePage() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Pillar</Label>
+                        <Label className="text-xs">{t("dashboard.pillarLabel")}</Label>
                         <Select
                           value={action.pillar}
                           onValueChange={(v) => updateAction(action.id, "pillar", v)}
@@ -202,7 +202,7 @@ export default function SimulatePage() {
                         </Select>
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Indicator</Label>
+                        <Label className="text-xs">{t("dashboard.indicatorLabel")}</Label>
                         <Select
                           value={action.indicator}
                           onValueChange={(v) => updateAction(action.id, "indicator", v)}
@@ -220,7 +220,7 @@ export default function SimulatePage() {
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <Label className="text-xs">Change</Label>
+                        <Label className="text-xs">{t("dashboard.changeLabel")}</Label>
                         <Badge
                           variant="secondary"
                           className={isNegative ? "text-brand-green bg-brand-green/10" : "text-brand-gold bg-brand-gold/10"}
@@ -247,7 +247,7 @@ export default function SimulatePage() {
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={addAction} className="flex-1">
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Action
+                  {t("dashboard.addAction")}
                 </Button>
                 <Button
                   size="sm"
@@ -260,7 +260,7 @@ export default function SimulatePage() {
                   ) : (
                     <Zap className="mr-2 h-4 w-4" />
                   )}
-                  Run Simulation
+                  {t("dashboard.runSimulation")}
                 </Button>
               </div>
               {error && (
@@ -280,7 +280,7 @@ export default function SimulatePage() {
               <CardContent className="py-16 flex flex-col items-center gap-3 text-center">
                 <BarChart3 className="h-12 w-12 text-muted-foreground/30" />
                 <p className="text-sm text-muted-foreground">
-                  Configure your actions and click <strong>Run Simulation</strong> to see projected impact
+                  {t("dashboard.runSimulationHint")}
                 </p>
               </CardContent>
             </Card>
@@ -290,7 +290,7 @@ export default function SimulatePage() {
             <Card className="border-border/50">
               <CardContent className="py-16 flex flex-col items-center gap-3">
                 <Loader2 className="h-10 w-10 animate-spin text-brand-blue" />
-                <p className="text-sm text-muted-foreground">Running simulation...</p>
+                <p className="text-sm text-muted-foreground">{t("dashboard.runningSimulation")}</p>
               </CardContent>
             </Card>
           )}
@@ -300,12 +300,12 @@ export default function SimulatePage() {
               {/* Score comparison */}
               <Card className="border-border/50">
                 <CardHeader>
-                  <CardTitle className="text-base">Score Impact</CardTitle>
+                  <CardTitle className="text-base">{t("dashboard.scoreImpact")}</CardTitle>
                 </CardHeader>
                 <CardContent className="px-6 pb-6">
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Current</p>
+                      <p className="text-xs text-muted-foreground mb-1">{t("dashboard.currentLabel")}</p>
                       <p className="text-3xl font-bold">{result.current_score.toFixed(1)}</p>
                       <p className={`text-sm font-semibold ${getGradeColor(result.current_grade)}`}>
                         {result.current_grade}
@@ -327,7 +327,7 @@ export default function SimulatePage() {
                       </Badge>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Projected</p>
+                      <p className="text-xs text-muted-foreground mb-1">{t("dashboard.projectedLabel")}</p>
                       <p className="text-3xl font-bold">{result.simulated_score.toFixed(1)}</p>
                       <p className={`text-sm font-semibold ${getGradeColor(result.simulated_grade)}`}>
                         {result.simulated_grade}
@@ -341,7 +341,7 @@ export default function SimulatePage() {
               {result.pillar_deltas && (
                 <Card className="border-border/50">
                   <CardHeader>
-                    <CardTitle className="text-base">Pillar Impact Breakdown</CardTitle>
+                    <CardTitle className="text-base">{t("dashboard.pillarImpactBreakdown")}</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 pb-6 space-y-3">
                     {Object.entries(result.pillar_deltas).map(([pillar, delta]) => {
@@ -380,7 +380,7 @@ export default function SimulatePage() {
               {result.recommendations && result.recommendations.length > 0 && (
                 <Card className="border-border/50">
                   <CardHeader>
-                    <CardTitle className="text-base">AI Recommendations</CardTitle>
+                    <CardTitle className="text-base">{t("dashboard.aiRecommendations")}</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 pb-6">
                     <ul className="space-y-2">

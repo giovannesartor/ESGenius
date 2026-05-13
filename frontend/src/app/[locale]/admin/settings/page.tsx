@@ -88,7 +88,7 @@ export default function AdminSettingsPage() {
           {t("admin.nav.settings")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Manage system configuration, email settings, and feature flags
+          {t("dashboard.adminSettingsSubtitle")}
         </p>
       </div>
 
@@ -97,46 +97,46 @@ export default function AdminSettingsPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Server className="h-4 w-4 text-brand-blue" />
-            System Configuration
+            {t("dashboard.systemConfig")}
           </CardTitle>
         </CardHeader>
         <CardContent className="px-6 pb-6 space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
               <Label htmlFor="api-url" className="text-sm font-medium">
-                API Base URL
+                {t("dashboard.apiBaseUrl")}
               </Label>
               <Input id="api-url" defaultValue="https://api.esg360.digital/api/v1" />
-              <p className="text-xs text-muted-foreground">Backend API endpoint</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.backendApiEndpoint")}</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="ai-model" className="text-sm font-medium">
-                AI Model
+                {t("dashboard.aiModel")}
               </Label>
               <Input id="ai-model" defaultValue="deepseek-chat-v3-0324" />
-              <p className="text-xs text-muted-foreground">Default AI model for processing</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.defaultAiModel")}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
               <Label htmlFor="max-upload" className="text-sm font-medium">
-                Max Upload Size (MB)
+                {t("dashboard.maxUploadSize")}
               </Label>
               <Input id="max-upload" type="number" defaultValue="50" />
-              <p className="text-xs text-muted-foreground">Maximum file upload size in megabytes</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.maxFileUpload")}</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="rate-limit" className="text-sm font-medium">
-                AI Rate Limit (req/min)
+                {t("dashboard.aiRateLimit")}
               </Label>
               <Input id="rate-limit" type="number" defaultValue="60" />
-              <p className="text-xs text-muted-foreground">Max AI requests per minute per user</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.rateLimitDesc")}</p>
             </div>
           </div>
           <div className="flex justify-end pt-2">
             <Button className="font-semibold">
               <Save className="mr-2 h-4 w-4" />
-              Save Configuration
+              {t("dashboard.saveConfiguration")}
             </Button>
           </div>
         </CardContent>
@@ -147,7 +147,7 @@ export default function AdminSettingsPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Mail className="h-4 w-4 text-brand-gold" />
-            Email Settings
+            {t("dashboard.emailSettings")}
           </CardTitle>
         </CardHeader>
         <CardContent className="px-6 pb-6 space-y-5">
@@ -182,7 +182,7 @@ export default function AdminSettingsPage() {
           <div className="flex justify-end pt-2">
             <Button className="font-semibold">
               <Save className="mr-2 h-4 w-4" />
-              Save Email Settings
+              {t("dashboard.saveEmailSettings")}
             </Button>
           </div>
         </CardContent>
@@ -193,7 +193,7 @@ export default function AdminSettingsPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <ToggleLeft className="h-4 w-4 text-brand-green" />
-            Feature Flags
+            {t("dashboard.featureFlags")}
           </CardTitle>
         </CardHeader>
         <CardContent className="px-6 pb-6">
@@ -219,7 +219,7 @@ export default function AdminSettingsPage() {
                           : "text-muted-foreground bg-muted"
                       }
                     >
-                      {flag.enabled ? "Enabled" : "Disabled"}
+                      {flag.enabled ? t("dashboard.enabled") : t("dashboard.disabled")}
                     </Badge>
                     <Switch
                       checked={flag.enabled}
@@ -239,32 +239,32 @@ export default function AdminSettingsPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-4 w-4" />
-            Danger Zone
+            {t("dashboard.dangerZone")}
           </CardTitle>
         </CardHeader>
         <CardContent className="px-6 pb-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg border border-border/50">
             <div>
-              <p className="text-sm font-medium">Clear Cache</p>
+              <p className="text-sm font-medium">{t("dashboard.clearCache")}</p>
               <p className="text-xs text-muted-foreground">
-                Clear all cached data including Redis cache and temporary files
+                {t("dashboard.clearCacheDesc")}
               </p>
             </div>
             <Button variant="outline" className="border-destructive/30 text-destructive hover:bg-destructive/10 shrink-0">
               <Trash2 className="mr-2 h-4 w-4" />
-              Clear Cache
+              {t("dashboard.clearCache")}
             </Button>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg border border-destructive/30 bg-destructive/5">
             <div>
-              <p className="text-sm font-medium text-destructive">Reset Database</p>
+              <p className="text-sm font-medium text-destructive">{t("dashboard.resetDatabase")}</p>
               <p className="text-xs text-muted-foreground">
-                Permanently reset all data. This action cannot be undone.
+                {t("dashboard.resetDatabaseDesc")}
               </p>
             </div>
             <Button variant="destructive" className="shrink-0">
               <RotateCcw className="mr-2 h-4 w-4" />
-              Reset Database
+              {t("dashboard.resetDatabase")}
             </Button>
           </div>
         </CardContent>
