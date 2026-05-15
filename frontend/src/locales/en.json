@@ -796,6 +796,98 @@
     "addAction": "Add Action",
     "runningSimulation": "Running simulation..."
   },
+  "tour": {
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip tour",
+    "finish": "Finish",
+    "stepLabel": "Step {current} of {total}",
+    "helpButtonTitle": "Replay product tour",
+    "user": {
+      "welcome": {
+        "title": "Welcome to ESGenius 👋",
+        "body": "Quick 60-second tour of your ESG workspace. You can replay it anytime from the green help button at the bottom-right."
+      },
+      "sidebar": {
+        "title": "Your navigation",
+        "body": "Everything you need lives in this sidebar — uploads, reports, your live ESG score, AI insights and more."
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "Your home base: KPIs, recent activity and a snapshot of how your ESG performance is trending."
+      },
+      "upload": {
+        "title": "Upload documents",
+        "body": "Drop in PDFs, spreadsheets or sustainability reports. Our AI extracts and classifies every ESG data point automatically."
+      },
+      "reports": {
+        "title": "Reports",
+        "body": "See every ESG report you have generated and download deliverables (Executive, Full Disclosure, Audit Trail, etc.)."
+      },
+      "score": {
+        "title": "ESG Score",
+        "body": "Your live score broken down across Environmental, Social and Governance, with industry benchmarks and historical trend."
+      },
+      "insights": {
+        "title": "AI Insights",
+        "body": "Risk alerts, recommendations and improvement opportunities — generated from your own data."
+      },
+      "simulate": {
+        "title": "What-If Simulation",
+        "body": "Model how specific actions (e.g. switch to renewables) would lift your score before you commit."
+      },
+      "esgReports": {
+        "title": "Buy ESG Reports",
+        "body": "Order a new ESG report bundle: 8 board-ready, audit-ready, stakeholder-ready deliverables in one purchase."
+      },
+      "topbar": {
+        "title": "Search, language & theme",
+        "body": "Switch language, toggle dark/light mode, search across your workspace and check notifications from here."
+      },
+      "done": {
+        "title": "You're all set 🎉",
+        "body": "Start by uploading your first document. Need a refresher? Click the green help button anytime to replay this tour."
+      }
+    },
+    "admin": {
+      "welcome": {
+        "title": "Welcome, admin 🛡️",
+        "body": "This is the ESGenius admin console. Quick tour of every panel you control — frameworks, companies, users, AI logs and system settings."
+      },
+      "sidebar": {
+        "title": "Admin navigation",
+        "body": "All admin tools are in this sidebar. Each section is scoped to platform-wide management."
+      },
+      "overview": {
+        "title": "Admin overview",
+        "body": "Platform-wide metrics: total companies, users, AI usage and ESG score distribution across the customer base."
+      },
+      "frameworks": {
+        "title": "Frameworks",
+        "body": "Manage ESG frameworks (GRI, SASB, TCFD, CDP, ISSB, CSRD), their categories and indicators. Activate or version them globally."
+      },
+      "companies": {
+        "title": "Companies",
+        "body": "View and manage every customer company on the platform — plan, ESG score and assigned users."
+      },
+      "users": {
+        "title": "Users",
+        "body": "Manage user accounts, promote/demote admins and audit access. The default admins are seeded from Railway env vars."
+      },
+      "aiLogs": {
+        "title": "AI logs",
+        "body": "Audit every AI call: model, latency, tokens, cost and the user who triggered it. Useful for cost control and debugging."
+      },
+      "settings": {
+        "title": "System settings",
+        "body": "Global configuration: API endpoints, default AI model, upload limits, rate limits, email and feature flags."
+      },
+      "done": {
+        "title": "Admin tour complete 🎉",
+        "body": "You can replay this tour anytime from the green help button at the bottom-right. Click 'Back to Dashboard' to return to the user view."
+      }
+    }
+  },
   "onboarding": {
     "welcomeTitle": "Welcome to ESG360! 👋",
     "welcomeSubtitle": "Let's set up your company profile to get started.",

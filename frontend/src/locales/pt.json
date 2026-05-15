@@ -796,6 +796,98 @@
     "addAction": "Adicionar Ação",
     "runningSimulation": "Executando simulação..."
   },
+  "tour": {
+    "next": "Próximo",
+    "back": "Voltar",
+    "skip": "Pular tour",
+    "finish": "Concluir",
+    "stepLabel": "Etapa {current} de {total}",
+    "helpButtonTitle": "Refazer tour do produto",
+    "user": {
+      "welcome": {
+        "title": "Bem-vindo ao ESGenius 👋",
+        "body": "Tour rápido de 60 segundos pelo seu workspace ESG. Você pode refazer a qualquer momento pelo botão verde de ajuda no canto inferior direito."
+      },
+      "sidebar": {
+        "title": "Sua navegação",
+        "body": "Tudo o que você precisa está nesta barra lateral — uploads, relatórios, seu score ESG ao vivo, insights de IA e mais."
+      },
+      "overview": {
+        "title": "Visão geral",
+        "body": "Sua tela inicial: KPIs, atividade recente e um snapshot da evolução do seu desempenho ESG."
+      },
+      "upload": {
+        "title": "Upload de documentos",
+        "body": "Solte PDFs, planilhas ou relatórios de sustentabilidade. Nossa IA extrai e classifica cada ponto de dado ESG automaticamente."
+      },
+      "reports": {
+        "title": "Relatórios",
+        "body": "Veja todos os relatórios ESG que você gerou e baixe os entregáveis (Executivo, Disclosure Completo, Trilha de Auditoria etc)."
+      },
+      "score": {
+        "title": "Score ESG",
+        "body": "Seu score ao vivo dividido em Ambiental, Social e Governança, com benchmarks de mercado e tendência histórica."
+      },
+      "insights": {
+        "title": "Insights de IA",
+        "body": "Alertas de risco, recomendações e oportunidades de melhoria — gerados a partir dos seus próprios dados."
+      },
+      "simulate": {
+        "title": "Simulação What-If",
+        "body": "Modele como ações específicas (ex: migrar para renováveis) impactariam seu score antes de se comprometer."
+      },
+      "esgReports": {
+        "title": "Comprar relatórios ESG",
+        "body": "Encomende um novo bundle ESG: 8 entregáveis prontos para conselho, auditoria e stakeholders em uma única compra."
+      },
+      "topbar": {
+        "title": "Busca, idioma e tema",
+        "body": "Troque o idioma, alterne entre modo claro/escuro, busque pelo workspace e veja notificações por aqui."
+      },
+      "done": {
+        "title": "Tudo pronto 🎉",
+        "body": "Comece subindo seu primeiro documento. Precisa rever? Clique no botão verde de ajuda a qualquer momento para refazer o tour."
+      }
+    },
+    "admin": {
+      "welcome": {
+        "title": "Bem-vindo, admin 🛡️",
+        "body": "Este é o console admin do ESGenius. Tour rápido por cada painel que você controla — frameworks, empresas, usuários, logs de IA e configurações."
+      },
+      "sidebar": {
+        "title": "Navegação admin",
+        "body": "Todas as ferramentas admin estão nesta barra lateral. Cada seção é escopo de gestão da plataforma inteira."
+      },
+      "overview": {
+        "title": "Visão geral admin",
+        "body": "Métricas da plataforma: total de empresas, usuários, uso de IA e distribuição de scores ESG na base de clientes."
+      },
+      "frameworks": {
+        "title": "Frameworks",
+        "body": "Gerencie frameworks ESG (GRI, SASB, TCFD, CDP, ISSB, CSRD), suas categorias e indicadores. Ative ou versione globalmente."
+      },
+      "companies": {
+        "title": "Empresas",
+        "body": "Veja e gerencie todas as empresas clientes da plataforma — plano, score ESG e usuários atribuídos."
+      },
+      "users": {
+        "title": "Usuários",
+        "body": "Gerencie contas, promova/rebaixe admins e audite acessos. Os admins padrão são semeados das variáveis do Railway."
+      },
+      "aiLogs": {
+        "title": "Logs de IA",
+        "body": "Audite cada chamada de IA: modelo, latência, tokens, custo e o usuário que disparou. Útil para controle de custo e debugging."
+      },
+      "settings": {
+        "title": "Configurações do sistema",
+        "body": "Configuração global: endpoints da API, modelo de IA padrão, limites de upload, rate limits, e-mail e feature flags."
+      },
+      "done": {
+        "title": "Tour admin concluído 🎉",
+        "body": "Você pode refazer este tour a qualquer momento pelo botão verde de ajuda. Clique em 'Voltar ao Dashboard' para retornar à visão de usuário."
+      }
+    }
+  },
   "onboarding": {
     "welcomeTitle": "Bem-vindo ao ESG360! 👋",
     "welcomeSubtitle": "Vamos configurar o perfil da sua empresa para começar.",

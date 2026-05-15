@@ -796,6 +796,98 @@
     "addAction": "Agregar Acción",
     "runningSimulation": "Ejecutando simulación..."
   },
+  "tour": {
+    "next": "Siguiente",
+    "back": "Atrás",
+    "skip": "Omitir tour",
+    "finish": "Finalizar",
+    "stepLabel": "Paso {current} de {total}",
+    "helpButtonTitle": "Repetir tour del producto",
+    "user": {
+      "welcome": {
+        "title": "Bienvenido a ESGenius 👋",
+        "body": "Tour rápido de 60 segundos por tu workspace ESG. Puedes repetirlo en cualquier momento desde el botón verde de ayuda en la esquina inferior derecha."
+      },
+      "sidebar": {
+        "title": "Tu navegación",
+        "body": "Todo lo que necesitas está en esta barra lateral — cargas, informes, tu puntuación ESG en vivo, insights de IA y más."
+      },
+      "overview": {
+        "title": "Resumen",
+        "body": "Tu pantalla principal: KPIs, actividad reciente y un snapshot de la evolución de tu desempeño ESG."
+      },
+      "upload": {
+        "title": "Cargar documentos",
+        "body": "Suelta PDFs, hojas de cálculo o informes de sostenibilidad. Nuestra IA extrae y clasifica cada punto de dato ESG automáticamente."
+      },
+      "reports": {
+        "title": "Informes",
+        "body": "Ve todos los informes ESG que has generado y descarga los entregables (Ejecutivo, Disclosure Completo, Trilla de Auditoría, etc)."
+      },
+      "score": {
+        "title": "Puntuación ESG",
+        "body": "Tu puntuación en vivo dividida en Ambiental, Social y Gobernanza, con benchmarks de la industria y tendencia histórica."
+      },
+      "insights": {
+        "title": "Insights de IA",
+        "body": "Alertas de riesgo, recomendaciones y oportunidades de mejora — generados a partir de tus propios datos."
+      },
+      "simulate": {
+        "title": "Simulación What-If",
+        "body": "Modela cómo acciones específicas (ej. migrar a renovables) impactarían tu puntuación antes de comprometerte."
+      },
+      "esgReports": {
+        "title": "Comprar informes ESG",
+        "body": "Encarga un nuevo bundle ESG: 8 entregables listos para directorio, auditoría y stakeholders en una sola compra."
+      },
+      "topbar": {
+        "title": "Búsqueda, idioma y tema",
+        "body": "Cambia el idioma, alterna entre modo claro/oscuro, busca en tu workspace y revisa notificaciones desde aquí."
+      },
+      "done": {
+        "title": "¡Todo listo! 🎉",
+        "body": "Empieza subiendo tu primer documento. ¿Necesitas un repaso? Haz clic en el botón verde de ayuda en cualquier momento para repetir el tour."
+      }
+    },
+    "admin": {
+      "welcome": {
+        "title": "Bienvenido, admin 🛡️",
+        "body": "Esta es la consola admin de ESGenius. Tour rápido por cada panel que controlas — frameworks, empresas, usuarios, logs de IA y configuración del sistema."
+      },
+      "sidebar": {
+        "title": "Navegación admin",
+        "body": "Todas las herramientas admin están en esta barra lateral. Cada sección abarca la gestión de toda la plataforma."
+      },
+      "overview": {
+        "title": "Resumen admin",
+        "body": "Métricas de la plataforma: total de empresas, usuarios, uso de IA y distribución de puntuaciones ESG en la base de clientes."
+      },
+      "frameworks": {
+        "title": "Frameworks",
+        "body": "Gestiona frameworks ESG (GRI, SASB, TCFD, CDP, ISSB, CSRD), sus categorías e indicadores. Actívalos o versiónalos globalmente."
+      },
+      "companies": {
+        "title": "Empresas",
+        "body": "Ve y gestiona todas las empresas clientes de la plataforma — plan, puntuación ESG y usuarios asignados."
+      },
+      "users": {
+        "title": "Usuarios",
+        "body": "Gestiona cuentas de usuario, promueve/degrada admins y audita accesos. Los admins por defecto se siembran desde las variables de Railway."
+      },
+      "aiLogs": {
+        "title": "Logs de IA",
+        "body": "Audita cada llamada de IA: modelo, latencia, tokens, costo y el usuario que disparó. Útil para control de costos y debugging."
+      },
+      "settings": {
+        "title": "Configuración del sistema",
+        "body": "Configuración global: endpoints de API, modelo de IA por defecto, límites de carga, rate limits, email y feature flags."
+      },
+      "done": {
+        "title": "Tour admin completado 🎉",
+        "body": "Puedes repetir este tour en cualquier momento desde el botón verde de ayuda. Haz clic en 'Volver al Dashboard' para regresar a la vista de usuario."
+      }
+    }
+  },
   "onboarding": {
     "welcomeTitle": "¡Bienvenido a ESG360! 👋",
     "welcomeSubtitle": "Configuremos el perfil de su empresa para comenzar.",

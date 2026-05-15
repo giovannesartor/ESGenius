@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { AdminTour } from "@/components/tour/admin-tour";
 import {
   LayoutDashboard,
   Layers,
@@ -100,7 +101,7 @@ export default function AdminLayout({
       </div>
 
       {/* Navigation */}
-      <ScrollArea className="flex-1 px-3 pb-4">
+      <ScrollArea className="flex-1 px-3 pb-4" data-tour="admin-sidebar">
         <nav className="space-y-1">
           {adminNavItems.map((item) => {
             const isActive =
@@ -112,6 +113,7 @@ export default function AdminLayout({
                 key={item.key}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
+                data-tour={`admin-nav-${item.key}`}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
@@ -191,6 +193,9 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
+
+      {/* Product tour for admins */}
+      <AdminTour />
     </div>
   );
 }

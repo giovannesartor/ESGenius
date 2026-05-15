@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserTour } from "@/components/tour/user-tour";
 import {
   LayoutDashboard,
   Building2,
@@ -110,6 +111,7 @@ export default function DashboardLayout({
         href={item.href}
         onClick={() => setMobileOpen(false)}
         title={collapsed ? t(`dashboard.nav.${item.key}`) : undefined}
+        data-tour={`nav-${item.key}`}
         className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 ${
           isActive
             ? "bg-emerald-500/12 text-emerald-400"
@@ -145,7 +147,7 @@ export default function DashboardLayout({
       </div>
 
       {/* Navigation */}
-      <ScrollArea className="flex-1 px-2 py-4">
+      <ScrollArea className="flex-1 px-2 py-4" data-tour="sidebar-nav">
         {/* Section label */}
         {!collapsed && (
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] px-3 mb-2"
@@ -351,7 +353,7 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" data-tour="topbar-actions">
             {/* Search */}
             <Button
               variant="ghost"
@@ -388,6 +390,9 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      {/* Product tour for normal users */}
+      <UserTour />
     </div>
   );
 }
