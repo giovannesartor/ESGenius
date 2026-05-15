@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 
-from sqlalchemy import DateTime, ForeignKey, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -39,6 +39,9 @@ class Company(Base):
     size: Mapped[str | None] = mapped_column(String(20), nullable=True)
     website: Mapped[str | None] = mapped_column(String(500), nullable=True)
     logo_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    is_demo: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, server_default="false"
+    )
 
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(

@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from enum import Enum as PyEnum
 
 from sqlalchemy import Boolean, DateTime, String, Text
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -53,6 +53,11 @@ class User(Base):
     # Status
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_superadmin: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # Notification preferences (json: {email: bool, types: [...]})
+    notification_prefs: Mapped[dict | None] = mapped_column(
+        JSON, nullable=True
+    )
 
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(

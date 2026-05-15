@@ -60,6 +60,8 @@ class DataPoint(Base):
     raw_text: Mapped[str | None] = mapped_column(Text, nullable=True)  # Original text from document
     ai_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)  # AI extraction confidence
     metadata_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    source_chunk_ids: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    source_page: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     # Audit
     created_by: Mapped[uuid.UUID | None] = mapped_column(

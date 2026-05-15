@@ -4,6 +4,7 @@ DeepSeek AI Engine — all AI functions for ESG data processing.
 All outputs are strictly structured JSON.
 """
 
+import asyncio
 import json
 import logging
 import time
@@ -244,3 +245,44 @@ ESG Scores: {json.dumps(scores)}
 Framework Mappings: {json.dumps(framework_mappings)}"""
 
         return self._call_ai(system_prompt, user_prompt, temperature=0.3)
+
+    # ============== New async helpers (for chat / extra services) ==============
+    def _call_ai_messages(
+        self,
+        messages: list[dict[str, str]],
+        temperature: float = 0.2,
+        json_mode: bool = True,
+    ) -> str:
+        """Generic chat-completions call. Returns raw string (JSON when json_mode)."""
+        kwargs: dict[str, Any] = {
+            "model": self.model,
+            "messages": messages,
+            "temperature": temperature,
+        }
+        if json_mode:
+            kwargs["response_format"] = {"type": "json_object"}
+        response = self.client.chat.completions.create(**kwargs)
+        return response.choices[0].message.content or ("{}" if json_mode else "")
+
+    async def chat(
+        self,
+        messages: list[dict[str, str]],
+        temperature: float = 0.2,
+        json_mode: bool = False,
+    ) -> str:
+        """Async wrapper around _call_ai_messages."""
+        return await asyncio.to_thread(
+            self._call_ai_messages, messages, temperature, json_mode
+        )
+
+
+# Module-level singleton — lazily constructed to avoid touching settings at import time
+_singleton: Optional[DeepSeekEngine] = None
+
+
+def get_engine() -> DeepSeekEngine:
+    global _singleton
+    if _singleton is None:
+        _singleton = DeepSeekEngine()
+    return _singleton
+
