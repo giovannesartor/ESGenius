@@ -1285,15 +1285,19 @@ export default function HomePage() {
                       <CheckCircle2 className="h-3 w-3" />
                       {t("pricing.oneTime")}
                     </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
-                        <FileText className="h-3.5 w-3.5 text-violet-500 shrink-0" />
-                        {t("pricing.deliverable1")}
-                      </div>
-                      <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
-                        <FileCheck className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
-                        {t("pricing.deliverable2")}
-                      </div>
+                    <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+                      {t(`pricing.${p.tier}.desc`)}
+                    </p>
+                    <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-2.5">
+                      {t("pricing.deliverables")}
+                    </div>
+                    <div className="space-y-1.5">
+                      {Array.from({ length: 8 }, (_, i) => (
+                        <div key={i} className="flex items-start gap-2 text-[12px] text-foreground/90">
+                          <FileCheck className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${p.tier === "enterprise" ? "text-emerald-500" : "text-violet-500"}`} />
+                          <span className="leading-snug">{t(`pricing.deliverable${i + 1}`)}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}

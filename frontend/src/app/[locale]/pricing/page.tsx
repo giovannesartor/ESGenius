@@ -162,16 +162,6 @@ export default function PricingPage() {
                         ))}
                       </ul>
 
-                      {!isEnt && (
-                        <div className="mt-6 rounded-xl border border-border/60 bg-muted/30 px-4 py-3">
-                          <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-1.5">
-                            {t("pricing.professional.extrasLabel")}
-                          </p>
-                          <p className="text-sm font-semibold text-foreground">
-                            {t("pricing.professional.extrasReport")}
-                          </p>
-                        </div>
-                      )}
                       {isEnt && (
                         <div className="mt-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
                           <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
