@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -76,6 +77,7 @@ export default function AdminLayout({
     router.push("/login");
   };
 
+  // eslint-disable-next-line react-hooks/static-components
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo + Admin badge */}

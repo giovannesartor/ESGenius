@@ -56,6 +56,7 @@ export default function DocumentsPage() {
   };
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (!token || !company) return;
 
     fetchDocuments(token, company.id).finally(() => setLoading(false));

@@ -371,4 +371,223 @@ export const stripeApi = {
   reactivateSubscription: (token: string) =>
     apiClient("/stripe/reactivate", { method: "POST", token }),
 };
+
+// =====================================================================
+// Platform extensions: notifications, collaboration, audit, privacy,
+// integrations (webhooks/API keys), ESG-AI (chat, recommendations,
+// regulatory, autofill, greenwashing, materiality, csv mapping,
+// emissions, benchmarks, templates, report versions).
+// =====================================================================
+
+// --- Notifications ---
+export const notificationsApi = {
+  list: (token: string, unreadOnly = false, limit = 50) =>
+    apiClient<unknown[]>(`/notifications?unread_only=${unreadOnly}&limit=${limit}`, { token }),
+  unreadCount: (token: string) =>
+    apiClient<{ count: number }>("/notifications/unread-count", { token }),
+  markRead: (token: string, id: string) =>
+    apiClient(`/notifications/${id}/read`, { method: "POST", token }),
+  markAllRead: (token: string) =>
+    apiClient("/notifications/read-all", { method: "POST", token }),
+  updatePrefs: (token: string, data: { email_enabled?: boolean; types?: string[] }) =>
+    apiClient("/notifications/preferences", { method: "PUT", body: data, token }),
+};
+
+// --- Collaboration: comments + tasks ---
+export const commentsApi = {
+  list: (token: string, entityType: string, entityId: string) =>
+    apiClient<unknown[]>(`/comments?entity_type=${entityType}&entity_id=${entityId}`, { token }),
+  create: (token: string, data: { entity_type: string; entity_id: string; body: string; parent_id?: string }) =>
+    apiClient("/comments", { method: "POST", body: data, token }),
+  update: (token: string, id: string, data: { body?: string; is_resolved?: boolean }) =>
+    apiClient(`/comments/${id}`, { method: "PUT", body: data, token }),
+  remove: (token: string, id: string) =>
+    apiClient(`/comments/${id}`, { method: "DELETE", token }),
+};
+
+export const tasksApi = {
+  list: (token: string, companyId: string, status?: string, assignee?: string) => {
+    const params = new URLSearchParams({ company_id: companyId });
+    if (status) params.set("status", status);
+    if (assignee) params.set("assignee_id", assignee);
+    return apiClient<unknown[]>(`/tasks?${params}`, { token });
+  },
+  create: (token: string, companyId: string, data: {
+    title: string; description?: string; assignee_id?: string;
+    priority?: string; due_date?: string; entity_type?: string; entity_id?: string;
+  }) => apiClient(`/tasks?company_id=${companyId}`, { method: "POST", body: data, token }),
+  update: (token: string, id: string, data: Record<string, unknown>) =>
+    apiClient(`/tasks/${id}`, { method: "PUT", body: data, token }),
+  remove: (token: string, id: string) =>
+    apiClient(`/tasks/${id}`, { method: "DELETE", token }),
+};
+
+// --- Audit logs ---
+export const auditApi = {
+  list: (token: string, companyId: string, filters: { action?: string; entity_type?: string; limit?: number } = {}) => {
+    const params = new URLSearchParams({ company_id: companyId });
+    if (filters.action) params.set("action", filters.action);
+    if (filters.entity_type) params.set("entity_type", filters.entity_type);
+    if (filters.limit) params.set("limit", String(filters.limit));
+    return apiClient<unknown[]>(`/audit-logs?${params}`, { token });
+  },
+};
+
+// --- Privacy / LGPD-GDPR ---
+export const privacyApi = {
+  exportData: (token: string) =>
+    apiClient("/privacy/export", { token }),
+  downloadExport: (token: string) =>
+    apiClient<Blob>("/privacy/export/download", { token }),
+  deleteAccount: (token: string) =>
+    apiClient("/privacy/account", { method: "DELETE", token }),
+};
+
+// --- Integrations: webhooks ---
+export const webhooksApi = {
+  list: (token: string, companyId: string) =>
+    apiClient<unknown[]>(`/webhooks?company_id=${companyId}`, { token }),
+  create: (token: string, companyId: string, data: { name: string; url: string; events: string[] }) =>
+    apiClient(`/webhooks?company_id=${companyId}`, { method: "POST", body: data, token }),
+  remove: (token: string, id: string) =>
+    apiClient(`/webhooks/${id}`, { method: "DELETE", token }),
+};
+
+// --- Integrations: API keys ---
+export const apiKeysApi = {
+  list: (token: string, companyId: string) =>
+    apiClient<unknown[]>(`/api-keys?company_id=${companyId}`, { token }),
+  create: (token: string, companyId: string, data: { name: string; scopes?: string[]; expires_at?: string }) =>
+    apiClient<{ plaintext_key: string } & Record<string, unknown>>(
+      `/api-keys?company_id=${companyId}`,
+      { method: "POST", body: data, token }
+    ),
+  remove: (token: string, id: string) =>
+    apiClient(`/api-keys/${id}`, { method: "DELETE", token }),
+};
+
+// --- ESG AI: chat ---
+export const chatApi = {
+  conversations: (token: string, companyId: string) =>
+    apiClient<unknown[]>(`/chat/conversations?company_id=${companyId}`, { token }),
+  messages: (token: string, conversationId: string) =>
+    apiClient<unknown[]>(`/chat/conversations/${conversationId}/messages`, { token }),
+  send: (token: string, data: { company_id: string; message: string; conversation_id?: string; language?: string }) =>
+    apiClient<{ conversation_id: string; message_id: string; answer: string; citations: unknown[] }>(
+      "/chat/messages",
+      { method: "POST", body: data, token }
+    ),
+};
+
+// --- ESG AI: recommendations ---
+export const recommendationsApi = {
+  list: (token: string, companyId: string, language = "en", limit = 5) =>
+    apiClient<{ recommendations: unknown[]; generated_at: string }>(
+      `/recommendations?company_id=${companyId}&language=${language}&limit=${limit}`,
+      { token }
+    ),
+};
+
+// --- ESG AI: regulatory feed ---
+export const regulatoryApi = {
+  list: (token: string, params: { company_id?: string; region?: string; sector?: string; framework?: string; limit?: number } = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => v !== undefined && q.set(k, String(v)));
+    return apiClient<unknown[]>(`/regulatory/updates?${q}`, { token });
+  },
+};
+
+// --- ESG AI: autofill ---
+export const autofillApi = {
+  suggest: (token: string, data: { company_id: string; year: number; framework_codes?: string[] }) =>
+    apiClient("/autofill", { method: "POST", body: data, token }),
+};
+
+// --- ESG AI: greenwashing scan ---
+export const greenwashingApi = {
+  scan: (token: string, text: string, language = "en") =>
+    apiClient(`/greenwashing/scan?text=${encodeURIComponent(text)}&language=${language}`, { method: "POST", token }),
+};
+
+// --- ESG AI: materiality matrix ---
+export const materialityApi = {
+  build: (token: string, companyId: string, language = "en") =>
+    apiClient(`/materiality?company_id=${companyId}&language=${language}`, { token }),
+};
+
+// --- ESG AI: CSV column mapping ---
+export const csvMappingApi = {
+  fromText: (token: string, csvText: string, language = "en") =>
+    apiClient("/csv/map", { method: "POST", body: { csv_text: csvText, language }, token }),
+  fromFile: async (token: string, file: File, language = "en") => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch(`${API_BASE_URL}/csv/upload-map?language=${language}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: fd,
+    });
+    if (!res.ok) throw new ApiError("Upload failed", res.status);
+    return res.json();
+  },
+};
+
+// --- Emissions ---
+export const emissionsApi = {
+  calculate: (token: string, data: {
+    scope: number; category: string; activity: string; quantity: number; unit: string; region?: string;
+  }) => apiClient("/emissions/calculate", { method: "POST", body: data, token }),
+  record: (token: string, companyId: string, year: number, data: Record<string, unknown>) =>
+    apiClient(`/emissions/record?company_id=${companyId}&year=${year}`, { method: "POST", body: data, token }),
+  summary: (token: string, companyId: string, year: number) =>
+    apiClient<{ year: number; total_kg: number; total_tonnes: number; scope_1_kg: number; scope_2_kg: number; scope_3_kg: number; by_category: Record<string, number> }>(
+      `/emissions/summary?company_id=${companyId}&year=${year}`,
+      { token }
+    ),
+  list: (token: string, companyId: string, year?: number) =>
+    apiClient<unknown[]>(
+      `/emissions?company_id=${companyId}${year ? `&year=${year}` : ""}`,
+      { token }
+    ),
+};
+
+// --- Benchmarks ---
+export const benchmarksApi = {
+  list: (token: string, sector: string, year: number) =>
+    apiClient<unknown[]>(`/benchmarks?sector=${sector}&year=${year}`, { token }),
+};
+
+// --- Report templates ---
+export const templatesApi = {
+  list: (token: string, params: { sector?: string; region?: string; framework?: string; language?: string } = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => v && q.set(k, v));
+    return apiClient<unknown[]>(`/report-templates?${q}`, { token });
+  },
+  get: (token: string, id: string) =>
+    apiClient(`/report-templates/${id}`, { token }),
+};
+
+// --- Report versions ---
+export const reportVersionsApi = {
+  list: (token: string, reportId: string) =>
+    apiClient<unknown[]>(`/reports/${reportId}/versions`, { token }),
+  get: (token: string, reportId: string, version: number) =>
+    apiClient(`/reports/${reportId}/versions/${version}`, { token }),
+  diff: (token: string, reportId: string, v1: number, v2: number) =>
+    apiClient(`/reports/${reportId}/diff/${v1}/${v2}`, { token }),
+};
+
+// --- Onboarding: framework recommendations ---
+export const onboardingApi = {
+  recommendFrameworks: (token: string, params: { sector?: string; country?: string; size?: string } = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => v && q.set(k, v));
+    return apiClient<{ recommendations: { code: string; rationale: string }[] }>(
+      `/onboarding/recommend-frameworks?${q}`,
+      { token }
+    );
+  },
+};
+
 export default apiClient;

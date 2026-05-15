@@ -369,7 +369,13 @@
       "simulate": "Simulación What-If",
       "subscription": "Informes ESG",
       "adminDashboard": "Panel Admin",
-      "esgReports": "Informes ESG"
+      "esgReports": "Informes ESG",
+      "emissions": "Emisiones",
+      "chat": "Asistente",
+      "regulatory": "Regulatorio",
+      "templates": "Plantillas",
+      "auditLog": "Auditoría",
+      "privacy": "Privacidad"
     },
     "stats": {
       "esgScore": "Puntuación ESG",

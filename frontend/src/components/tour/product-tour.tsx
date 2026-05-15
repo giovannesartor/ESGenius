@@ -102,11 +102,13 @@ export function ProductTour({
 
   // Mount portal target
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   // Auto-start once
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (startedRef.current) return;
     if (!mounted) return;
     if (run !== undefined) {
@@ -125,12 +127,15 @@ export function ProductTour({
       }, 600);
       return () => window.clearTimeout(t);
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [auto, mounted, run, tourId]);
 
   // React to external `run` toggling true after initial mount
   useEffect(() => {
     if (run) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRunning(true);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIndex(0);
     }
   }, [run]);

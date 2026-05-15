@@ -22,18 +22,35 @@ export function useCompany() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    let cancelled = false;
     if (!token) {
-      setLoading(false);
-      return;
+      if (!cancelled) {
+        setCompany(null);
+        setLoading(false);
+      }
+      return () => {
+        cancelled = true;
+      };
     }
+    setLoading(true);
     companyApi
       .list(token)
       .then((data) => {
+        if (cancelled) return;
         const list = data as Company[];
         setCompany(list.length > 0 ? list[0] : null);
       })
-      .catch(() => setCompany(null))
-      .finally(() => setLoading(false));
+      .catch(() => {
+        if (!cancelled) setCompany(null);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [token]);
 
   return { company, loading, token };

@@ -369,7 +369,13 @@
       "simulate": "What-If Simulation",
       "subscription": "ESG Reports",
       "adminDashboard": "Admin Panel",
-      "esgReports": "ESG Reports"
+      "esgReports": "ESG Reports",
+      "emissions": "Emissions",
+      "chat": "Assistant",
+      "regulatory": "Regulatory",
+      "templates": "Templates",
+      "auditLog": "Audit Log",
+      "privacy": "Privacy"
     },
     "stats": {
       "esgScore": "ESG Score",

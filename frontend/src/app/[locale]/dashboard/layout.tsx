@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserTour } from "@/components/tour/user-tour";
+import { NotificationBell } from "@/components/notification-bell";
 import {
   LayoutDashboard,
   Building2,
@@ -22,7 +24,6 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Bell,
   Menu,
   X,
   Search,
@@ -35,6 +36,11 @@ import {
   CreditCard,
   FlaskConical,
   BookOpen,
+  MessageSquare,
+  Cloud,
+  Globe2,
+  ScrollText,
+  UserCog,
 } from "lucide-react";
 
 const navItems = [
@@ -45,11 +51,17 @@ const navItems = [
   { key: "dataPoints", href: "/dashboard/data-points", icon: Leaf },
   { key: "frameworks", href: "/dashboard/frameworks", icon: BookOpen },
   { key: "insights", href: "/dashboard/insights", icon: Brain },
+  { key: "emissions", href: "/dashboard/emissions", icon: Cloud },
+  { key: "chat", href: "/dashboard/chat", icon: MessageSquare },
+  { key: "regulatory", href: "/dashboard/regulatory", icon: Globe2 },
+  { key: "templates", href: "/dashboard/templates", icon: FileText },
+  { key: "auditLog", href: "/dashboard/audit-log", icon: ScrollText },
   { key: "simulate", href: "/dashboard/simulate", icon: FlaskConical },
 ];
 
 const bottomNavItems = [
   { key: "subscription", href: "/dashboard/subscription", icon: CreditCard },
+  { key: "privacy", href: "/dashboard/privacy", icon: UserCog },
   { key: "settings", href: "/dashboard/settings", icon: Settings },
 ];
 
@@ -138,6 +150,7 @@ export default function DashboardLayout({
     );
   };
 
+  // eslint-disable-next-line react-hooks/static-components
   const SidebarContent = () => (
     <div className="flex flex-col h-full" style={{ background: "#0b1220" }}>
       {/* Logo area */}
@@ -371,10 +384,7 @@ export default function DashboardLayout({
             <ThemeToggle />
 
             {/* Notifications */}
-            <button className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 flex h-1.5 w-1.5 rounded-full bg-emerald-500 ring-1 ring-background" />
-            </button>
+            <NotificationBell />
 
             {/* Avatar (mobile) */}
             <Avatar className="h-8 w-8 lg:hidden border border-border/60">
