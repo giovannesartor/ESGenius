@@ -1,7 +1,7 @@
 """Stripe API endpoints — checkout, portal, subscription, webhook."""
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -57,14 +57,41 @@ async def create_checkout(
     db: AsyncSession = Depends(get_db),
 ):
     """Create a Stripe Checkout session for upgrading to Professional."""
-    if data.plan not in ("professional",):
+    if data.plan not in ("professional", "enterprise"):
         raise HTTPException(status_code=400, detail="Invalid plan.")
     if data.interval not in ("month", "year"):
         raise HTTPException(status_code=400, detail="Invalid interval.")
 
-    # Only superadmins need no subscription
+    # ── Admin bypass: skip Stripe entirely and activate immediately ──
+    # Superadmins ("admin") get reports unlocked without going through checkout
+    # so they can generate/test reports at no cost.
     if current_user.is_superadmin:
-        raise HTTPException(status_code=400, detail="Admins don't need a subscription.")
+        now = datetime.now(timezone.utc)
+        bypass_id = f"admin_bypass_{current_user.id}_{int(now.timestamp())}"
+        await activate_subscription(
+            db=db,
+            user_id=str(current_user.id),
+            stripe_sub_id=bypass_id,
+            plan=data.plan,
+            interval=data.interval,
+            price=0.0,
+            currency="usd",
+            period_start=now,
+            period_end=now + timedelta(days=365 * 100),
+        )
+        await db.commit()
+        logger.info(
+            f"[ADMIN-BYPASS] Subscription auto-activated for superadmin "
+            f"{current_user.email} (plan={data.plan})"
+        )
+        base = settings.FRONTEND_URL.rstrip("/")
+        redirect = f"{base}/dashboard/subscription?admin_bypass=1"
+        return {
+            "url": redirect,
+            "checkout_url": redirect,
+            "admin_bypass": True,
+            "plan": data.plan,
+        }
 
     customer_id = await get_or_create_customer(
         email=current_user.email,

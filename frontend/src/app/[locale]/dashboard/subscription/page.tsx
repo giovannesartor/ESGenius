@@ -82,6 +82,14 @@ function EsgReportsContent() {
     const success = searchParams.get("success");
     const cancelled = searchParams.get("cancelled");
     const sessionId = searchParams.get("session_id");
+    const adminBypass = searchParams.get("admin_bypass");
+
+    if (adminBypass === "1") {
+      setSuccessMsg(t("dashboard.esgReports.unlockProcessing"));
+      fetchSubscription();
+      router.replace(window.location.pathname);
+      return;
+    }
 
     if (success === "true" && sessionId && token) {
       stripeApi
@@ -107,7 +115,18 @@ function EsgReportsContent() {
     setErrorMsg("");
     try {
       const res = await stripeApi.createCheckout(token, plan, "month");
-      window.location.href = res.checkout_url;
+      // Admin bypass: backend already activated the subscription, no Stripe redirect needed
+      if (res.admin_bypass) {
+        setSuccessMsg(t("dashboard.esgReports.unlockProcessing"));
+        await fetchSubscription();
+        return;
+      }
+      const target = res.checkout_url || res.url;
+      if (target) {
+        window.location.href = target;
+      } else {
+        setErrorMsg(t("common.error"));
+      }
     } catch {
       setErrorMsg(t("common.error"));
     } finally {

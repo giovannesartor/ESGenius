@@ -346,7 +346,7 @@ export const analyticsApi = {
 // --- Stripe / Subscription API ---
 export const stripeApi = {
   createCheckout: (token: string, plan: string, interval: "month" | "year") =>
-    apiClient<{ checkout_url: string }>("/stripe/create-checkout", {
+    apiClient<{ checkout_url?: string; url?: string; admin_bypass?: boolean; plan?: string }>("/stripe/create-checkout", {
       method: "POST",
       body: { plan, interval },
       token,
