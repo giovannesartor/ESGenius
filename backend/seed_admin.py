@@ -5,7 +5,7 @@ import os
 
 from sqlalchemy import select
 from app.core.database import engine, AsyncSessionLocal
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, verify_password
 from app.domain.models.user import User
 
 
@@ -29,29 +29,48 @@ for i in range(2, 10):
 
 
 async def _seed_one(session, email: str, password: str, name: str):
-    """Create or promote a single admin."""
+    """Create or promote a single admin. Auto-heals critical flags + password."""
     result = await session.execute(
         select(User).where(User.email == email)
     )
     existing = result.scalar_one_or_none()
 
+    force_reset = os.getenv("RESET_ADMIN_PASSWORD", "false").lower() in ("1", "true", "yes")
+
     if existing:
         changed = False
+
+        # Always ensure superadmin
         if not existing.is_superadmin:
             existing.is_superadmin = True
             changed = True
-        if os.getenv("RESET_ADMIN_PASSWORD", "false").lower() in ("1", "true", "yes"):
-            existing.hashed_password = get_password_hash(password)
+
+        # Always ensure active + verified + local auth (so login works)
+        if not existing.is_active:
             existing.is_active = True
+            changed = True
+        if not existing.is_email_verified:
             existing.is_email_verified = True
+            changed = True
+        if existing.auth_provider != "local":
             existing.auth_provider = "local"
             changed = True
-            print(f"[SEED] Password reset for {email}")
+
+        # Auto-heal password: if the configured env password does NOT verify
+        # against the stored hash, OR force_reset is set, refresh the hash.
+        password_ok = bool(existing.hashed_password) and verify_password(
+            password, existing.hashed_password
+        )
+        if force_reset or not password_ok:
+            existing.hashed_password = get_password_hash(password)
+            changed = True
+            print(f"[SEED] Password (re)synced for {email}")
+
         if changed:
             await session.commit()
-            print(f"[SEED] Updated {email}")
+            print(f"[SEED] Updated superadmin {email}")
         else:
-            print(f"[SEED] Superadmin {email} already exists — skipping")
+            print(f"[SEED] Superadmin {email} already in sync — skipping")
     else:
         admin = User(
             email=email,
