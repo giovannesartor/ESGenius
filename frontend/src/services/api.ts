@@ -590,4 +590,322 @@ export const onboardingApi = {
   },
 };
 
+// =====================================================================
+//  ESG Financial Intelligence layer
+// =====================================================================
+
+export interface FinancialScore {
+  id?: string;
+  company_id?: string;
+  year?: number;
+  score: number;
+  components: { performance: number; disclosure: number; forward_risk: number };
+  spread_bps: number;
+  wacc_adjustment_bps: number;
+  rating_band: string;
+  sector?: string | null;
+  sector_percentile?: number | null;
+  drivers?: { top_positive?: Array<Record<string, unknown>>; top_negative?: Array<Record<string, unknown>> };
+  explainability?: Record<string, unknown>;
+  methodology_version?: string;
+  created_at?: string;
+}
+
+export const financialScoreApi = {
+  compute: (token: string, companyId: string, year?: number) =>
+    apiClient<FinancialScore>(
+      `/companies/${companyId}/financial-score/compute${year ? `?year=${year}` : ""}`,
+      { method: "POST", token }
+    ),
+  latest: (token: string, companyId: string) =>
+    apiClient<FinancialScore | { score: null; message: string }>(
+      `/companies/${companyId}/financial-score/latest`,
+      { token }
+    ),
+  history: (token: string, companyId: string, limit = 10) =>
+    apiClient<{ items: FinancialScore[] }>(
+      `/companies/${companyId}/financial-score/history?limit=${limit}`,
+      { token }
+    ),
+  translate: (score: number) =>
+    apiClient<{ score: number; spread_bps: number; rating_band: string; interpretation: string }>(
+      `/companies/00000000-0000-0000-0000-000000000000/financial-score/translate?score=${score}`
+    ).catch(() => ({ score, spread_bps: -0.8 * (score - 50), rating_band: "BB", interpretation: "" })),
+};
+
+export interface ClimateScenarioResult {
+  id: string;
+  scenario: string;
+  horizon_years: number;
+  physical_var: number;
+  transition_var: number;
+  total_var: number;
+  ebitda_at_risk_pct: number;
+  carbon_price_assumed?: number | null;
+  exposed_assets?: Record<string, unknown>;
+  methodology?: Record<string, unknown>;
+  created_at?: string;
+}
+
+export const climateRiskApi = {
+  scenarios: () =>
+    apiClient<{ scenarios: Array<{ code: string; carbon_price_path: Record<string, number>; physical_risk_mult: number }> }>(
+      `/companies/00000000-0000-0000-0000-000000000000/climate-risk/scenarios`
+    ),
+  compute: (token: string, companyId: string, scenario: string, horizonYears = 5, revenueUsd?: number) => {
+    const q = new URLSearchParams({ scenario, horizon_years: String(horizonYears) });
+    if (revenueUsd) q.set("revenue_usd", String(revenueUsd));
+    return apiClient<ClimateScenarioResult>(`/companies/${companyId}/climate-risk/compute?${q}`, {
+      method: "POST",
+      token,
+    });
+  },
+  computeAll: (token: string, companyId: string, horizonYears = 5) =>
+    apiClient<{ items: ClimateScenarioResult[] }>(
+      `/companies/${companyId}/climate-risk/compute-all?horizon_years=${horizonYears}`,
+      { method: "POST", token }
+    ),
+};
+
+export interface FundingReadiness {
+  id: string;
+  instrument: string;
+  overall_score: number;
+  status: "red" | "amber" | "green";
+  checklist: Array<{ id: string; label: string; weight: number; completion_pct: number }>;
+  gaps: Array<{ id: string; label: string; weight: number; completion_pct: number; severity: string }>;
+  remediation_plan: Array<{ id: string; action: string; effort_weeks: number; owner_suggested: string }>;
+  estimated_pricing_benefit_bps?: number | null;
+  created_at?: string;
+}
+
+export const fundingReadinessApi = {
+  instruments: (token: string, companyId: string) =>
+    apiClient<{ instruments: Array<{ code: string; label: string; items: number; max_score: number }> }>(
+      `/companies/${companyId}/funding-readiness/instruments`,
+      { token }
+    ),
+  assess: (token: string, companyId: string, instrument: string) =>
+    apiClient<FundingReadiness>(
+      `/companies/${companyId}/funding-readiness/assess?instrument=${encodeURIComponent(instrument)}`,
+      { method: "POST", token }
+    ),
+};
+
+export interface CreditAssessment {
+  id: string;
+  counterparty_name: string;
+  base_pd: number;
+  esg_adjustment_bps: number;
+  adjusted_pd: number;
+  base_lgd?: number | null;
+  adjusted_lgd?: number | null;
+  exposure_usd?: number | null;
+  rationale: Record<string, unknown>;
+  created_at?: string;
+}
+
+export const creditIntelligenceApi = {
+  assess: (
+    token: string,
+    companyId: string,
+    payload: {
+      counterparty_name: string;
+      base_pd: number;
+      base_lgd?: number;
+      exposure_usd?: number;
+      counterparty_company_id?: string;
+      explicit_esg_score?: number;
+    }
+  ) =>
+    apiClient<CreditAssessment>(`/companies/${companyId}/credit-intelligence/assess`, {
+      method: "POST",
+      body: payload,
+      token,
+    }),
+  list: (token: string, companyId: string, limit = 100) =>
+    apiClient<{
+      items: CreditAssessment[];
+      book_impact: { book_size_usd: number; expected_loss_delta_usd: number; avg_pd_shift_pct: number; counterparties: number };
+    }>(`/companies/${companyId}/credit-intelligence?limit=${limit}`, { token }),
+};
+
+export interface ValuationResult {
+  id: string;
+  base_wacc: number;
+  esg_adjusted_wacc: number;
+  base_beta?: number | null;
+  esg_adjusted_beta?: number | null;
+  base_terminal_growth?: number | null;
+  esg_adjusted_terminal_growth?: number | null;
+  base_enterprise_value_usd?: number | null;
+  esg_adjusted_enterprise_value_usd?: number | null;
+  delta_pct?: number | null;
+  inputs: Record<string, unknown>;
+  methodology: Record<string, unknown>;
+  created_at?: string;
+}
+
+export const valuationApi = {
+  compute: (
+    token: string,
+    companyId: string,
+    payload: {
+      base_wacc?: number;
+      base_beta?: number;
+      base_terminal_growth?: number;
+      free_cash_flow_usd?: number;
+      debt_to_value?: number;
+      equity_risk_premium?: number;
+      explicit_score?: number;
+    } = {}
+  ) =>
+    apiClient<ValuationResult>(`/companies/${companyId}/valuation/compute`, {
+      method: "POST",
+      body: payload,
+      token,
+    }),
+  sensitivity: (token: string, companyId: string, baseWacc = 0.085, fcf = 10_000_000, growth = 0.025) =>
+    apiClient<{ items: Array<{ wacc_delta_bps: number; wacc: number; enterprise_value_usd: number }> }>(
+      `/companies/${companyId}/valuation/sensitivity?base_wacc=${baseWacc}&free_cash_flow_usd=${fcf}&growth=${growth}`,
+      { token }
+    ),
+};
+
+export interface AbatementOption {
+  id: string;
+  name: string;
+  category: string;
+  scope: number;
+  abatement_potential_tco2e: number;
+  cost_per_tonne_usd: number;
+  capex_usd?: number | null;
+  payback_years?: number | null;
+  implementation_status: string;
+  notes?: string | null;
+}
+
+export interface MaccCurve {
+  bars: Array<{
+    id: string;
+    name: string;
+    category: string;
+    scope: number;
+    abatement_tco2e: number;
+    cost_per_tonne_usd: number;
+    cumulative_start: number;
+    cumulative_end: number;
+    capex_usd: number;
+    payback_years?: number | null;
+    implementation_status: string;
+  }>;
+  total_options: number;
+  total_abatement_tco2e: number;
+  negative_cost_abatement_tco2e: number;
+  weighted_avg_cost_per_tonne_usd: number;
+  total_capex_usd: number;
+}
+
+export const maccApi = {
+  get: (token: string, companyId: string) =>
+    apiClient<{ items: AbatementOption[]; curve: MaccCurve }>(`/companies/${companyId}/macc`, { token }),
+  create: (token: string, companyId: string, payload: Omit<AbatementOption, "id">) =>
+    apiClient<AbatementOption>(`/companies/${companyId}/macc/options`, {
+      method: "POST",
+      body: payload,
+      token,
+    }),
+  remove: (token: string, companyId: string, optionId: string) =>
+    apiClient<{ deleted: boolean }>(`/companies/${companyId}/macc/options/${optionId}`, {
+      method: "DELETE",
+      token,
+    }),
+};
+
+export interface Portfolio {
+  id: string;
+  name: string;
+  description?: string | null;
+  aum_usd?: number | null;
+  base_currency: string;
+  portfolio_type: string;
+  created_at?: string;
+}
+
+export interface PortfolioHolding {
+  id: string;
+  portfolio_id: string;
+  company_name: string;
+  company_id?: string | null;
+  ticker?: string | null;
+  sector?: string | null;
+  country?: string | null;
+  weight_pct: number;
+  market_value_usd?: number | null;
+  last_esg_score?: number | null;
+  last_climate_var_pct?: number | null;
+  last_controversy_count: number;
+  last_refreshed_at?: string | null;
+}
+
+export interface PortfolioAggregate {
+  portfolio_id: string;
+  name: string;
+  holdings_count: number;
+  coverage_pct: number;
+  weighted_score: number;
+  rating_band: string;
+  weighted_spread_bps: number;
+  weighted_climate_var_pct: number;
+  top_contributors: Array<{ company_name: string; ticker?: string | null; weight_pct: number; esg_score: number; contribution: number; climate_var_pct?: number | null }>;
+  bottom_contributors: Array<{ company_name: string; ticker?: string | null; weight_pct: number; esg_score: number; contribution: number; climate_var_pct?: number | null }>;
+  sector_summary: Array<{ sector: string; weight_pct: number; weighted_score: number | null }>;
+  aum_usd?: number | null;
+}
+
+export const portfolioApi = {
+  list: (token: string, companyId: string) =>
+    apiClient<{ items: Portfolio[] }>(`/companies/${companyId}/portfolios`, { token }),
+  create: (token: string, companyId: string, payload: { name: string; description?: string; aum_usd?: number; portfolio_type?: string }) =>
+    apiClient<Portfolio>(`/companies/${companyId}/portfolios`, { method: "POST", body: payload, token }),
+  listHoldings: (token: string, companyId: string, portfolioId: string) =>
+    apiClient<{ items: PortfolioHolding[] }>(`/companies/${companyId}/portfolios/${portfolioId}/holdings`, { token }),
+  addHolding: (token: string, companyId: string, portfolioId: string, payload: Omit<PortfolioHolding, "id" | "portfolio_id" | "last_esg_score" | "last_climate_var_pct" | "last_controversy_count" | "last_refreshed_at">) =>
+    apiClient<PortfolioHolding>(`/companies/${companyId}/portfolios/${portfolioId}/holdings`, { method: "POST", body: payload, token }),
+  refresh: (token: string, companyId: string, portfolioId: string) =>
+    apiClient<{ updated: number }>(`/companies/${companyId}/portfolios/${portfolioId}/refresh`, { method: "POST", token }),
+  aggregate: (token: string, companyId: string, portfolioId: string) =>
+    apiClient<PortfolioAggregate>(`/companies/${companyId}/portfolios/${portfolioId}/aggregate`, { token }),
+};
+
+export interface FrameworkMapping {
+  id: string;
+  source_framework: string;
+  source_code: string;
+  source_label: string;
+  target_framework: string;
+  target_code: string;
+  target_label: string;
+  relationship_type: string;
+  confidence: number;
+  notes?: string | null;
+}
+
+export const knowledgeGraphApi = {
+  frameworks: () => apiClient<{ frameworks: string[] }>(`/knowledge-graph/frameworks`),
+  coverage: () =>
+    apiClient<{ frameworks: string[]; matrix: Record<string, Record<string, number>>; total_edges: number }>(
+      `/knowledge-graph/coverage`
+    ),
+  mappings: (params: { source_framework?: string; target_framework?: string; source_code?: string } = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => v && q.set(k, v));
+    return apiClient<{ items: FrameworkMapping[] }>(`/knowledge-graph/mappings?${q}`);
+  },
+  equivalent: (sourceFramework: string, sourceCode: string) =>
+    apiClient<{ items: Array<{ target_framework: string; target_code: string; target_label: string; relationship_type: string; confidence: number; notes: string | null }> }>(
+      `/knowledge-graph/equivalent?source_framework=${encodeURIComponent(sourceFramework)}&source_code=${encodeURIComponent(sourceCode)}`
+    ),
+};
+
 export default apiClient;

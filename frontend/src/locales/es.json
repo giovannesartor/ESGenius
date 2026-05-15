@@ -375,7 +375,14 @@
       "regulatory": "Regulatorio",
       "templates": "Plantillas",
       "auditLog": "Auditoría",
-      "privacy": "Privacidad"
+      "privacy": "Privacidad",
+      "financialScore": "Score Financiero",
+      "climateRisk": "Riesgo Climático",
+      "fundingReadiness": "Preparación Financiera",
+      "portfolio": "Portafolio",
+      "creditIntel": "Inteligencia de Crédito",
+      "valuation": "Valoración",
+      "macc": "Curva de Abatimiento"
     },
     "stats": {
       "esgScore": "Puntuación ESG",

@@ -70,6 +70,10 @@ class CompanyService:
             raise NotFoundException("Company not found")
         return CompanyResponse.model_validate(company)
 
+    async def get_by_id(self, company_id: UUID):
+        """Return raw Company model (or None) — used by services that need ORM object."""
+        return await self.company_repo.get_by_id(company_id)
+
     async def update_company(
         self, company_id: UUID, data: CompanyUpdate, user_id: UUID, is_superadmin: bool = False
     ) -> CompanyResponse:

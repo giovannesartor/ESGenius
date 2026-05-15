@@ -375,7 +375,14 @@
       "regulatory": "Regulatory",
       "templates": "Templates",
       "auditLog": "Audit Log",
-      "privacy": "Privacy"
+      "privacy": "Privacy",
+      "financialScore": "Financial Score",
+      "climateRisk": "Climate Risk",
+      "fundingReadiness": "Funding Readiness",
+      "portfolio": "Portfolio",
+      "creditIntel": "Credit Intelligence",
+      "valuation": "Valuation",
+      "macc": "Abatement Curve"
     },
     "stats": {
       "esgScore": "ESG Score",

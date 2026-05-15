@@ -31,6 +31,7 @@ stripe==11.4.1
 
 # AI
 openai==1.59.3
+anthropic==0.40.0
 
 # Document Processing
 PyMuPDF==1.25.1

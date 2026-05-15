@@ -19,6 +19,18 @@ from app.api.v1.endpoints.privacy import router as privacy_router
 from app.api.v1.endpoints.reports import router as reports_router
 from app.api.v1.endpoints.stripe import router as stripe_router
 
+# Financial Intelligence layer
+from app.api.v1.endpoints.financial_score import router as financial_score_router
+from app.api.v1.endpoints.climate_risk import router as climate_risk_router
+from app.api.v1.endpoints.funding_readiness import router as funding_readiness_router
+from app.api.v1.endpoints.credit_intelligence import router as credit_intelligence_router
+from app.api.v1.endpoints.valuation import router as valuation_router
+from app.api.v1.endpoints.macc import router as macc_router
+from app.api.v1.endpoints.portfolio import router as portfolio_router
+from app.api.v1.endpoints.knowledge_graph import router as knowledge_graph_router
+from app.api.v1.endpoints.public_api import router as public_api_router
+from app.api.v1.endpoints.embedded import router as embedded_router
+
 api_router = APIRouter()
 
 api_router.include_router(auth_router)
@@ -39,3 +51,15 @@ api_router.include_router(audit_logs_router)
 api_router.include_router(privacy_router)
 api_router.include_router(integrations_router)
 api_router.include_router(esg_ai_router)
+
+# Financial Intelligence layer (the new wedge)
+api_router.include_router(financial_score_router)
+api_router.include_router(climate_risk_router)
+api_router.include_router(funding_readiness_router)
+api_router.include_router(credit_intelligence_router)
+api_router.include_router(valuation_router)
+api_router.include_router(macc_router)
+api_router.include_router(portfolio_router)
+api_router.include_router(knowledge_graph_router)
+api_router.include_router(public_api_router)
+api_router.include_router(embedded_router)

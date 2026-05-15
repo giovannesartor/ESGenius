@@ -16,7 +16,6 @@ import { UserTour } from "@/components/tour/user-tour";
 import { NotificationBell } from "@/components/notification-bell";
 import {
   LayoutDashboard,
-  Building2,
   FileText,
   BarChart3,
   Upload,
@@ -41,10 +40,24 @@ import {
   Globe2,
   ScrollText,
   UserCog,
+  Coins,
+  Thermometer,
+  Banknote,
+  Briefcase,
+  Landmark,
+  Calculator,
+  TrendingDown,
 } from "lucide-react";
 
 const navItems = [
   { key: "overview", href: "/dashboard", icon: LayoutDashboard },
+  { key: "financialScore", href: "/dashboard/financial-score", icon: Coins },
+  { key: "climateRisk", href: "/dashboard/climate-risk", icon: Thermometer },
+  { key: "fundingReadiness", href: "/dashboard/funding-readiness", icon: Banknote },
+  { key: "portfolio", href: "/dashboard/portfolio", icon: Briefcase },
+  { key: "creditIntel", href: "/dashboard/credit-intelligence", icon: Landmark },
+  { key: "valuation", href: "/dashboard/valuation", icon: Calculator },
+  { key: "macc", href: "/dashboard/macc", icon: TrendingDown },
   { key: "reports", href: "/dashboard/reports", icon: BarChart3 },
   { key: "upload", href: "/dashboard/upload", icon: Upload },
   { key: "esgScore", href: "/dashboard/esg-score", icon: Target },

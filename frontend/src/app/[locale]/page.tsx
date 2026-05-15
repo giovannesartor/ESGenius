@@ -509,6 +509,38 @@ export default function HomePage() {
       <main className="flex-1">
 
         {/* ════════════════════════════════════════════════════════════════
+            FINANCIAL INTELLIGENCE BANNER — Two-door CTA
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="border-b bg-gradient-to-r from-emerald-500/5 via-blue-500/5 to-violet-500/5 py-3">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 text-sm">
+            <p className="font-medium">
+              <span className="rounded bg-emerald-600 px-2 py-0.5 text-xs font-bold text-white">NEW</span>{" "}
+              ESG Financial Intelligence — your sustainability data, priced in basis points.
+            </p>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/solutions/companies"
+                className="rounded-md border px-3 py-1 text-xs font-semibold hover:bg-background"
+              >
+                For Companies →
+              </Link>
+              <Link
+                href="/solutions/finance"
+                className="rounded-md border px-3 py-1 text-xs font-semibold hover:bg-background"
+              >
+                For Banks &amp; Investors →
+              </Link>
+              <Link
+                href="/manifesto"
+                className="rounded-md px-3 py-1 text-xs font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
+              >
+                Manifesto
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
             HERO — Dark, Immersive, Editorial
         ════════════════════════════════════════════════════════════════ */}
         <section className="relative overflow-hidden hero-bg min-h-[calc(100vh-3.5rem)] flex items-center">
@@ -1421,9 +1453,81 @@ export default function HomePage() {
           </section>
         </FadeIn>
 
+        {/* ════════════════════════════════════════════════════════════════
+            FINANCIAL INTELLIGENCE PILLARS
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="border-t bg-muted/20 py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="mx-auto max-w-3xl text-center">
+              <Badge variant="outline" className="mb-4">Financial intelligence layer</Badge>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+                Four pillars. One language: capital.
+              </h2>
+              <p className="mt-3 text-muted-foreground">
+                ESG translated into spreads, WACC, PD/LGD and enterprise value — for both companies and investors.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <FIPillar
+                emoji="🪙"
+                title="Financial Score"
+                desc="Composite 0-100 score with bps spread, rating band, peer percentile and explainable drivers."
+                href="/dashboard/financial-score"
+              />
+              <FIPillar
+                emoji="🌡️"
+                title="Climate Risk"
+                desc="NGFS &amp; IEA scenarios — physical and transition VaR with full methodology disclosure."
+                href="/dashboard/climate-risk"
+              />
+              <FIPillar
+                emoji="💶"
+                title="Funding Readiness"
+                desc="Per-instrument self-assessment (SLL, green bond, IPO, M&amp;A, PE) with remediation plan."
+                href="/dashboard/funding-readiness"
+              />
+              <FIPillar
+                emoji="💼"
+                title="Portfolio Intelligence"
+                desc="Buy-side aggregates: weighted score, climate VaR, top &amp; bottom contributors per holding."
+                href="/dashboard/portfolio"
+              />
+            </div>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/developers" className="text-sm font-semibold text-emerald-600 hover:underline dark:text-emerald-400">
+                Developers &amp; API →
+              </Link>
+              <span className="text-muted-foreground">·</span>
+              <Link href="/trust" className="text-sm font-semibold text-emerald-600 hover:underline dark:text-emerald-400">
+                Trust &amp; security →
+              </Link>
+              <span className="text-muted-foreground">·</span>
+              <Link href="/manifesto" className="text-sm font-semibold text-emerald-600 hover:underline dark:text-emerald-400">
+                Read the manifesto →
+              </Link>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       <Footer />
     </div>
+  );
+}
+
+function FIPillar({ emoji, title, desc, href }: { emoji: string; title: string; desc: string; href: string }) {
+  return (
+    <Link
+      href={href}
+      className="group rounded-xl border bg-background/60 p-5 transition hover:border-emerald-500/50 hover:shadow-lg"
+    >
+      <div className="text-3xl">{emoji}</div>
+      <h3 className="mt-3 text-base font-semibold">{title}</h3>
+      <p className="mt-2 text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: desc }} />
+      <p className="mt-3 text-xs font-semibold text-emerald-600 group-hover:underline dark:text-emerald-400">
+        Open →
+      </p>
+    </Link>
   );
 }

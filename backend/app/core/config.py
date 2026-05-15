@@ -49,10 +49,28 @@ class Settings(BaseSettings):
     EMAIL_FROM: str = "noreply@esg360.digital"
     FRONTEND_URL: str = "https://esg360.digital"
 
+    # AI - Multi-provider router
+    # Primary: Anthropic Claude (enterprise + EU compliant)
+    # Fallback chain: ANTHROPIC -> OPENAI -> DEEPSEEK
+    AI_PROVIDER_PRIMARY: str = "deepseek"  # anthropic | openai | deepseek
+    AI_PROVIDER_FALLBACKS: str = ""  # comma-separated, e.g. "openai,deepseek"
+
+    ANTHROPIC_API_KEY: Optional[str] = None
+    ANTHROPIC_MODEL: str = "claude-3-5-sonnet-20241022"
+
+    OPENAI_API_KEY: Optional[str] = None
+    OPENAI_MODEL: str = "gpt-4o-mini"
+
     # AI - DeepSeek
     DEEPSEEK_API_KEY: Optional[str] = None
     DEEPSEEK_BASE_URL: str = "https://api.deepseek.com"
     DEEPSEEK_MODEL: str = "deepseek-chat"
+
+    # Data residency for AI calls (eu | us | br | global)
+    AI_DATA_RESIDENCY: str = "global"
+
+    # PII redaction before sending to external LLMs
+    AI_PII_REDACTION: bool = True
 
     # File Upload
     MAX_UPLOAD_SIZE_MB: int = 50

@@ -19,6 +19,17 @@ from app.domain.models.regulatory import (  # noqa: F401
     RegulatoryUpdate, EmissionFactor, SectorBenchmark, CarbonEmission,
 )
 from app.domain.models.chat import ChatConversation, ChatMessage  # noqa: F401
+from app.domain.models.financial import (  # noqa: F401
+    ESGFinancialScore,
+    ClimateScenarioResult,
+    FundingReadinessAssessment,
+    CreditIntelligenceAssessment,
+    ValuationImpact,
+    AbatementOption,
+    Portfolio,
+    PortfolioHolding,
+    FrameworkMapping,
+)
 
 __all__ = [
     "User",
@@ -63,4 +74,13 @@ __all__ = [
     "AILog",
     "Integration",
     "Subscription",
+    "ESGFinancialScore",
+    "ClimateScenarioResult",
+    "FundingReadinessAssessment",
+    "CreditIntelligenceAssessment",
+    "ValuationImpact",
+    "AbatementOption",
+    "Portfolio",
+    "PortfolioHolding",
+    "FrameworkMapping",
 ]
