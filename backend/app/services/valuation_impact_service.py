@@ -1,51 +1,45 @@
 """
-Valuation Impact service — translates ESG into WACC and DCF deltas.
+Valuation Impact service v2 — sector-aware FCFE/DCF with ESG WACC adjustment.
 
-Method (transparent v1):
-  spread_bps          = spread_bps_from_score(score)        # neg = better
-  cost_of_debt_delta  = spread_bps / 10000                   # decimal (e.g. -22bps -> -0.0022)
-  beta_delta          = -0.05 if score >= 70 else (+0.05 if score < 40 else 0)
-  cost_of_equity_delta= beta_delta * equity_risk_premium
-  wacc_delta          = (D/V) * cost_of_debt_delta + (E/V) * cost_of_equity_delta
-  enterprise_value    = sum_of_DCF(fcf, wacc, growth)        # Gordon terminal
+Engine: Valuora v7.1 ported to ESG360 (see app/core/valuation_engine/).
 
-Defaults can be overridden by user inputs.
+Method:
+  1. Fetch live US 10-Year Treasury rate (FRED) for risk-free rate.
+  2. Build 5-Factor beta: sector (Damodaran) + size + stage + profitability + liquidity.
+     ESG layer: score ≥ 70 → beta −0.05; score < 40 → beta +0.05.
+  3. Project FCFE for 5 years (sector NWC/CapEx/D&A, exponential growth decay).
+  4. Terminal value = 50/50 Gordon + exit multiple blend (stage-adjusted).
+  5. ESG credit spread: spread_bps = −0.8 × (score − 50).
+  6. Compare base equity value (no ESG) vs ESG-adjusted to yield delta_pct.
+  7. Multiples CCA as parallel sanity check.
+  8. Optional Monte Carlo (2000 runs, P5/P50/P95).
+
+References: Berg et al. 2022; ECB WP 2023/2811; Damodaran NYU Stern (2025);
+            Dimson 1979 liquidity premium.
 """
 
 from __future__ import annotations
 
 from typing import Any
-from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.models.company import Company
 from app.domain.models.financial import ValuationImpact
-from app.services.financial_score_service import (
-    FinancialScoreService,
-    spread_bps_from_score,
+from app.services.financial_score_service import FinancialScoreService
+from app.core.valuation_engine.engine import (
+    fetch_risk_free_rate,
+    run_esg_valuation,
+    get_risk_free_rate,
 )
 
-
-def _gordon_dcf(
-    free_cash_flow_usd: float,
-    wacc: float,
-    growth: float,
-    forecast_years: int = 5,
-    fcf_growth: float = 0.03,
-) -> float:
-    """Two-stage DCF with Gordon terminal."""
-    if wacc <= growth:
-        wacc = growth + 0.005
-    pv = 0.0
-    fcf = free_cash_flow_usd
-    for t in range(1, forecast_years + 1):
-        fcf = fcf * (1 + fcf_growth)
-        pv += fcf / ((1 + wacc) ** t)
-    terminal_fcf = fcf * (1 + growth)
-    terminal_value = terminal_fcf / (wacc - growth)
-    pv += terminal_value / ((1 + wacc) ** forecast_years)
-    return pv
+# Map company.size → approximate employee count for beta sizing
+_SIZE_TO_EMPLOYEES: dict[str, int] = {
+    "micro": 5,
+    "small": 25,
+    "medium": 100,
+    "large": 500,
+}
 
 
 class ValuationImpactService:
@@ -55,73 +49,100 @@ class ValuationImpactService:
         db: AsyncSession,
         company: Company,
         *,
-        base_wacc: float = 0.085,
-        base_beta: float = 1.0,
-        base_terminal_growth: float = 0.025,
-        free_cash_flow_usd: float = 10_000_000.0,
-        debt_to_value: float = 0.30,
-        equity_risk_premium: float = 0.055,
+        revenue: float = 5_000_000.0,
+        net_margin: float = 0.10,
+        growth_rate: float = 0.08,
+        debt: float = 0.0,
+        cash: float = 0.0,
+        years_in_business: int = 5,
         explicit_score: float | None = None,
+        refresh_rate: bool = False,
+        run_monte_carlo_sim: bool = True,
         persist: bool = True,
     ) -> ValuationImpact:
+        """
+        Compute ESG-aware valuation impact for a company.
+
+        Parameters
+        ----------
+        revenue : float
+            Annual revenue in USD (default 5M).
+        net_margin : float
+            Net margin as decimal (default 0.10 = 10%).
+        growth_rate : float
+            Expected revenue growth rate (default 0.08 = 8%).
+        debt : float
+            Total financial debt in USD.
+        cash : float
+            Cash and equivalents in USD.
+        years_in_business : int
+            Company age (used for stage beta and DLOM).
+        explicit_score : float | None
+            Override ESG score; otherwise fetched from DB.
+        refresh_rate : bool
+            If True, re-fetch live FRED rate before computing.
+        run_monte_carlo_sim : bool
+            If True, run Monte Carlo (adds ~100ms).
+        persist : bool
+            If True, save record to DB.
+        """
+        if refresh_rate:
+            await fetch_risk_free_rate()
+
         score_obj = await FinancialScoreService.latest_for_company(db, company.id)
-        score = explicit_score if explicit_score is not None else (score_obj.score if score_obj else 50.0)
+        score = explicit_score if explicit_score is not None else (
+            score_obj.score if score_obj else 50.0
+        )
 
-        spread = spread_bps_from_score(score)
-        cod_delta = spread / 10000.0  # decimal
+        sector = (company.sector or "outros").lower().strip()
+        num_employees = _SIZE_TO_EMPLOYEES.get(company.size or "", 0)
 
-        if score >= 70:
-            beta_delta = -0.05
-        elif score < 40:
-            beta_delta = 0.05
-        else:
-            beta_delta = 0.0
-        adj_beta = base_beta + beta_delta
-        coe_delta = beta_delta * equity_risk_premium
+        result = run_esg_valuation(
+            revenue=revenue,
+            net_margin=net_margin,
+            sector=sector,
+            growth_rate=growth_rate,
+            debt=debt,
+            cash=cash,
+            num_employees=num_employees,
+            years_in_business=years_in_business,
+            esg_score=score,
+            run_monte_carlo_sim=run_monte_carlo_sim,
+        )
 
-        equity_share = 1 - debt_to_value
-        wacc_delta = debt_to_value * cod_delta + equity_share * coe_delta
-        adj_wacc = max(0.02, base_wacc + wacc_delta)
-
-        # Terminal growth: small uplift for top performers (innovation/optionality)
-        if score >= 80:
-            terminal_delta = 0.003
-        elif score < 30:
-            terminal_delta = -0.003
-        else:
-            terminal_delta = 0.0
-        adj_growth = max(0.0, base_terminal_growth + terminal_delta)
-
-        base_ev = _gordon_dcf(free_cash_flow_usd, base_wacc, base_terminal_growth)
-        adj_ev = _gordon_dcf(free_cash_flow_usd, adj_wacc, adj_growth)
-        delta_pct = round(((adj_ev / base_ev) - 1) * 100, 2) if base_ev else 0.0
+        base_ke = result["base"]["cost_of_equity"]
+        esg_ke = result["esg_adjusted"]["cost_of_equity"]
+        base_ev = result["base"]["equity_value"]
+        esg_ev = result["esg_adjusted"]["equity_value"]
 
         record = ValuationImpact(
             company_id=company.id,
-            base_wacc=base_wacc,
-            esg_adjusted_wacc=round(adj_wacc, 5),
-            base_beta=base_beta,
-            esg_adjusted_beta=round(adj_beta, 3),
-            base_terminal_growth=base_terminal_growth,
-            esg_adjusted_terminal_growth=round(adj_growth, 5),
-            base_enterprise_value_usd=round(base_ev, 2),
-            esg_adjusted_enterprise_value_usd=round(adj_ev, 2),
-            delta_pct=delta_pct,
+            base_wacc=round(base_ke, 5),
+            esg_adjusted_wacc=round(esg_ke, 5),
+            base_beta=round(result["base"]["coe_detail"]["beta_levered"], 4),
+            esg_adjusted_beta=round(result["esg_adjusted"]["coe_detail"]["beta_levered"], 4),
+            base_terminal_growth=0.025,
+            esg_adjusted_terminal_growth=0.025,
+            base_enterprise_value_usd=base_ev,
+            esg_adjusted_enterprise_value_usd=esg_ev,
+            delta_pct=result["delta_pct"],
             inputs={
-                "score": score,
-                "spread_bps": spread,
-                "cost_of_debt_delta": cod_delta,
-                "beta_delta": beta_delta,
-                "cost_of_equity_delta": coe_delta,
-                "free_cash_flow_usd": free_cash_flow_usd,
-                "debt_to_value": debt_to_value,
-                "equity_risk_premium": equity_risk_premium,
+                "revenue": revenue,
+                "net_margin": net_margin,
+                "growth_rate": growth_rate,
+                "debt": debt,
+                "cash": cash,
+                "sector": sector,
+                "num_employees": num_employees,
+                "years_in_business": years_in_business,
+                "esg_score": score,
+                "esg_spread_bps": result["esg_spread_bps"],
+                "risk_free_rate": result["risk_free_rate"],
             },
-            methodology={
-                "version": "v1",
-                "wacc_formula": "wacc = (D/V)*Kd + (E/V)*Ke; ESG modifies both Kd and beta",
-                "dcf_model": "two-stage Gordon (5y forecast + perpetuity)",
-                "references": ["Berg, Kölbel, Rigobon 2022", "MSCI ESG-Adjusted DCF guide 2024"],
+            methodology=result["methodology"] | {
+                "engine": result["engine_version"],
+                "multiples_valuation": result["multiples"]["valuation"],
+                "monte_carlo": result.get("monte_carlo"),
             },
         )
         if persist:
@@ -130,14 +151,66 @@ class ValuationImpactService:
             await db.refresh(record)
         return record
 
+    @classmethod
+    async def compute_full(
+        cls,
+        db: AsyncSession,
+        company: Company,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        """
+        Same as compute() but returns the full engine result dict
+        (including FCFE projections, multiples breakdown, Monte Carlo)
+        without persisting to DB.
+        """
+        if kwargs.pop("refresh_rate", False):
+            await fetch_risk_free_rate()
+
+        score_obj = await FinancialScoreService.latest_for_company(db, company.id)
+        explicit_score = kwargs.pop("explicit_score", None)
+        score = explicit_score if explicit_score is not None else (
+            score_obj.score if score_obj else 50.0
+        )
+
+        sector = (company.sector or "outros").lower().strip()
+        num_employees = _SIZE_TO_EMPLOYEES.get(company.size or "", 0)
+
+        return run_esg_valuation(
+            revenue=kwargs.get("revenue", 5_000_000.0),
+            net_margin=kwargs.get("net_margin", 0.10),
+            sector=sector,
+            growth_rate=kwargs.get("growth_rate", 0.08),
+            debt=kwargs.get("debt", 0.0),
+            cash=kwargs.get("cash", 0.0),
+            num_employees=num_employees,
+            years_in_business=kwargs.get("years_in_business", 5),
+            esg_score=score,
+            run_monte_carlo_sim=kwargs.get("run_monte_carlo_sim", True),
+        )
+
 
 def sensitivity_table(
-    base_wacc: float, free_cash_flow_usd: float, growth: float = 0.025
+    base_ke: float,
+    revenue: float,
+    net_margin: float,
+    sector: str = "outros",
+    growth: float = 0.025,
 ) -> list[dict[str, Any]]:
-    """Return a small sensitivity table for the UI to plot."""
+    """Sensitivity table: equity value vs ESG score deltas, for UI charts."""
+    from app.core.valuation_engine.engine import (
+        project_fcfe,
+        calculate_terminal_value_gordon,
+        calculate_equity_value_fcfe,
+    )
     rows = []
     for delta_bps in (-100, -50, -25, 0, 25, 50, 100):
-        wacc = base_wacc + delta_bps / 10000.0
-        ev = _gordon_dcf(free_cash_flow_usd, wacc, growth)
-        rows.append({"wacc_delta_bps": delta_bps, "wacc": round(wacc, 5), "enterprise_value_usd": round(ev, 2)})
+        ke = base_ke + delta_bps / 10000.0
+        projs = project_fcfe(revenue, net_margin, growth, sector=sector)
+        tv = calculate_terminal_value_gordon(projs[-1]["fcf"], ke)
+        ev = calculate_equity_value_fcfe(projs, ke, tv["terminal_value"])
+        rows.append({
+            "ke_delta_bps": delta_bps,
+            "ke": round(ke, 5),
+            "equity_value_usd": round(ev["equity_value"], 2),
+        })
     return rows
