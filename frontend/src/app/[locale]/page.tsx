@@ -515,26 +515,26 @@ export default function HomePage() {
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 text-sm">
             <p className="font-medium">
               <span className="rounded bg-emerald-600 px-2 py-0.5 text-xs font-bold text-white">NEW</span>{" "}
-              ESG Financial Intelligence — your sustainability data, priced in basis points.
+              {t("home.bannerText")}
             </p>
             <div className="flex items-center gap-2">
               <Link
                 href="/solutions/companies"
                 className="rounded-md border px-3 py-1 text-xs font-semibold hover:bg-background"
               >
-                For Companies →
+                {t("home.bannerCompanies")}
               </Link>
               <Link
                 href="/solutions/finance"
                 className="rounded-md border px-3 py-1 text-xs font-semibold hover:bg-background"
               >
-                For Banks &amp; Investors →
+                {t("home.bannerBanks")}
               </Link>
               <Link
                 href="/manifesto"
                 className="rounded-md px-3 py-1 text-xs font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
               >
-                Manifesto
+                {t("home.bannerManifesto")}
               </Link>
             </div>
           </div>
@@ -1459,51 +1459,55 @@ export default function HomePage() {
         <section className="border-t bg-muted/20 py-20">
           <div className="mx-auto max-w-6xl px-4">
             <div className="mx-auto max-w-3xl text-center">
-              <Badge variant="outline" className="mb-4">Financial intelligence layer</Badge>
+              <Badge variant="outline" className="mb-4">{t("home.fiLabel")}</Badge>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                Four pillars. One language: capital.
+                {t("home.fiTitle")}
               </h2>
               <p className="mt-3 text-muted-foreground">
-                ESG translated into spreads, WACC, PD/LGD and enterprise value — for both companies and investors.
+                {t("home.fiSub")}
               </p>
             </div>
             <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <FIPillar
-                emoji="🪙"
-                title="Financial Score"
-                desc="Composite 0-100 score with bps spread, rating band, peer percentile and explainable drivers."
+                icon={<TrendingUp className="h-5 w-5" />}
+                title={t("home.fiScoreTitle")}
+                desc={t("home.fiScoreDesc")}
                 href="/dashboard/financial-score"
+                accent="violet"
               />
               <FIPillar
-                emoji="🌡️"
-                title="Climate Risk"
-                desc="NGFS &amp; IEA scenarios — physical and transition VaR with full methodology disclosure."
+                icon={<Activity className="h-5 w-5" />}
+                title={t("home.fiClimateTitle")}
+                desc={t("home.fiClimateDesc")}
                 href="/dashboard/climate-risk"
+                accent="amber"
               />
               <FIPillar
-                emoji="💶"
-                title="Funding Readiness"
-                desc="Per-instrument self-assessment (SLL, green bond, IPO, M&amp;A, PE) with remediation plan."
+                icon={<Zap className="h-5 w-5" />}
+                title={t("home.fiFundingTitle")}
+                desc={t("home.fiFundingDesc")}
                 href="/dashboard/funding-readiness"
+                accent="blue"
               />
               <FIPillar
-                emoji="💼"
-                title="Portfolio Intelligence"
-                desc="Buy-side aggregates: weighted score, climate VaR, top &amp; bottom contributors per holding."
+                icon={<LineChart className="h-5 w-5" />}
+                title={t("home.fiPortfolioTitle")}
+                desc={t("home.fiPortfolioDesc")}
                 href="/dashboard/portfolio"
+                accent="emerald"
               />
             </div>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link href="/developers" className="text-sm font-semibold text-emerald-600 hover:underline dark:text-emerald-400">
-                Developers &amp; API →
+                {t("home.fiDevLink")}
               </Link>
               <span className="text-muted-foreground">·</span>
               <Link href="/trust" className="text-sm font-semibold text-emerald-600 hover:underline dark:text-emerald-400">
-                Trust &amp; security →
+                {t("home.fiTrustLink")}
               </Link>
               <span className="text-muted-foreground">·</span>
               <Link href="/manifesto" className="text-sm font-semibold text-emerald-600 hover:underline dark:text-emerald-400">
-                Read the manifesto →
+                {t("home.fiManifestoLink")}
               </Link>
             </div>
           </div>
@@ -1516,17 +1520,34 @@ export default function HomePage() {
   );
 }
 
-function FIPillar({ emoji, title, desc, href }: { emoji: string; title: string; desc: string; href: string }) {
+const FI_ACCENT: Record<string, { bg: string; text: string; border: string; hover: string }> = {
+  violet:  { bg: "bg-violet-500/10",  text: "text-violet-600 dark:text-violet-400",  border: "border-violet-500/20",  hover: "hover:border-violet-500/50" },
+  amber:   { bg: "bg-amber-500/10",   text: "text-amber-600 dark:text-amber-400",    border: "border-amber-500/20",   hover: "hover:border-amber-500/50" },
+  blue:    { bg: "bg-blue-500/10",    text: "text-blue-600 dark:text-blue-400",      border: "border-blue-500/20",    hover: "hover:border-blue-500/50" },
+  emerald: { bg: "bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400",border: "border-emerald-500/20", hover: "hover:border-emerald-500/50" },
+};
+
+function FIPillar({ icon, title, desc, href, accent = "emerald" }: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  href: string;
+  accent?: string;
+}) {
+  const a = FI_ACCENT[accent] ?? FI_ACCENT.emerald;
+  const t = useTranslations();
   return (
     <Link
       href={href}
-      className="group rounded-xl border bg-background/60 p-5 transition hover:border-emerald-500/50 hover:shadow-lg"
+      className={`group rounded-xl border bg-background/60 p-5 transition hover:shadow-lg ${a.hover}`}
     >
-      <div className="text-3xl">{emoji}</div>
+      <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl border ${a.bg} ${a.text} ${a.border} transition-transform duration-200 group-hover:scale-110`}>
+        {icon}
+      </div>
       <h3 className="mt-3 text-base font-semibold">{title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: desc }} />
-      <p className="mt-3 text-xs font-semibold text-emerald-600 group-hover:underline dark:text-emerald-400">
-        Open →
+      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+      <p className={`mt-3 text-xs font-semibold ${a.text} group-hover:underline`}>
+        {t("home.fiOpen")}
       </p>
     </Link>
   );

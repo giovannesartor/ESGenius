@@ -158,7 +158,26 @@
     "testimonial3Role": "CFO",
     "testimonial3Company": "Empresa de energia renovável",
     "finalCtaPill": "Pronto quando você estiver",
-    "twoPdfsLabel": "8 entregáveis ESG inclusos"
+    "twoPdfsLabel": "8 entregáveis ESG inclusos",
+    "bannerText": "Inteligência Financeira ESG — sua sustentabilidade precificada em basis points.",
+    "bannerCompanies": "Para Empresas →",
+    "bannerBanks": "Para Bancos e Investidores →",
+    "bannerManifesto": "Manifesto",
+    "fiLabel": "Camada de inteligência financeira",
+    "fiTitle": "Quatro pilares. Uma linguagem: capital.",
+    "fiSub": "ESG traduzido em spreads, WACC, PD/LGD e enterprise value — para empresas e investidores.",
+    "fiScoreTitle": "Financial Score",
+    "fiScoreDesc": "Score composto 0-100 com spread em bps, rating, percentil por setor e drivers explicáveis.",
+    "fiClimateTitle": "Risco Climático",
+    "fiClimateDesc": "Cenários NGFS e IEA — VaR físico e de transição com divulgação completa de metodologia.",
+    "fiFundingTitle": "Funding Readiness",
+    "fiFundingDesc": "Autoavaliação por instrumento (SLL, green bond, IPO, M&A, PE) com plano de remediação.",
+    "fiPortfolioTitle": "Portfolio Intelligence",
+    "fiPortfolioDesc": "Agregados buy-side: score ponderado, VaR climático, maiores contribuidores por holding.",
+    "fiOpen": "Abrir →",
+    "fiDevLink": "Developers & API →",
+    "fiTrustLink": "Segurança e conformidade →",
+    "fiManifestoLink": "Leia o manifesto →"
   },
   "features": {
     "title": "Tudo o que você precisa para gestão ESG",
@@ -262,7 +281,7 @@
       "feature8": "Assistente IA 24/7 + suporte por e-mail",
       "extrasLabel": "Cobranças adicionais:",
       "extrasReport": "Relatório ESG adicional: $7.500 cada",
-      "cta": "Solicitar Relatório"
+      "cta": "Começar agora"
     },
     "enterprise": {
       "name": "Enterprise",
@@ -279,7 +298,7 @@
       "feature7": "PDF Relatório Completo (white-label)",
       "feature8": "CSM dedicado + SSO + entrega prioritária",
       "noExtras": "Tudo incluído no plano",
-      "cta": "Falar com Vendas"
+      "cta": "Começar agora"
     }
   },
   "auth": {
@@ -1002,5 +1021,25 @@
     "pt": "Português",
     "es": "Español",
     "switch": "Idioma"
+  },
+  "manifesto": {
+    "badge": "Manifesto",
+    "title": "ESG é a linguagem financeira da sustentabilidade.",
+    "intro": "Por muito tempo, sustentabilidade foi uma linguagem separada — falada em relatórios elaborados, debatida em salas laterais e adicionada às demonstrações financeiras como um afterthought. Nós rejeitamos isso.",
+    "s1Title": "1. ESG é finanças.",
+    "s1Body": "Risco climático é risco de crédito. Carbono é um passivo. Um ativo em estresse hídrico é um ativo impaired. Falhas de governança são eventos de P&L. A disciplina da sustentabilidade é a disciplina da avaliação de longo prazo. Qualquer outra coisa é marketing.",
+    "s2Title": "2. Bps, não badges.",
+    "s2Body": "Um score não tem significado até que mova um basis point de spread, um euro de provisão ou um múltiplo de EBITDA. Nossa unidade padrão é o bps. Se não conseguirmos traduzir uma métrica em capital, não a entregaremos.",
+    "s3Title": "3. Transparente por construção.",
+    "s3Body": "Caixas pretas perdem auditorias e perdem confiança. Todo score que produzimos vem acompanhado de sua fórmula, seus inputs, suas fontes e sua incerteza. Nenhum modelo é sofisticado demais para ser aberto.",
+    "s4Title": "4. Multi-framework ou não aconteceu.",
+    "s4Body": "Resolução CVM 193, CSRD & ESRS, IFRS S1/S2, TCFD, SBTi, GRI, SASB — os frameworks não estão em conflito; são diferentes visões da mesma realidade. Nosso knowledge graph os mantém sincronizados para que você não precise.",
+    "s5Title": "5. IA com rastro auditável.",
+    "s5Body": "Modelos generativos são poderosos e falíveis. Usamos onde ajudam — extração, rascunho, tradução — e registramos cada chamada, redigimos PII por padrão e deixamos você escolher seu provedor e sua jurisdição.",
+    "s6Title": "6. Construído para os dois lados da mesa.",
+    "s6Body": "Empresas precisam divulgar. Bancos e investidores precisam decidir. Ambos merecem os mesmos primitivos. ESG360 é uma plataforma com duas portas de entrada e uma única fonte de verdade.",
+    "s7Title": "7. Horizonte longo por design.",
+    "s7Body": "Não otimizamos para o próximo trimestre. Construímos para as instituições e reguladores que ainda estarão aqui em 2050. Essa é uma disciplina de software diferente — e é a única que vale a pena praticar.",
+    "signature": "— O time ESG360"
   }
 }

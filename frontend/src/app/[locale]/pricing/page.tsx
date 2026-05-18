@@ -131,7 +131,7 @@ export default function PricingPage() {
                         </div>
                       </div>
 
-                      <Link href={isEnt ? "/contact" : "/register"} className="block mt-6">
+                      <Link href="/register" className="block mt-6">
                         <Button
                           className={`w-full h-12 font-bold text-base ${
                             isEnt
