@@ -908,4 +908,69 @@ export const knowledgeGraphApi = {
     ),
 };
 
+// --- Partner API ---
+export const partnerApi = {
+  getDashboard: (token: string) =>
+    apiClient("/partners/dashboard", { token }),
+  getClients: (token: string, stage?: string, search?: string) => {
+    const params = new URLSearchParams();
+    if (stage) params.set("stage", stage);
+    if (search) params.set("search", search);
+    const q = params.toString();
+    return apiClient(`/partners/clients${q ? `?${q}` : ""}`, { token });
+  },
+  createClient: (token: string, data: unknown) =>
+    apiClient("/partners/clients", { method: "POST", body: data, token }),
+  updateClient: (token: string, id: string, data: unknown) =>
+    apiClient(`/partners/clients/${id}`, { method: "PATCH", body: data, token }),
+  deleteClient: (token: string, id: string) =>
+    apiClient(`/partners/clients/${id}`, { method: "DELETE", token }),
+  getCommissions: (token: string, status?: string) =>
+    apiClient(`/partners/commissions${status ? `?status=${status}` : ""}`, { token }),
+  updatePix: (token: string, data: unknown) =>
+    apiClient("/partners/pix", { method: "PATCH", body: data, token }),
+  getTasks: (token: string) =>
+    apiClient("/partners/tasks", { token }),
+  createTask: (token: string, data: unknown) =>
+    apiClient("/partners/tasks", { method: "POST", body: data, token }),
+  updateTask: (token: string, id: string, data: unknown) =>
+    apiClient(`/partners/tasks/${id}`, { method: "PATCH", body: data, token }),
+  deleteTask: (token: string, id: string) =>
+    apiClient(`/partners/tasks/${id}`, { method: "DELETE", token }),
+  getFollowUpRules: (token: string) =>
+    apiClient("/partners/followup/rules", { token }),
+  createFollowUpRule: (token: string, data: unknown) =>
+    apiClient("/partners/followup/rules", { method: "POST", body: data, token }),
+};
+
+// --- Admin Extended API ---
+export const adminExtApi = {
+  getCoupons: (token: string) =>
+    apiClient("/admin/ext/coupons", { token }),
+  createCoupon: (token: string, data: unknown) =>
+    apiClient("/admin/ext/coupons", { method: "POST", body: data, token }),
+  updateCoupon: (token: string, id: string, data: unknown) =>
+    apiClient(`/admin/ext/coupons/${id}`, { method: "PATCH", body: data, token }),
+  deleteCoupon: (token: string, id: string) =>
+    apiClient(`/admin/ext/coupons/${id}`, { method: "DELETE", token }),
+  getErrorLogs: (token: string, resolved?: boolean) =>
+    apiClient(`/admin/ext/error-logs${resolved !== undefined ? `?resolved=${resolved}` : ""}`, { token }),
+  resolveErrorLog: (token: string, id: string) =>
+    apiClient(`/admin/ext/error-logs/${id}/resolve`, { method: "PATCH", token }),
+  deleteErrorLog: (token: string, id: string) =>
+    apiClient(`/admin/ext/error-logs/${id}`, { method: "DELETE", token }),
+  getPaymentsOverview: (token: string) =>
+    apiClient("/admin/ext/payments/overview", { token }),
+};
+
+// --- Partner Admin API ---
+export const partnerAdminApi = {
+  listPartners: (token: string, status?: string) =>
+    apiClient(`/partners/admin/list${status ? `?status=${status}` : ""}`, { token }),
+  approvePartner: (token: string, id: string) =>
+    apiClient(`/partners/admin/${id}/approve`, { method: "PATCH", token }),
+  suspendPartner: (token: string, id: string) =>
+    apiClient(`/partners/admin/${id}/suspend`, { method: "PATCH", token }),
+};
+
 export default apiClient;

@@ -975,8 +975,243 @@
       "companies": "Empresas",
       "users": "Usuários",
       "aiLogs": "Logs de IA",
-      "settings": "Configurações"
-    }
+      "settings": "Configurações",
+      "payments": "Pagamentos",
+      "coupons": "Cupons",
+      "auditLog": "Auditoria",
+      "errorLogs": "Erros do Sistema",
+      "partners": "Parceiros",
+      "intelligence": "Inteligência"
+    },
+    "payments": {
+      "title": "Pagamentos e Receita",
+      "subtitle": "Acompanhe MRR, ARR e histórico de pagamentos",
+      "kpi": {
+        "totalRevenue": "Receita Total",
+        "activeSubscriptions": "Assinaturas Ativas",
+        "mrr": "MRR",
+        "arr": "ARR",
+        "churnRate": "Churn Rate",
+        "avgRevenue": "Receita Média"
+      },
+      "chart": { "title": "Evolução do MRR" },
+      "history": { "title": "Histórico de Pagamentos", "allPlans": "Todos os Planos" },
+      "col": { "user": "Usuário", "plan": "Plano", "amount": "Valor", "status": "Status", "date": "Data" }
+    },
+    "coupons": {
+      "title": "Cupons de Desconto",
+      "subtitle": "Gerencie cupons para campanhas e parceiros",
+      "addCoupon": "Novo Cupom",
+      "confirmDelete": "Tem certeza que deseja excluir este cupom?",
+      "noCoupons": "Nenhum cupom cadastrado",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "col": { "code": "Código", "type": "Tipo", "value": "Valor", "usage": "Uso", "status": "Status", "expires": "Validade", "actions": "Ações" },
+      "form": { "code": "Código", "type": "Tipo", "value": "Valor", "maxUses": "Limite de Usos", "expiresAt": "Validade", "description": "Descrição", "descriptionPlaceholder": "Ex: Campanha de lançamento" }
+    },
+    "auditLog": {
+      "title": "Log de Auditoria",
+      "subtitle": "Rastreamento de ações realizadas na plataforma",
+      "searchPlaceholder": "Buscar por usuário ou ação...",
+      "allResources": "Todos os Recursos",
+      "noEntries": "Nenhum registro encontrado",
+      "col": { "timestamp": "Data/Hora", "user": "Usuário", "action": "Ação", "resource": "Recurso", "ip": "IP" }
+    },
+    "errorLogs": {
+      "title": "Erros do Sistema",
+      "subtitle": "Monitore e resolva erros da plataforma",
+      "resolve": "Resolver",
+      "resolved": "Resolvido",
+      "open": "Aberto",
+      "unresolved": "pendentes",
+      "allSeverities": "Todas as Severidades",
+      "allStatuses": "Todos os Status",
+      "confirmDelete": "Tem certeza que deseja excluir este log?",
+      "noErrors": "Nenhum erro encontrado",
+      "view": "Detalhes",
+      "detail": "Detalhes do Erro",
+      "stackTrace": "Stack Trace",
+      "col": { "severity": "Severidade", "message": "Mensagem", "endpoint": "Endpoint", "status": "Status", "date": "Data", "actions": "Ações" }
+    },
+    "partners": {
+      "title": "Gestão de Parceiros",
+      "subtitle": "Aprove, monitore e gerencie parceiros ESGenius",
+      "approve": "Aprovar",
+      "suspend": "Suspender",
+      "reactivate": "Reativar",
+      "searchPlaceholder": "Buscar parceiro...",
+      "allStatuses": "Todos os Status",
+      "confirmSuspend": "Tem certeza que deseja suspender este parceiro?",
+      "noPartners": "Nenhum parceiro encontrado",
+      "pendingApproval": "parceiro(s) aguardando aprovação",
+      "status": { "active": "Ativo", "pending": "Pendente", "suspended": "Suspenso" },
+      "kpi": { "total": "Total de Parceiros", "active": "Ativos", "pending": "Pendentes", "avgCommission": "Comissão Média" },
+      "col": { "name": "Nome", "company": "Empresa", "refCode": "Código Ref.", "commission": "Comissão", "status": "Status", "joined": "Cadastro", "actions": "Ações" }
+    },
+    "intelligence": {
+      "title": "Inteligência da Plataforma",
+      "subtitle": "Uso de IA, performance de modelos e sinais ESG do mercado",
+      "kpi": { "totalCalls": "Chamadas de IA", "totalCost": "Custo Total", "avgLatency": "Latência Média", "modelsActive": "Modelos Ativos" },
+      "chart": { "monthlyCalls": "Chamadas por Mês", "modelDistribution": "Distribuição de Modelos" },
+      "endpoints": { "title": "Performance por Funcionalidade" },
+      "signals": { "title": "Sinais ESG de Mercado", "subtitle": "Oportunidades e gaps por setor detectados pela IA", "gap": "Gap", "opportunity": "Oportunidade" }
+    },
+    "common": { "cancel": "Cancelar", "save": "Salvar", "close": "Fechar" }
+  },
+  "partner": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "clients": "Clientes",
+      "commissions": "Comissões",
+      "followUp": "Follow-up",
+      "marketing": "Marketing",
+      "tasks": "Tarefas",
+      "freeReport": "Relatório Grátis"
+    },
+    "login": {
+      "title": "Portal do Parceiro",
+      "subtitle": "Acesse sua conta de parceiro ESGenius",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Senha",
+      "submit": "Entrar",
+      "noAccount": "Ainda não é parceiro?",
+      "registerLink": "Cadastre-se",
+      "invalidCredentials": "E-mail ou senha inválidos"
+    },
+    "register": {
+      "title": "Torne-se Parceiro",
+      "subtitle": "Cadastre-se para indicar clientes e ganhar comissões",
+      "fullName": "Nome Completo",
+      "email": "E-mail",
+      "password": "Senha",
+      "company": "Empresa",
+      "phone": "Telefone",
+      "submit": "Cadastrar",
+      "hasAccount": "Já tem conta?",
+      "loginLink": "Fazer Login",
+      "successTitle": "Cadastro enviado!",
+      "successMessage": "Recebemos seu cadastro. Nossa equipe irá analisar e você receberá um e-mail de aprovação.",
+      "goToLogin": "Ir para Login",
+      "errorGeneric": "Erro ao cadastrar. Tente novamente."
+    },
+    "dashboard": {
+      "title": "Meu Dashboard",
+      "welcome": "Bem-vindo(a)",
+      "kpi": {
+        "clients": "Clientes Ativos",
+        "deals": "Negócios Fechados",
+        "totalCommissions": "Total em Comissões",
+        "tasksPending": "Tarefas Pendentes",
+        "pendingCommissions": "Comissões Pendentes",
+        "pendingNote": "aguardando aprovação"
+      },
+      "pipeline": {
+        "title": "Pipeline de Clientes",
+        "lead": "Lead",
+        "proposta": "Proposta",
+        "negociacao": "Negociação",
+        "fechado": "Fechado",
+        "analise_feita": "Análise Feita",
+        "entregue": "Entregue",
+        "viewAll": "Ver Todos"
+      },
+      "referral": {
+        "title": "Seu Link de Indicação",
+        "description": "Compartilhe com potenciais clientes para rastrear suas indicações"
+      }
+    },
+    "clients": {
+      "title": "Clientes",
+      "subtitle": "Gerencie seu pipeline de clientes",
+      "addClient": "Novo Cliente",
+      "editClient": "Editar Cliente",
+      "searchPlaceholder": "Buscar cliente...",
+      "allStages": "Todas as Etapas",
+      "noClients": "Nenhum cliente encontrado",
+      "confirmDelete": "Tem certeza que deseja excluir este cliente?",
+      "col": { "name": "Nome", "company": "Empresa", "email": "E-mail", "stage": "Etapa", "actions": "Ações" },
+      "form": { "name": "Nome", "email": "E-mail", "company": "Empresa", "phone": "Telefone", "stage": "Etapa do Pipeline", "notes": "Observações" }
+    },
+    "commissions": {
+      "title": "Minhas Comissões",
+      "subtitle": "Acompanhe seus ganhos e configure seu PIX",
+      "managePix": "Meu PIX",
+      "allStatuses": "Todos os Status",
+      "export": "Exportar CSV",
+      "noData": "Nenhuma comissão registrada",
+      "kpi": { "totalPaid": "Total Pago", "totalPending": "A Receber", "totalCommissions": "Total em Comissões" },
+      "status": { "pending": "Pendente", "approved": "Aprovada", "paid": "Paga" },
+      "col": { "product": "Produto/Plano", "gross": "Valor Bruto", "rate": "Taxa", "commission": "Comissão", "status": "Status", "date": "Data" },
+      "pixDialog": { "title": "Configurar PIX", "keyType": "Tipo de Chave", "key": "Chave PIX" }
+    },
+    "followUp": {
+      "title": "Regras de Follow-up",
+      "subtitle": "Automatize lembretes e acompanhamentos de clientes",
+      "addRule": "Nova Regra",
+      "editRule": "Editar Regra",
+      "alertsTitle": "Alertas Ativos",
+      "noRules": "Nenhuma regra configurada",
+      "active": "Ativa",
+      "inactive": "Inativa",
+      "trigger": {
+        "client_no_data": "Cliente sem dados",
+        "report_pending": "Relatório pendente",
+        "proposal_no_response": "Proposta sem resposta",
+        "post_report": "Pós-relatório",
+        "client_inactive": "Cliente inativo"
+      },
+      "form": { "trigger": "Gatilho", "days": "Dias", "template": "Mensagem", "templatePlaceholder": "Ex: Olá {nome}, notamos que...", "active": "Regra ativa" }
+    },
+    "marketing": {
+      "title": "Kit de Marketing",
+      "subtitle": "Scripts e materiais prontos para suas abordagens comerciais",
+      "scenarios": "Cenários",
+      "copy": "Copiar",
+      "copied": "Copiado!",
+      "materials": "Materiais para Download",
+      "download": "Baixar"
+    },
+    "tasks": {
+      "title": "Minhas Tarefas",
+      "subtitle": "Organize e acompanhe suas tarefas de parceiro",
+      "addTask": "Nova Tarefa",
+      "editTask": "Editar Tarefa",
+      "allStatuses": "Todos os Status",
+      "noTasks": "Nenhuma tarefa encontrada",
+      "confirmDelete": "Tem certeza que deseja excluir esta tarefa?",
+      "overdue": "Atrasadas",
+      "upcoming": "Próximas",
+      "completed": "Concluídas",
+      "status": { "pending": "Pendente", "done": "Concluída", "cancelled": "Cancelada" },
+      "form": { "title": "Título", "description": "Descrição", "dueDate": "Prazo", "status": "Status" }
+    },
+    "freeReport": {
+      "title": "Relatório ESG Gratuito",
+      "subtitle": "Gere um preview de diagnóstico ESG para seus prospects",
+      "formTitle": "Dados da Empresa",
+      "companyName": "Nome da Empresa",
+      "sector": "Setor",
+      "selectSector": "Selecione o setor",
+      "size": "Porte",
+      "selectSize": "Selecione o porte",
+      "employees": "Nº de Funcionários",
+      "generate": "Gerar Diagnóstico",
+      "generating": "Gerando...",
+      "generated": "Diagnóstico Gerado!",
+      "previewLabel": "Preview do Relatório ESG",
+      "preview": "Prévia",
+      "esgScore": "Score ESG",
+      "rating": "Rating",
+      "waccDelta": "Impacto no WACC",
+      "topGaps": "Principais Gaps",
+      "recommendation": "Recomendação",
+      "ctaTitle": "Transforme seus dados ESG em vantagem competitiva",
+      "ctaDescription": "Obtenha o relatório completo com plano de ação, benchmarks setoriais e análise de risco climático.",
+      "shareLink": "Compartilhar Link",
+      "downloadPDF": "Baixar PDF",
+      "newReport": "Novo Diagnóstico"
+    },
+    "common": { "cancel": "Cancelar", "save": "Salvar", "backToSite": "Voltar ao site" }
   },
   "common": {
     "save": "Salvar",

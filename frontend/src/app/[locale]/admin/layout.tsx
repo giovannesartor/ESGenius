@@ -26,6 +26,12 @@ import {
   X,
   Shield,
   Loader2,
+  CreditCard,
+  Tag,
+  FileText,
+  AlertTriangle,
+  Handshake,
+  Sparkles,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -35,6 +41,12 @@ const adminNavItems = [
   { key: "users", href: "/admin/users", icon: Users },
   { key: "aiLogs", href: "/admin/ai-logs", icon: Brain },
   { key: "settings", href: "/admin/settings", icon: Settings },
+  { key: "payments", href: "/admin/payments", icon: CreditCard },
+  { key: "coupons", href: "/admin/coupons", icon: Tag },
+  { key: "auditLog", href: "/admin/audit-log", icon: FileText },
+  { key: "errorLogs", href: "/admin/error-logs", icon: AlertTriangle },
+  { key: "partners", href: "/admin/partners", icon: Handshake },
+  { key: "intelligence", href: "/admin/intelligence", icon: Sparkles },
 ];
 
 export default function AdminLayout({

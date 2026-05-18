@@ -31,6 +31,10 @@ from app.api.v1.endpoints.knowledge_graph import router as knowledge_graph_route
 from app.api.v1.endpoints.public_api import router as public_api_router
 from app.api.v1.endpoints.embedded import router as embedded_router
 
+# Partner module
+from app.api.v1.endpoints.partners import router as partners_router
+from app.api.v1.endpoints.admin_ext import router as admin_ext_router
+
 api_router = APIRouter()
 
 api_router.include_router(auth_router)
@@ -63,3 +67,5 @@ api_router.include_router(portfolio_router)
 api_router.include_router(knowledge_graph_router)
 api_router.include_router(public_api_router)
 api_router.include_router(embedded_router)
+api_router.include_router(partners_router)
+api_router.include_router(admin_ext_router)
