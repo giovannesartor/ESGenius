@@ -43,6 +43,7 @@ import {
   Upload,
   Cpu,
   FileBarChart,
+  Handshake,
 } from "lucide-react";
 
 /* ── Scroll-animated wrapper ─────────────────────────────────────── */
@@ -1383,6 +1384,124 @@ export default function HomePage() {
                   </AccordionItem>
                 ))}
               </Accordion>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            PARTNER PROGRAM
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="parceiros" className="relative overflow-hidden py-24 sm:py-32 bg-gradient-to-br from-slate-950 via-emerald-950/20 to-slate-950">
+          <div className="absolute inset-0 dot-grid-dark opacity-30" />
+          <div className="pointer-events-none absolute top-0 right-0 w-[600px] h-[400px]"
+            style={{ background: "radial-gradient(ellipse at top right, rgba(16,185,129,0.10) 0%, transparent 70%)" }} />
+
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <FadeIn>
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-400 mb-6">
+                  <Handshake className="h-3.5 w-3.5" />
+                  {t("home.partnersLabel")}
+                </div>
+                <h2 className="text-4xl font-black tracking-tight sm:text-5xl text-white mb-5 leading-[1.08]">
+                  {t("home.partnersTitle")}
+                </h2>
+                <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                  {t("home.partnersSub")}
+                </p>
+              </div>
+            </FadeIn>
+
+            {/* Stats */}
+            <FadeIn delay={0.1}>
+              <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-16">
+                {[
+                  { value: t("home.partnersCommission"), label: t("home.partnersCommissionLabel") },
+                  { value: t("home.partnersFee"), label: t("home.partnersFeeLabel") },
+                  { value: t("home.partnersUnlimited"), label: t("home.partnersUnlimitedLabel") },
+                ].map((stat) => (
+                  <div key={stat.label} className="rounded-2xl border border-white/8 bg-white/4 p-6 text-center backdrop-blur-sm">
+                    <div className="text-3xl sm:text-4xl font-black text-emerald-400 mb-1">{stat.value}</div>
+                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+
+            {/* How it works */}
+            <FadeIn delay={0.15}>
+              <div className="mb-14">
+                <h3 className="text-center text-sm font-bold uppercase tracking-[0.15em] text-emerald-400 mb-8">
+                  {t("home.partnersHowTitle")}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {([
+                    { n: 1, title: t("home.partnersStep1Title"), desc: t("home.partnersStep1Desc") },
+                    { n: 2, title: t("home.partnersStep2Title"), desc: t("home.partnersStep2Desc") },
+                    { n: 3, title: t("home.partnersStep3Title"), desc: t("home.partnersStep3Desc") },
+                  ] as { n: number; title: string; desc: string }[]).map((step) => (
+                    <div key={step.n} className="relative rounded-2xl border border-white/8 bg-white/4 p-6 backdrop-blur-sm">
+                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 border border-emerald-500/30">
+                        <span className="text-lg font-black text-emerald-400">{step.n}</span>
+                      </div>
+                      <h4 className="font-bold text-white mb-2 text-sm">{step.title}</h4>
+                      <p className="text-sm text-slate-400 leading-relaxed">{step.desc}</p>
+                      {step.n < 3 && (
+                        <div className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                          <ChevronRight className="h-5 w-5 text-emerald-500/50" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* Benefits grid */}
+            <FadeIn delay={0.2}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-14">
+                {[
+                  t("home.partnersBenefit1"),
+                  t("home.partnersBenefit2"),
+                  t("home.partnersBenefit3"),
+                  t("home.partnersBenefit4"),
+                  t("home.partnersBenefit5"),
+                  t("home.partnersBenefit6"),
+                ].map((benefit) => (
+                  <div key={benefit} className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/3 px-4 py-3">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20">
+                      <Check className="h-3 w-3 text-emerald-400" />
+                    </div>
+                    <span className="text-sm text-slate-300 font-medium">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+
+            {/* CTA */}
+            <FadeIn delay={0.25}>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link href="/partner/register">
+                  <Button
+                    size="lg"
+                    className="h-13 px-10 text-base font-bold rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-[1.03] transition-all duration-200 border-0"
+                  >
+                    <Handshake className="mr-2.5 h-4.5 w-4.5" />
+                    {t("home.partnersCta")}
+                  </Button>
+                </Link>
+                <Link href="/partner/login">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="h-13 px-8 text-base font-semibold rounded-xl border-white/10 text-slate-300 hover:bg-white/5 hover:text-white hover:border-white/20 bg-transparent transition-all duration-200"
+                  >
+                    {t("home.partnersLogin")}
+                  </Button>
+                </Link>
+              </div>
+              <p className="text-center text-xs text-slate-500 mt-4">{t("home.partnersDisclaimer")}</p>
             </FadeIn>
           </div>
         </section>

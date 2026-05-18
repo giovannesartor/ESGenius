@@ -34,6 +34,10 @@ from app.core.database import engine
 PATCHES = [
     'ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255) UNIQUE',
     \"ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_plan VARCHAR(50) NOT NULL DEFAULT 'free'\",
+    'ALTER TABLE users ADD COLUMN IF NOT EXISTS notification_prefs JSONB',
+    'ALTER TABLE companies ADD COLUMN IF NOT EXISTS is_demo BOOLEAN NOT NULL DEFAULT false',
+    'ALTER TABLE data_points ADD COLUMN IF NOT EXISTS source_chunk_ids JSONB',
+    'ALTER TABLE data_points ADD COLUMN IF NOT EXISTS source_page INTEGER',
 ]
 
 async def patch():
@@ -51,6 +55,10 @@ asyncio.run(patch())
 echo ""
 echo "=== Seeding Default Admin ==="
 python seed_admin.py 2>&1 || echo "WARNING: Admin seeding had issues"
+
+echo ""
+echo "=== Seeding Test Partner ==="
+python seed_partner.py 2>&1 || echo "WARNING: Partner seeding had issues"
 
 echo ""
 echo "=== Testing App Import ==="

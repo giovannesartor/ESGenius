@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, Handshake } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export function Navbar() {
@@ -77,6 +77,17 @@ export function Navbar() {
           >
             {t("nav.pricing")}
           </Link>
+          <Link
+            href="/#parceiros"
+            className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
+              darkMode
+                ? "text-emerald-400 hover:text-emerald-300 hover:bg-white/8"
+                : "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-500/8"
+            }`}
+          >
+            <Handshake className="h-3.5 w-3.5" />
+            {t("nav.partners")}
+          </Link>
         </nav>
 
         {/* Desktop Actions */}
@@ -117,6 +128,23 @@ export function Navbar() {
               <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Button>
           </Link>
+
+          <div className={`h-5 w-px mx-1 ${darkMode ? "bg-white/10" : "bg-border"}`} />
+
+          <Link href="/partner/login">
+            <Button
+              variant="outline"
+              size="sm"
+              className={`h-8 px-3 text-sm font-semibold rounded-xl gap-1.5 transition-all hover:scale-[1.02] ${
+                darkMode
+                  ? "border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-400/50 bg-transparent"
+                  : "border-emerald-500/40 text-emerald-700 hover:bg-emerald-500/8 hover:border-emerald-500/60"
+              }`}
+            >
+              <Handshake className="h-3.5 w-3.5" />
+              {t("nav.partnerPortal")}
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -151,6 +179,14 @@ export function Navbar() {
             >
               {t("nav.pricing")}
             </Link>
+            <Link
+              href="/#parceiros"
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/8 hover:text-emerald-700 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Handshake className="h-4 w-4" />
+              {t("nav.partners")}
+            </Link>
           </div>
           <div className="border-t border-border/40 mx-4" />
           <div className="mx-auto max-w-7xl px-4 py-4 space-y-3">
@@ -167,6 +203,18 @@ export function Navbar() {
               <Button size="sm" className="w-full h-10 text-sm font-bold rounded-xl bg-primary hover:bg-primary/90">
                 {t("nav.register")}
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Button>
+            </Link>
+            <div className="border-t border-border/40 my-1" />
+            <Link href="/partner/login" className="block" onClick={() => setMobileOpen(false)}>
+              <Button variant="outline" size="sm" className="w-full h-10 text-sm font-semibold rounded-xl border-emerald-500/40 text-emerald-700 dark:text-emerald-400 gap-2">
+                <Handshake className="h-4 w-4" />
+                {t("nav.partnerPortal")}
+              </Button>
+            </Link>
+            <Link href="/partner/register" className="block" onClick={() => setMobileOpen(false)}>
+              <Button variant="ghost" size="sm" className="w-full h-9 text-xs font-medium text-muted-foreground rounded-xl">
+                {t("nav.partnerRegister")}
               </Button>
             </Link>
           </div>
