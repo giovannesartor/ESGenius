@@ -91,13 +91,16 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
     const storedPartner = localStorage.getItem("partner_user");
     if (storedToken && storedPartner) {
       try {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setToken(storedToken);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPartner(JSON.parse(storedPartner));
       } catch {
         localStorage.removeItem("partner_token");
         localStorage.removeItem("partner_user");
       }
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(false);
   }, []);
 
@@ -135,7 +138,7 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
     );
   }
 
-  const SidebarContent = () => (
+  const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Logo + Partner badge */}
       <div className="flex items-center justify-between px-4 py-5">
@@ -229,12 +232,12 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
               <X className="h-5 w-5" />
             </button>
           </div>
-          <SidebarContent />
+          {sidebarContent}
         </aside>
 
         {/* Desktop sidebar */}
         <aside className="hidden lg:flex flex-col w-60 border-r border-border bg-card">
-          <SidebarContent />
+          {sidebarContent}
         </aside>
 
         {/* Main */}

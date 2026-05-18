@@ -1022,9 +1022,20 @@
         "churnRate": "Churn Rate",
         "avgRevenue": "Receita Média"
       },
-      "chart": { "title": "Evolução do MRR" },
-      "history": { "title": "Histórico de Pagamentos", "allPlans": "Todos os Planos" },
-      "col": { "user": "Usuário", "plan": "Plano", "amount": "Valor", "status": "Status", "date": "Data" }
+      "chart": {
+        "title": "Evolução do MRR"
+      },
+      "history": {
+        "title": "Histórico de Pagamentos",
+        "allPlans": "Todos os Planos"
+      },
+      "col": {
+        "user": "Usuário",
+        "plan": "Plano",
+        "amount": "Valor",
+        "status": "Status",
+        "date": "Data"
+      }
     },
     "coupons": {
       "title": "Cupons de Desconto",
@@ -1035,8 +1046,24 @@
       "noCoupons": "Nenhum cupom cadastrado",
       "active": "Ativo",
       "inactive": "Inativo",
-      "col": { "code": "Código", "type": "Tipo", "value": "Valor", "usage": "Uso", "status": "Status", "expires": "Validade", "actions": "Ações" },
-      "form": { "code": "Código", "type": "Tipo", "value": "Valor", "maxUses": "Limite de Usos", "expiresAt": "Validade", "description": "Descrição", "descriptionPlaceholder": "Ex: Campanha de lançamento" }
+      "col": {
+        "code": "Código",
+        "type": "Tipo",
+        "value": "Valor",
+        "usage": "Uso",
+        "status": "Status",
+        "expires": "Validade",
+        "actions": "Ações"
+      },
+      "form": {
+        "code": "Código",
+        "type": "Tipo",
+        "value": "Valor",
+        "maxUses": "Limite de Usos",
+        "expiresAt": "Validade",
+        "description": "Descrição",
+        "descriptionPlaceholder": "Ex: Campanha de lançamento"
+      }
     },
     "auditLog": {
       "title": "Log de Auditoria",
@@ -1044,7 +1071,13 @@
       "searchPlaceholder": "Buscar por usuário ou ação...",
       "allResources": "Todos os Recursos",
       "noEntries": "Nenhum registro encontrado",
-      "col": { "timestamp": "Data/Hora", "user": "Usuário", "action": "Ação", "resource": "Recurso", "ip": "IP" }
+      "col": {
+        "timestamp": "Data/Hora",
+        "user": "Usuário",
+        "action": "Ação",
+        "resource": "Recurso",
+        "ip": "IP"
+      }
     },
     "errorLogs": {
       "title": "Erros do Sistema",
@@ -1060,7 +1093,14 @@
       "view": "Detalhes",
       "detail": "Detalhes do Erro",
       "stackTrace": "Stack Trace",
-      "col": { "severity": "Severidade", "message": "Mensagem", "endpoint": "Endpoint", "status": "Status", "date": "Data", "actions": "Ações" }
+      "col": {
+        "severity": "Severidade",
+        "message": "Mensagem",
+        "endpoint": "Endpoint",
+        "status": "Status",
+        "date": "Data",
+        "actions": "Ações"
+      }
     },
     "partners": {
       "title": "Gestão de Parceiros",
@@ -1073,19 +1113,85 @@
       "confirmSuspend": "Tem certeza que deseja suspender este parceiro?",
       "noPartners": "Nenhum parceiro encontrado",
       "pendingApproval": "parceiro(s) aguardando aprovação",
-      "status": { "active": "Ativo", "pending": "Pendente", "suspended": "Suspenso" },
-      "kpi": { "total": "Total de Parceiros", "active": "Ativos", "pending": "Pendentes", "avgCommission": "Comissão Média" },
-      "col": { "name": "Nome", "company": "Empresa", "refCode": "Código Ref.", "commission": "Comissão", "status": "Status", "joined": "Cadastro", "actions": "Ações" }
+      "status": {
+        "active": "Ativo",
+        "pending": "Pendente",
+        "suspended": "Suspenso"
+      },
+      "kpi": {
+        "total": "Total de Parceiros",
+        "active": "Ativos",
+        "pending": "Pendentes",
+        "avgCommission": "Comissão Média"
+      },
+      "col": {
+        "name": "Nome",
+        "company": "Empresa",
+        "refCode": "Código Ref.",
+        "commission": "Comissão",
+        "status": "Status",
+        "joined": "Cadastro",
+        "actions": "Ações"
+      }
     },
     "intelligence": {
       "title": "Inteligência da Plataforma",
       "subtitle": "Uso de IA, performance de modelos e sinais ESG do mercado",
-      "kpi": { "totalCalls": "Chamadas de IA", "totalCost": "Custo Total", "avgLatency": "Latência Média", "modelsActive": "Modelos Ativos" },
-      "chart": { "monthlyCalls": "Chamadas por Mês", "modelDistribution": "Distribuição de Modelos" },
-      "endpoints": { "title": "Performance por Funcionalidade" },
-      "signals": { "title": "Sinais ESG de Mercado", "subtitle": "Oportunidades e gaps por setor detectados pela IA", "gap": "Gap", "opportunity": "Oportunidade" }
+      "kpi": {
+        "totalCalls": "Chamadas de IA",
+        "totalCost": "Custo Total",
+        "avgLatency": "Latência Média",
+        "modelsActive": "Modelos Ativos"
+      },
+      "chart": {
+        "monthlyCalls": "Chamadas por Mês",
+        "modelDistribution": "Distribuição de Modelos"
+      },
+      "endpoints": {
+        "title": "Performance por Funcionalidade"
+      },
+      "signals": {
+        "title": "Sinais ESG de Mercado",
+        "subtitle": "Oportunidades e gaps por setor detectados pela IA",
+        "gap": "Gap",
+        "opportunity": "Oportunidade"
+      }
     },
-    "common": { "cancel": "Cancelar", "save": "Salvar", "close": "Fechar" }
+    "common": {
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "close": "Fechar"
+    },
+    "overview": {
+      "subtitle": "Visão geral do sistema e ações rápidas",
+      "allOperational": "Todos os sistemas operacionais",
+      "systemHealth": "Saúde do sistema",
+      "platformSummary": "Resumo da plataforma",
+      "quickActions": "Ações rápidas",
+      "stats": {
+        "totalUsers": "Usuários",
+        "totalCompanies": "Empresas",
+        "documentsUploaded": "Documentos enviados",
+        "activeFrameworks": "Frameworks ativos",
+        "activeLast30d": "{count} ativos (30d)",
+        "allTime": "Total acumulado",
+        "allOperational": "Todos operacionais"
+      },
+      "summary": {
+        "esgReports": "Relatórios ESG",
+        "activeUsers30d": "Usuários ativos (30d)",
+        "documentsProcessed": "Documentos processados",
+        "frameworks": "Frameworks"
+      },
+      "actions": {
+        "manageFrameworks": "Gerenciar frameworks",
+        "manageFrameworksDesc": "Adicionar, editar ou remover frameworks ESG",
+        "viewUsers": "Ver usuários",
+        "viewUsersDesc": "Gerenciar contas e permissões",
+        "aiLogs": "Logs de IA",
+        "aiLogsDesc": "Monitorar processamento e requisições de IA"
+      }
+    }
   },
   "partner": {
     "nav": {
@@ -1158,8 +1264,21 @@
       "allStages": "Todas as Etapas",
       "noClients": "Nenhum cliente encontrado",
       "confirmDelete": "Tem certeza que deseja excluir este cliente?",
-      "col": { "name": "Nome", "company": "Empresa", "email": "E-mail", "stage": "Etapa", "actions": "Ações" },
-      "form": { "name": "Nome", "email": "E-mail", "company": "Empresa", "phone": "Telefone", "stage": "Etapa do Pipeline", "notes": "Observações" }
+      "col": {
+        "name": "Nome",
+        "company": "Empresa",
+        "email": "E-mail",
+        "stage": "Etapa",
+        "actions": "Ações"
+      },
+      "form": {
+        "name": "Nome",
+        "email": "E-mail",
+        "company": "Empresa",
+        "phone": "Telefone",
+        "stage": "Etapa do Pipeline",
+        "notes": "Observações"
+      }
     },
     "commissions": {
       "title": "Minhas Comissões",
@@ -1168,10 +1287,29 @@
       "allStatuses": "Todos os Status",
       "export": "Exportar CSV",
       "noData": "Nenhuma comissão registrada",
-      "kpi": { "totalPaid": "Total Pago", "totalPending": "A Receber", "totalCommissions": "Total em Comissões" },
-      "status": { "pending": "Pendente", "approved": "Aprovada", "paid": "Paga" },
-      "col": { "product": "Produto/Plano", "gross": "Valor Bruto", "rate": "Taxa", "commission": "Comissão", "status": "Status", "date": "Data" },
-      "pixDialog": { "title": "Configurar PIX", "keyType": "Tipo de Chave", "key": "Chave PIX" }
+      "kpi": {
+        "totalPaid": "Total Pago",
+        "totalPending": "A Receber",
+        "totalCommissions": "Total em Comissões"
+      },
+      "status": {
+        "pending": "Pendente",
+        "approved": "Aprovada",
+        "paid": "Paga"
+      },
+      "col": {
+        "product": "Produto/Plano",
+        "gross": "Valor Bruto",
+        "rate": "Taxa",
+        "commission": "Comissão",
+        "status": "Status",
+        "date": "Data"
+      },
+      "pixDialog": {
+        "title": "Configurar PIX",
+        "keyType": "Tipo de Chave",
+        "key": "Chave PIX"
+      }
     },
     "followUp": {
       "title": "Regras de Follow-up",
@@ -1189,7 +1327,13 @@
         "post_report": "Pós-relatório",
         "client_inactive": "Cliente inativo"
       },
-      "form": { "trigger": "Gatilho", "days": "Dias", "template": "Mensagem", "templatePlaceholder": "Ex: Olá {nome}, notamos que...", "active": "Regra ativa" }
+      "form": {
+        "trigger": "Gatilho",
+        "days": "Dias",
+        "template": "Mensagem",
+        "templatePlaceholder": "Ex: Olá {nome}, notamos que...",
+        "active": "Regra ativa"
+      }
     },
     "marketing": {
       "title": "Kit de Marketing",
@@ -1211,8 +1355,17 @@
       "overdue": "Atrasadas",
       "upcoming": "Próximas",
       "completed": "Concluídas",
-      "status": { "pending": "Pendente", "done": "Concluída", "cancelled": "Cancelada" },
-      "form": { "title": "Título", "description": "Descrição", "dueDate": "Prazo", "status": "Status" }
+      "status": {
+        "pending": "Pendente",
+        "done": "Concluída",
+        "cancelled": "Cancelada"
+      },
+      "form": {
+        "title": "Título",
+        "description": "Descrição",
+        "dueDate": "Prazo",
+        "status": "Status"
+      }
     },
     "freeReport": {
       "title": "Relatório ESG Gratuito",
@@ -1240,7 +1393,11 @@
       "downloadPDF": "Baixar PDF",
       "newReport": "Novo Diagnóstico"
     },
-    "common": { "cancel": "Cancelar", "save": "Salvar", "backToSite": "Voltar ao site" }
+    "common": {
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "backToSite": "Voltar ao site"
+    }
   },
   "common": {
     "save": "Salvar",
@@ -1260,7 +1417,8 @@
     "actions": "Ações",
     "all": "Todos",
     "yes": "Sim",
-    "no": "Não"
+    "no": "Não",
+    "backToSite": "Voltar ao site"
   },
   "terms": {
     "title": "Termos de Serviço",

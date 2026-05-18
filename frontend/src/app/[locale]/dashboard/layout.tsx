@@ -162,8 +162,7 @@ export default function DashboardLayout({
     );
   };
 
-  // eslint-disable-next-line react-hooks/static-components
-  const SidebarContent = () => (
+  const sidebarContent = (
     <div className="flex flex-col h-full" style={{ background: "#0b1220" }}>
       {/* Logo area */}
       <div className={`flex items-center h-[57px] px-4 shrink-0 border-b ${collapsed ? "justify-center" : "gap-3"}`}
@@ -321,7 +320,7 @@ export default function DashboardLayout({
         >
           <X className="h-4 w-4" />
         </button>
-        <SidebarContent />
+        {sidebarContent}
       </aside>
 
       {/* Desktop sidebar */}
@@ -331,7 +330,7 @@ export default function DashboardLayout({
         }`}
         style={{ background: "#0b1220", borderRight: "1px solid #1a2740" }}
       >
-        <SidebarContent />
+        {sidebarContent}
         {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -164,9 +165,9 @@ export default function PartnerDashboardPage() {
             </div>
             <div className="mt-4">
               <Button variant="outline" size="sm" asChild className="w-full">
-                <a href="/partner/clients">
+                <Link href="/partner/clients">
                   {t("dashboard.pipeline.viewAll")} <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                </a>
+                </Link>
               </Button>
             </div>
           </CardContent>

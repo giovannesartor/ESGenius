@@ -43,11 +43,7 @@ const systemHealth = [
   { name: "AI Engine", icon: Brain, latency: "320ms" },
 ];
 
-const quickActions = [
-  { label: "Manage Frameworks", href: "/admin/frameworks", icon: Layers, description: "Add, edit, or remove ESG frameworks" },
-  { label: "View Users", href: "/admin/users", icon: Users, description: "Manage user accounts and permissions" },
-  { label: "AI Logs", href: "/admin/ai-logs", icon: Brain, description: "Monitor AI processing and requests" },
-];
+// quickActions are built inside the component so labels/descriptions can be translated
 
 export default function AdminOverviewPage() {
   const t = useTranslations();
@@ -72,37 +68,43 @@ export default function AdminOverviewPage() {
 
   const statsCards = [
     {
-      label: "Total Users",
+      label: t("admin.overview.stats.totalUsers"),
       value: loading ? "—" : String(stats?.total_users ?? 0),
-      change: `${stats?.active_users_30d ?? 0} active (30d)`,
+      change: t("admin.overview.stats.activeLast30d", { count: stats?.active_users_30d ?? 0 }),
       icon: Users,
       color: "text-brand-blue",
       bgColor: "bg-brand-blue/10",
     },
     {
-      label: "Total Companies",
+      label: t("admin.overview.stats.totalCompanies"),
       value: loading ? "—" : String(stats?.total_companies ?? 0),
-      change: "All time",
+      change: t("admin.overview.stats.allTime"),
       icon: Building2,
       color: "text-brand-green",
       bgColor: "bg-brand-green/10",
     },
     {
-      label: "Documents Uploaded",
+      label: t("admin.overview.stats.documentsUploaded"),
       value: loading ? "—" : String(stats?.total_documents ?? 0),
-      change: "All time",
+      change: t("admin.overview.stats.allTime"),
       icon: FileText,
       color: "text-brand-gold",
       bgColor: "bg-brand-gold/10",
     },
     {
-      label: "Active Frameworks",
+      label: t("admin.overview.stats.activeFrameworks"),
       value: loading ? "—" : String(stats?.total_frameworks ?? 0),
-      change: "All operational",
+      change: t("admin.overview.stats.allOperational"),
       icon: Layers,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
+  ];
+
+  const quickActions = [
+    { label: t("admin.overview.actions.manageFrameworks"), href: "/admin/frameworks", icon: Layers, description: t("admin.overview.actions.manageFrameworksDesc") },
+    { label: t("admin.overview.actions.viewUsers"), href: "/admin/users", icon: Users, description: t("admin.overview.actions.viewUsersDesc") },
+    { label: t("admin.overview.actions.aiLogs"), href: "/admin/ai-logs", icon: Brain, description: t("admin.overview.actions.aiLogsDesc") },
   ];
 
   return (
@@ -115,7 +117,7 @@ export default function AdminOverviewPage() {
             {t("admin.nav.overview")}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            System overview and quick actions
+            {t("admin.overview.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -124,7 +126,7 @@ export default function AdminOverviewPage() {
           </Button>
           <Badge variant="outline" className="w-fit text-xs">
             <Activity className="mr-1.5 h-3 w-3 text-brand-green" />
-            All systems operational
+            {t("admin.overview.allOperational")}
           </Badge>
         </div>
       </div>
@@ -156,7 +158,7 @@ export default function AdminOverviewPage() {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Activity className="h-4 w-4 text-brand-green" />
-              System Health
+              {t("admin.overview.systemHealth")}
             </CardTitle>
           </CardHeader>
           <CardContent className="px-6 pb-6 space-y-4">
@@ -186,16 +188,16 @@ export default function AdminOverviewPage() {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-brand-blue" />
-              Platform Summary
+              {t("admin.overview.platformSummary")}
             </CardTitle>
           </CardHeader>
           <CardContent className="px-6 pb-6">
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: "ESG Reports", value: stats?.total_reports ?? 0, icon: BarChart3, color: "text-brand-blue" },
-                { label: "Active Users (30d)", value: stats?.active_users_30d ?? 0, icon: Users, color: "text-brand-green" },
-                { label: "Documents Processed", value: stats?.total_documents ?? 0, icon: FileText, color: "text-brand-gold" },
-                { label: "Frameworks", value: stats?.total_frameworks ?? 0, icon: Layers, color: "text-primary" },
+                { label: t("admin.overview.summary.esgReports"), value: stats?.total_reports ?? 0, icon: BarChart3, color: "text-brand-blue" },
+                { label: t("admin.overview.summary.activeUsers30d"), value: stats?.active_users_30d ?? 0, icon: Users, color: "text-brand-green" },
+                { label: t("admin.overview.summary.documentsProcessed"), value: stats?.total_documents ?? 0, icon: FileText, color: "text-brand-gold" },
+                { label: t("admin.overview.summary.frameworks"), value: stats?.total_frameworks ?? 0, icon: Layers, color: "text-primary" },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3 p-3 rounded-lg bg-muted/40">
                   <item.icon className={`h-5 w-5 ${item.color}`} />
@@ -212,7 +214,7 @@ export default function AdminOverviewPage() {
 
       {/* Quick Actions */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-semibold mb-4">{t("admin.overview.quickActions")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {quickActions.map((action) => (
             <Link key={action.href} href={action.href}>

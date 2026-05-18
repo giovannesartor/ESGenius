@@ -52,15 +52,10 @@ const ACTION_COLORS: Record<string, string> = {
 
 export default function AdminAuditLogPage() {
   const t = useTranslations("admin");
-  const [entries, setEntries] = useState<AuditEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [entries, setEntries] = useState<AuditEntry[]>(MOCK_ENTRIES);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("");
-
-  useEffect(() => {
-    setEntries(MOCK_ENTRIES);
-    setLoading(false);
-  }, []);
 
   const filtered = entries.filter(
     (e) =>

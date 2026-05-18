@@ -1014,10 +1014,28 @@
     "payments": {
       "title": "Payments & Revenue",
       "subtitle": "Track MRR, ARR and payment history",
-      "kpi": { "totalRevenue": "Total Revenue", "activeSubscriptions": "Active Subscriptions", "mrr": "MRR", "arr": "ARR", "churnRate": "Churn Rate", "avgRevenue": "Avg Revenue" },
-      "chart": { "title": "MRR Growth" },
-      "history": { "title": "Payment History", "allPlans": "All Plans" },
-      "col": { "user": "User", "plan": "Plan", "amount": "Amount", "status": "Status", "date": "Date" }
+      "kpi": {
+        "totalRevenue": "Total Revenue",
+        "activeSubscriptions": "Active Subscriptions",
+        "mrr": "MRR",
+        "arr": "ARR",
+        "churnRate": "Churn Rate",
+        "avgRevenue": "Avg Revenue"
+      },
+      "chart": {
+        "title": "MRR Growth"
+      },
+      "history": {
+        "title": "Payment History",
+        "allPlans": "All Plans"
+      },
+      "col": {
+        "user": "User",
+        "plan": "Plan",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date"
+      }
     },
     "coupons": {
       "title": "Discount Coupons",
@@ -1028,8 +1046,24 @@
       "noCoupons": "No coupons registered",
       "active": "Active",
       "inactive": "Inactive",
-      "col": { "code": "Code", "type": "Type", "value": "Value", "usage": "Usage", "status": "Status", "expires": "Expires", "actions": "Actions" },
-      "form": { "code": "Code", "type": "Type", "value": "Value", "maxUses": "Max Uses", "expiresAt": "Expires At", "description": "Description", "descriptionPlaceholder": "E.g. Launch campaign" }
+      "col": {
+        "code": "Code",
+        "type": "Type",
+        "value": "Value",
+        "usage": "Usage",
+        "status": "Status",
+        "expires": "Expires",
+        "actions": "Actions"
+      },
+      "form": {
+        "code": "Code",
+        "type": "Type",
+        "value": "Value",
+        "maxUses": "Max Uses",
+        "expiresAt": "Expires At",
+        "description": "Description",
+        "descriptionPlaceholder": "E.g. Launch campaign"
+      }
     },
     "auditLog": {
       "title": "Audit Log",
@@ -1037,7 +1071,13 @@
       "searchPlaceholder": "Search by user or action...",
       "allResources": "All Resources",
       "noEntries": "No records found",
-      "col": { "timestamp": "Timestamp", "user": "User", "action": "Action", "resource": "Resource", "ip": "IP" }
+      "col": {
+        "timestamp": "Timestamp",
+        "user": "User",
+        "action": "Action",
+        "resource": "Resource",
+        "ip": "IP"
+      }
     },
     "errorLogs": {
       "title": "System Error Logs",
@@ -1053,7 +1093,14 @@
       "view": "Details",
       "detail": "Error Details",
       "stackTrace": "Stack Trace",
-      "col": { "severity": "Severity", "message": "Message", "endpoint": "Endpoint", "status": "Status", "date": "Date", "actions": "Actions" }
+      "col": {
+        "severity": "Severity",
+        "message": "Message",
+        "endpoint": "Endpoint",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      }
     },
     "partners": {
       "title": "Partner Management",
@@ -1066,19 +1113,85 @@
       "confirmSuspend": "Are you sure you want to suspend this partner?",
       "noPartners": "No partners found",
       "pendingApproval": "partner(s) awaiting approval",
-      "status": { "active": "Active", "pending": "Pending", "suspended": "Suspended" },
-      "kpi": { "total": "Total Partners", "active": "Active", "pending": "Pending", "avgCommission": "Avg Commission" },
-      "col": { "name": "Name", "company": "Company", "refCode": "Ref Code", "commission": "Commission", "status": "Status", "joined": "Joined", "actions": "Actions" }
+      "status": {
+        "active": "Active",
+        "pending": "Pending",
+        "suspended": "Suspended"
+      },
+      "kpi": {
+        "total": "Total Partners",
+        "active": "Active",
+        "pending": "Pending",
+        "avgCommission": "Avg Commission"
+      },
+      "col": {
+        "name": "Name",
+        "company": "Company",
+        "refCode": "Ref Code",
+        "commission": "Commission",
+        "status": "Status",
+        "joined": "Joined",
+        "actions": "Actions"
+      }
     },
     "intelligence": {
       "title": "Platform Intelligence",
       "subtitle": "AI usage, model performance and ESG market signals",
-      "kpi": { "totalCalls": "AI Calls", "totalCost": "Total Cost", "avgLatency": "Avg Latency", "modelsActive": "Active Models" },
-      "chart": { "monthlyCalls": "Monthly Calls", "modelDistribution": "Model Distribution" },
-      "endpoints": { "title": "Performance by Feature" },
-      "signals": { "title": "ESG Market Signals", "subtitle": "Opportunities and gaps detected by AI per sector", "gap": "Gap", "opportunity": "Opportunity" }
+      "kpi": {
+        "totalCalls": "AI Calls",
+        "totalCost": "Total Cost",
+        "avgLatency": "Avg Latency",
+        "modelsActive": "Active Models"
+      },
+      "chart": {
+        "monthlyCalls": "Monthly Calls",
+        "modelDistribution": "Model Distribution"
+      },
+      "endpoints": {
+        "title": "Performance by Feature"
+      },
+      "signals": {
+        "title": "ESG Market Signals",
+        "subtitle": "Opportunities and gaps detected by AI per sector",
+        "gap": "Gap",
+        "opportunity": "Opportunity"
+      }
     },
-    "common": { "cancel": "Cancel", "save": "Save", "close": "Close" }
+    "common": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "close": "Close"
+    },
+    "overview": {
+      "subtitle": "System overview and quick actions",
+      "allOperational": "All systems operational",
+      "systemHealth": "System Health",
+      "platformSummary": "Platform Summary",
+      "quickActions": "Quick Actions",
+      "stats": {
+        "totalUsers": "Total Users",
+        "totalCompanies": "Total Companies",
+        "documentsUploaded": "Documents Uploaded",
+        "activeFrameworks": "Active Frameworks",
+        "activeLast30d": "{count} active (30d)",
+        "allTime": "All time",
+        "allOperational": "All operational"
+      },
+      "summary": {
+        "esgReports": "ESG Reports",
+        "activeUsers30d": "Active Users (30d)",
+        "documentsProcessed": "Documents Processed",
+        "frameworks": "Frameworks"
+      },
+      "actions": {
+        "manageFrameworks": "Manage Frameworks",
+        "manageFrameworksDesc": "Add, edit, or remove ESG frameworks",
+        "viewUsers": "View Users",
+        "viewUsersDesc": "Manage user accounts and permissions",
+        "aiLogs": "AI Logs",
+        "aiLogsDesc": "Monitor AI processing and requests"
+      }
+    }
   },
   "partner": {
     "nav": {
@@ -1119,9 +1232,28 @@
     "dashboard": {
       "title": "My Dashboard",
       "welcome": "Welcome",
-      "kpi": { "clients": "Active Clients", "deals": "Closed Deals", "totalCommissions": "Total Commissions", "tasksPending": "Pending Tasks", "pendingCommissions": "Pending Commissions", "pendingNote": "awaiting approval" },
-      "pipeline": { "title": "Client Pipeline", "lead": "Lead", "proposta": "Proposal", "negociacao": "Negotiation", "fechado": "Closed", "analise_feita": "Analysis Done", "entregue": "Delivered", "viewAll": "View All" },
-      "referral": { "title": "Your Referral Link", "description": "Share with potential clients to track your referrals" }
+      "kpi": {
+        "clients": "Active Clients",
+        "deals": "Closed Deals",
+        "totalCommissions": "Total Commissions",
+        "tasksPending": "Pending Tasks",
+        "pendingCommissions": "Pending Commissions",
+        "pendingNote": "awaiting approval"
+      },
+      "pipeline": {
+        "title": "Client Pipeline",
+        "lead": "Lead",
+        "proposta": "Proposal",
+        "negociacao": "Negotiation",
+        "fechado": "Closed",
+        "analise_feita": "Analysis Done",
+        "entregue": "Delivered",
+        "viewAll": "View All"
+      },
+      "referral": {
+        "title": "Your Referral Link",
+        "description": "Share with potential clients to track your referrals"
+      }
     },
     "clients": {
       "title": "Clients",
@@ -1132,8 +1264,21 @@
       "allStages": "All Stages",
       "noClients": "No clients found",
       "confirmDelete": "Are you sure you want to delete this client?",
-      "col": { "name": "Name", "company": "Company", "email": "Email", "stage": "Stage", "actions": "Actions" },
-      "form": { "name": "Name", "email": "Email", "company": "Company", "phone": "Phone", "stage": "Pipeline Stage", "notes": "Notes" }
+      "col": {
+        "name": "Name",
+        "company": "Company",
+        "email": "Email",
+        "stage": "Stage",
+        "actions": "Actions"
+      },
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "company": "Company",
+        "phone": "Phone",
+        "stage": "Pipeline Stage",
+        "notes": "Notes"
+      }
     },
     "commissions": {
       "title": "My Commissions",
@@ -1142,10 +1287,29 @@
       "allStatuses": "All Statuses",
       "export": "Export CSV",
       "noData": "No commissions recorded",
-      "kpi": { "totalPaid": "Total Paid", "totalPending": "To Receive", "totalCommissions": "Total Commissions" },
-      "status": { "pending": "Pending", "approved": "Approved", "paid": "Paid" },
-      "col": { "product": "Product/Plan", "gross": "Gross Value", "rate": "Rate", "commission": "Commission", "status": "Status", "date": "Date" },
-      "pixDialog": { "title": "Configure PIX", "keyType": "Key Type", "key": "PIX Key" }
+      "kpi": {
+        "totalPaid": "Total Paid",
+        "totalPending": "To Receive",
+        "totalCommissions": "Total Commissions"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "paid": "Paid"
+      },
+      "col": {
+        "product": "Product/Plan",
+        "gross": "Gross Value",
+        "rate": "Rate",
+        "commission": "Commission",
+        "status": "Status",
+        "date": "Date"
+      },
+      "pixDialog": {
+        "title": "Configure PIX",
+        "keyType": "Key Type",
+        "key": "PIX Key"
+      }
     },
     "followUp": {
       "title": "Follow-up Rules",
@@ -1156,8 +1320,20 @@
       "noRules": "No rules configured",
       "active": "Active",
       "inactive": "Inactive",
-      "trigger": { "client_no_data": "Client with no data", "report_pending": "Report pending", "proposal_no_response": "Proposal with no response", "post_report": "Post-report", "client_inactive": "Inactive client" },
-      "form": { "trigger": "Trigger", "days": "Days", "template": "Message", "templatePlaceholder": "E.g. Hi {name}, we noticed that...", "active": "Rule active" }
+      "trigger": {
+        "client_no_data": "Client with no data",
+        "report_pending": "Report pending",
+        "proposal_no_response": "Proposal with no response",
+        "post_report": "Post-report",
+        "client_inactive": "Inactive client"
+      },
+      "form": {
+        "trigger": "Trigger",
+        "days": "Days",
+        "template": "Message",
+        "templatePlaceholder": "E.g. Hi {name}, we noticed that...",
+        "active": "Rule active"
+      }
     },
     "marketing": {
       "title": "Marketing Kit",
@@ -1179,8 +1355,17 @@
       "overdue": "Overdue",
       "upcoming": "Upcoming",
       "completed": "Completed",
-      "status": { "pending": "Pending", "done": "Done", "cancelled": "Cancelled" },
-      "form": { "title": "Title", "description": "Description", "dueDate": "Due Date", "status": "Status" }
+      "status": {
+        "pending": "Pending",
+        "done": "Done",
+        "cancelled": "Cancelled"
+      },
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "dueDate": "Due Date",
+        "status": "Status"
+      }
     },
     "freeReport": {
       "title": "Free ESG Report",
@@ -1208,7 +1393,11 @@
       "downloadPDF": "Download PDF",
       "newReport": "New Diagnostic"
     },
-    "common": { "cancel": "Cancel", "save": "Save", "backToSite": "Back to site" }
+    "common": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "backToSite": "Back to site"
+    }
   },
   "common": {
     "save": "Save",
@@ -1228,7 +1417,8 @@
     "actions": "Actions",
     "all": "All",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "backToSite": "Back to site"
   },
   "terms": {
     "title": "Terms of Service",

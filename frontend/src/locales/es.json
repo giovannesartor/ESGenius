@@ -1014,10 +1014,28 @@
     "payments": {
       "title": "Pagos e Ingresos",
       "subtitle": "Seguimiento de MRR, ARR e historial de pagos",
-      "kpi": { "totalRevenue": "Ingresos Totales", "activeSubscriptions": "Suscripciones Activas", "mrr": "MRR", "arr": "ARR", "churnRate": "Tasa de Cancelación", "avgRevenue": "Ingreso Promedio" },
-      "chart": { "title": "Evolución del MRR" },
-      "history": { "title": "Historial de Pagos", "allPlans": "Todos los Planes" },
-      "col": { "user": "Usuario", "plan": "Plan", "amount": "Monto", "status": "Estado", "date": "Fecha" }
+      "kpi": {
+        "totalRevenue": "Ingresos Totales",
+        "activeSubscriptions": "Suscripciones Activas",
+        "mrr": "MRR",
+        "arr": "ARR",
+        "churnRate": "Tasa de Cancelación",
+        "avgRevenue": "Ingreso Promedio"
+      },
+      "chart": {
+        "title": "Evolución del MRR"
+      },
+      "history": {
+        "title": "Historial de Pagos",
+        "allPlans": "Todos los Planes"
+      },
+      "col": {
+        "user": "Usuario",
+        "plan": "Plan",
+        "amount": "Monto",
+        "status": "Estado",
+        "date": "Fecha"
+      }
     },
     "coupons": {
       "title": "Cupones de Descuento",
@@ -1028,8 +1046,24 @@
       "noCoupons": "No hay cupones registrados",
       "active": "Activo",
       "inactive": "Inactivo",
-      "col": { "code": "Código", "type": "Tipo", "value": "Valor", "usage": "Uso", "status": "Estado", "expires": "Vence", "actions": "Acciones" },
-      "form": { "code": "Código", "type": "Tipo", "value": "Valor", "maxUses": "Límite de Usos", "expiresAt": "Vencimiento", "description": "Descripción", "descriptionPlaceholder": "Ej. Campaña de lanzamiento" }
+      "col": {
+        "code": "Código",
+        "type": "Tipo",
+        "value": "Valor",
+        "usage": "Uso",
+        "status": "Estado",
+        "expires": "Vence",
+        "actions": "Acciones"
+      },
+      "form": {
+        "code": "Código",
+        "type": "Tipo",
+        "value": "Valor",
+        "maxUses": "Límite de Usos",
+        "expiresAt": "Vencimiento",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Ej. Campaña de lanzamiento"
+      }
     },
     "auditLog": {
       "title": "Registro de Auditoría",
@@ -1037,7 +1071,13 @@
       "searchPlaceholder": "Buscar por usuario o acción...",
       "allResources": "Todos los Recursos",
       "noEntries": "No se encontraron registros",
-      "col": { "timestamp": "Fecha/Hora", "user": "Usuario", "action": "Acción", "resource": "Recurso", "ip": "IP" }
+      "col": {
+        "timestamp": "Fecha/Hora",
+        "user": "Usuario",
+        "action": "Acción",
+        "resource": "Recurso",
+        "ip": "IP"
+      }
     },
     "errorLogs": {
       "title": "Errores del Sistema",
@@ -1053,7 +1093,14 @@
       "view": "Detalles",
       "detail": "Detalles del Error",
       "stackTrace": "Stack Trace",
-      "col": { "severity": "Severidad", "message": "Mensaje", "endpoint": "Endpoint", "status": "Estado", "date": "Fecha", "actions": "Acciones" }
+      "col": {
+        "severity": "Severidad",
+        "message": "Mensaje",
+        "endpoint": "Endpoint",
+        "status": "Estado",
+        "date": "Fecha",
+        "actions": "Acciones"
+      }
     },
     "partners": {
       "title": "Gestión de Socios",
@@ -1066,19 +1113,85 @@
       "confirmSuspend": "¿Seguro que deseas suspender este socio?",
       "noPartners": "No se encontraron socios",
       "pendingApproval": "socio(s) esperando aprobación",
-      "status": { "active": "Activo", "pending": "Pendiente", "suspended": "Suspendido" },
-      "kpi": { "total": "Total de Socios", "active": "Activos", "pending": "Pendientes", "avgCommission": "Comisión Promedio" },
-      "col": { "name": "Nombre", "company": "Empresa", "refCode": "Cód. Ref.", "commission": "Comisión", "status": "Estado", "joined": "Registro", "actions": "Acciones" }
+      "status": {
+        "active": "Activo",
+        "pending": "Pendiente",
+        "suspended": "Suspendido"
+      },
+      "kpi": {
+        "total": "Total de Socios",
+        "active": "Activos",
+        "pending": "Pendientes",
+        "avgCommission": "Comisión Promedio"
+      },
+      "col": {
+        "name": "Nombre",
+        "company": "Empresa",
+        "refCode": "Cód. Ref.",
+        "commission": "Comisión",
+        "status": "Estado",
+        "joined": "Registro",
+        "actions": "Acciones"
+      }
     },
     "intelligence": {
       "title": "Inteligencia de la Plataforma",
       "subtitle": "Uso de IA, rendimiento de modelos y señales ESG del mercado",
-      "kpi": { "totalCalls": "Llamadas de IA", "totalCost": "Costo Total", "avgLatency": "Latencia Promedio", "modelsActive": "Modelos Activos" },
-      "chart": { "monthlyCalls": "Llamadas por Mes", "modelDistribution": "Distribución de Modelos" },
-      "endpoints": { "title": "Rendimiento por Funcionalidad" },
-      "signals": { "title": "Señales ESG del Mercado", "subtitle": "Oportunidades y brechas detectadas por IA por sector", "gap": "Brecha", "opportunity": "Oportunidad" }
+      "kpi": {
+        "totalCalls": "Llamadas de IA",
+        "totalCost": "Costo Total",
+        "avgLatency": "Latencia Promedio",
+        "modelsActive": "Modelos Activos"
+      },
+      "chart": {
+        "monthlyCalls": "Llamadas por Mes",
+        "modelDistribution": "Distribución de Modelos"
+      },
+      "endpoints": {
+        "title": "Rendimiento por Funcionalidad"
+      },
+      "signals": {
+        "title": "Señales ESG del Mercado",
+        "subtitle": "Oportunidades y brechas detectadas por IA por sector",
+        "gap": "Brecha",
+        "opportunity": "Oportunidad"
+      }
     },
-    "common": { "cancel": "Cancelar", "save": "Guardar", "close": "Cerrar" }
+    "common": {
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "close": "Cerrar"
+    },
+    "overview": {
+      "subtitle": "Vista general del sistema y acciones rápidas",
+      "allOperational": "Todos los sistemas operativos",
+      "systemHealth": "Estado del sistema",
+      "platformSummary": "Resumen de la plataforma",
+      "quickActions": "Acciones rápidas",
+      "stats": {
+        "totalUsers": "Usuarios",
+        "totalCompanies": "Empresas",
+        "documentsUploaded": "Documentos subidos",
+        "activeFrameworks": "Frameworks activos",
+        "activeLast30d": "{count} activos (30d)",
+        "allTime": "Acumulado",
+        "allOperational": "Todos operativos"
+      },
+      "summary": {
+        "esgReports": "Informes ESG",
+        "activeUsers30d": "Usuarios activos (30d)",
+        "documentsProcessed": "Documentos procesados",
+        "frameworks": "Frameworks"
+      },
+      "actions": {
+        "manageFrameworks": "Gestionar frameworks",
+        "manageFrameworksDesc": "Añadir, editar o eliminar frameworks ESG",
+        "viewUsers": "Ver usuarios",
+        "viewUsersDesc": "Gestionar cuentas y permisos",
+        "aiLogs": "Logs de IA",
+        "aiLogsDesc": "Monitorear procesamiento y peticiones de IA"
+      }
+    }
   },
   "partner": {
     "nav": {
@@ -1119,9 +1232,28 @@
     "dashboard": {
       "title": "Mi Panel",
       "welcome": "Bienvenido(a)",
-      "kpi": { "clients": "Clientes Activos", "deals": "Negocios Cerrados", "totalCommissions": "Total en Comisiones", "tasksPending": "Tareas Pendientes", "pendingCommissions": "Comisiones Pendientes", "pendingNote": "esperando aprobación" },
-      "pipeline": { "title": "Pipeline de Clientes", "lead": "Lead", "proposta": "Propuesta", "negociacao": "Negociación", "fechado": "Cerrado", "analise_feita": "Análisis Hecho", "entregue": "Entregado", "viewAll": "Ver Todos" },
-      "referral": { "title": "Tu Enlace de Referido", "description": "Comparte con clientes potenciales para rastrear tus referidos" }
+      "kpi": {
+        "clients": "Clientes Activos",
+        "deals": "Negocios Cerrados",
+        "totalCommissions": "Total en Comisiones",
+        "tasksPending": "Tareas Pendientes",
+        "pendingCommissions": "Comisiones Pendientes",
+        "pendingNote": "esperando aprobación"
+      },
+      "pipeline": {
+        "title": "Pipeline de Clientes",
+        "lead": "Lead",
+        "proposta": "Propuesta",
+        "negociacao": "Negociación",
+        "fechado": "Cerrado",
+        "analise_feita": "Análisis Hecho",
+        "entregue": "Entregado",
+        "viewAll": "Ver Todos"
+      },
+      "referral": {
+        "title": "Tu Enlace de Referido",
+        "description": "Comparte con clientes potenciales para rastrear tus referidos"
+      }
     },
     "clients": {
       "title": "Clientes",
@@ -1132,8 +1264,21 @@
       "allStages": "Todas las Etapas",
       "noClients": "No se encontraron clientes",
       "confirmDelete": "¿Seguro que deseas eliminar este cliente?",
-      "col": { "name": "Nombre", "company": "Empresa", "email": "Correo", "stage": "Etapa", "actions": "Acciones" },
-      "form": { "name": "Nombre", "email": "Correo", "company": "Empresa", "phone": "Teléfono", "stage": "Etapa del Pipeline", "notes": "Notas" }
+      "col": {
+        "name": "Nombre",
+        "company": "Empresa",
+        "email": "Correo",
+        "stage": "Etapa",
+        "actions": "Acciones"
+      },
+      "form": {
+        "name": "Nombre",
+        "email": "Correo",
+        "company": "Empresa",
+        "phone": "Teléfono",
+        "stage": "Etapa del Pipeline",
+        "notes": "Notas"
+      }
     },
     "commissions": {
       "title": "Mis Comisiones",
@@ -1142,10 +1287,29 @@
       "allStatuses": "Todos los Estados",
       "export": "Exportar CSV",
       "noData": "No hay comisiones registradas",
-      "kpi": { "totalPaid": "Total Pagado", "totalPending": "Por Recibir", "totalCommissions": "Total en Comisiones" },
-      "status": { "pending": "Pendiente", "approved": "Aprobada", "paid": "Pagada" },
-      "col": { "product": "Producto/Plan", "gross": "Valor Bruto", "rate": "Tasa", "commission": "Comisión", "status": "Estado", "date": "Fecha" },
-      "pixDialog": { "title": "Configurar PIX", "keyType": "Tipo de Clave", "key": "Clave PIX" }
+      "kpi": {
+        "totalPaid": "Total Pagado",
+        "totalPending": "Por Recibir",
+        "totalCommissions": "Total en Comisiones"
+      },
+      "status": {
+        "pending": "Pendiente",
+        "approved": "Aprobada",
+        "paid": "Pagada"
+      },
+      "col": {
+        "product": "Producto/Plan",
+        "gross": "Valor Bruto",
+        "rate": "Tasa",
+        "commission": "Comisión",
+        "status": "Estado",
+        "date": "Fecha"
+      },
+      "pixDialog": {
+        "title": "Configurar PIX",
+        "keyType": "Tipo de Clave",
+        "key": "Clave PIX"
+      }
     },
     "followUp": {
       "title": "Reglas de Seguimiento",
@@ -1156,8 +1320,20 @@
       "noRules": "No hay reglas configuradas",
       "active": "Activa",
       "inactive": "Inactiva",
-      "trigger": { "client_no_data": "Cliente sin datos", "report_pending": "Informe pendiente", "proposal_no_response": "Propuesta sin respuesta", "post_report": "Post-informe", "client_inactive": "Cliente inactivo" },
-      "form": { "trigger": "Disparador", "days": "Días", "template": "Mensaje", "templatePlaceholder": "Ej. Hola {nombre}, notamos que...", "active": "Regla activa" }
+      "trigger": {
+        "client_no_data": "Cliente sin datos",
+        "report_pending": "Informe pendiente",
+        "proposal_no_response": "Propuesta sin respuesta",
+        "post_report": "Post-informe",
+        "client_inactive": "Cliente inactivo"
+      },
+      "form": {
+        "trigger": "Disparador",
+        "days": "Días",
+        "template": "Mensaje",
+        "templatePlaceholder": "Ej. Hola {nombre}, notamos que...",
+        "active": "Regla activa"
+      }
     },
     "marketing": {
       "title": "Kit de Marketing",
@@ -1179,8 +1355,17 @@
       "overdue": "Atrasadas",
       "upcoming": "Próximas",
       "completed": "Completadas",
-      "status": { "pending": "Pendiente", "done": "Hecha", "cancelled": "Cancelada" },
-      "form": { "title": "Título", "description": "Descripción", "dueDate": "Fecha Límite", "status": "Estado" }
+      "status": {
+        "pending": "Pendiente",
+        "done": "Hecha",
+        "cancelled": "Cancelada"
+      },
+      "form": {
+        "title": "Título",
+        "description": "Descripción",
+        "dueDate": "Fecha Límite",
+        "status": "Estado"
+      }
     },
     "freeReport": {
       "title": "Informe ESG Gratuito",
@@ -1208,7 +1393,11 @@
       "downloadPDF": "Descargar PDF",
       "newReport": "Nuevo Diagnóstico"
     },
-    "common": { "cancel": "Cancelar", "save": "Guardar", "backToSite": "Volver al sitio" }
+    "common": {
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "backToSite": "Volver al sitio"
+    }
   },
   "common": {
     "save": "Guardar",
@@ -1228,7 +1417,8 @@
     "actions": "Acciones",
     "all": "Todos",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "backToSite": "Volver al sitio"
   },
   "terms": {
     "title": "Términos de Servicio",
