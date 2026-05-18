@@ -83,6 +83,9 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
   const [isLoading, setIsLoading] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Public routes inside /partner that should NOT enforce auth
+  const isPublicRoute = pathname === "/partner/login" || pathname === "/partner/register";
+
   useEffect(() => {
     const storedToken = localStorage.getItem("partner_token");
     const storedPartner = localStorage.getItem("partner_user");
@@ -99,10 +102,10 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
   }, []);
 
   useEffect(() => {
-    if (!isLoading && !partner) {
+    if (!isLoading && !partner && !isPublicRoute) {
       router.push("/partner/login");
     }
-  }, [isLoading, partner, router]);
+  }, [isLoading, partner, router, isPublicRoute]);
 
   const logout = () => {
     localStorage.removeItem("partner_token");
@@ -111,6 +114,15 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
     setToken(null);
     router.push("/partner/login");
   };
+
+  // Public routes (login / register) render without the sidebar/auth gate
+  if (isPublicRoute) {
+    return (
+      <PartnerAuthContext.Provider value={{ partner, token, isLoading, logout }}>
+        {children}
+      </PartnerAuthContext.Provider>
+    );
+  }
 
   if (isLoading || !partner) {
     return (

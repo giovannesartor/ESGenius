@@ -30,6 +30,18 @@ from app.domain.models.financial import (  # noqa: F401
     PortfolioHolding,
     FrameworkMapping,
 )
+from app.domain.models.partner import (  # noqa: F401
+    Partner,
+    PartnerClient,
+    PartnerCommission,
+    PartnerTask,
+    PartnerFollowUpRule,
+    Coupon,
+    ErrorLog,
+    PartnerStatus,
+    PipelineStage,
+    CommissionStatus,
+)
 
 __all__ = [
     "User",
@@ -83,4 +95,14 @@ __all__ = [
     "Portfolio",
     "PortfolioHolding",
     "FrameworkMapping",
+    "Partner",
+    "PartnerClient",
+    "PartnerCommission",
+    "PartnerTask",
+    "PartnerFollowUpRule",
+    "Coupon",
+    "ErrorLog",
+    "PartnerStatus",
+    "PipelineStage",
+    "CommissionStatus",
 ]

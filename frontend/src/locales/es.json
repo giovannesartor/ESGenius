@@ -186,7 +186,7 @@
     "partnersSub": "Comisión fija del 50% en cada venta. Sin límite de clientes. Sin cuota de entrada. Cobro directo vía PIX.",
     "partnersCommission": "50%",
     "partnersCommissionLabel": "comisión fija",
-    "partnersFee": "$0",
+    "partnersFee": "Gratis",
     "partnersFeeLabel": "cuota de entrada",
     "partnersUnlimited": "Ilimitado",
     "partnersUnlimitedLabel": "clientes referidos",
