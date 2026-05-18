@@ -995,6 +995,7 @@
       "title": "Cupones de Descuento",
       "subtitle": "Gestiona cupones para campañas y socios",
       "addCoupon": "Nuevo Cupón",
+      "editCoupon": "Editar Cupón",
       "confirmDelete": "¿Seguro que deseas eliminar este cupón?",
       "noCoupons": "No hay cupones registrados",
       "active": "Activo",

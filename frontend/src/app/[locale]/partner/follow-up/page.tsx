@@ -62,7 +62,7 @@ export default function PartnerFollowUpPage() {
   useEffect(() => {
     if (!token) return;
     partnerApi.getFollowUpRules(token)
-      .then(setRules)
+      .then((res) => setRules(res as FollowUpRule[]))
       .catch(() => setRules(MOCK_RULES))
       .finally(() => setLoading(false));
   }, [token]);
@@ -77,7 +77,7 @@ export default function PartnerFollowUpPage() {
       await partnerApi.createFollowUpRule(token!, form);
       closeDialog();
       // reload
-      partnerApi.getFollowUpRules(token!).then(setRules).catch(() => {});
+      partnerApi.getFollowUpRules(token!).then((res) => setRules(res as FollowUpRule[])).catch(() => {});
     } catch {
       closeDialog();
     } finally {

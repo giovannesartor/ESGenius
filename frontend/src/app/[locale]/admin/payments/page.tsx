@@ -108,7 +108,7 @@ export default function AdminPaymentsPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} tickFormatter={(v) => `$${v / 1000}k`} />
-              <Tooltip formatter={(v: number) => [`$${v.toLocaleString()}`, "MRR"]} />
+              <Tooltip formatter={(v) => [`$${(v as number).toLocaleString()}`, "MRR"]} />
               <Line type="monotone" dataKey="mrr" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>

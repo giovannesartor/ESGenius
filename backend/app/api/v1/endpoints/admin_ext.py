@@ -30,9 +30,22 @@ class CouponCreate(BaseModel):
 
 
 class CouponUpdate(BaseModel):
+    code: str | None = None
+    coupon_type: str | None = None
+    value: float | None = None
     is_active: bool | None = None
     max_uses: int | None = None
+    description: str | None = None
     expires_at: datetime | None = None
+    partner_id: str | None = None
+
+
+class ErrorLogCreate(BaseModel):
+    severity: str = "error"
+    message: str
+    endpoint: str | None = None
+    method: str | None = None
+    stack_trace: str | None = None
 
 
 # ─── Coupons ─────────────────────────────────────────────────────────────────
@@ -162,20 +175,16 @@ async def list_error_logs(
 
 @router.post("/error-logs", status_code=status.HTTP_201_CREATED)
 async def create_error_log(
-    severity: str,
-    message: str,
-    endpoint: str | None = None,
-    method: str | None = None,
-    stack_trace: str | None = None,
+    data: ErrorLogCreate,
     db: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
     """Internal endpoint to log application errors (called by middleware)."""
     log = ErrorLog(
-        severity=severity,
-        message=message,
-        endpoint=endpoint,
-        method=method,
-        stack_trace=stack_trace,
+        severity=data.severity,
+        message=data.message,
+        endpoint=data.endpoint,
+        method=data.method,
+        stack_trace=data.stack_trace,
     )
     db.add(log)
     await db.commit()

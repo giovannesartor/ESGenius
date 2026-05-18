@@ -12,9 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Brain, TrendingUp, AlertTriangle, Zap, BarChart3, Globe } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { adminApi } from "@/services/api";
+import { Loader2, Brain, TrendingUp, AlertTriangle, Zap, Globe } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -63,7 +61,6 @@ const MOCK_SIGNALS = [
 
 export default function AdminIntelligencePage() {
   const t = useTranslations("admin");
-  const { token } = useAuth();
   const [periodFilter, setPeriodFilter] = useState("30d");
   const [loading] = useState(false);
 

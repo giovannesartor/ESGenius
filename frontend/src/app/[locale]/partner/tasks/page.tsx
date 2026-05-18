@@ -64,7 +64,7 @@ export default function PartnerTasksPage() {
   const loadTasks = () => {
     if (!token) return;
     partnerApi.getTasks(token)
-      .then((res) => setTasks(Array.isArray(res) ? res : res.items || []))
+      .then((res) => { const r = res as { items?: Task[] }; setTasks(Array.isArray(res) ? (res as unknown as Task[]) : r.items ?? []); })
       .catch(() => setTasks(MOCK_TASKS))
       .finally(() => setLoading(false));
   };

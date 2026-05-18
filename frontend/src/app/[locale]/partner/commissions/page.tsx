@@ -67,13 +67,17 @@ export default function PartnerCommissionsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("");
   const [pixDialog, setPixDialog] = useState(false);
-  const [pixForm, setPixForm] = useState({ pix_key_type: partner?.pix_key_type || "email", pix_key: "" });
+  const [pixForm, setPixForm] = useState({ pix_key_type: partner?.pix_key_type || "email", pix_key: partner?.pix_key || "" });
+
+  useEffect(() => {
+    setPixForm({ pix_key_type: partner?.pix_key_type || "email", pix_key: partner?.pix_key || "" });
+  }, [partner?.pix_key_type, partner?.pix_key]);
   const [savingPix, setSavingPix] = useState(false);
 
   useEffect(() => {
     if (!token) return;
     partnerApi.getCommissions(token, statusFilter || undefined)
-      .then((res) => setCommissions(res.items || res))
+      .then((res) => { const r = res as { items?: Commission[] }; setCommissions(r.items ?? (res as unknown as Commission[])); })
       .catch(() => setCommissions(MOCK_COMMISSIONS))
       .finally(() => setLoading(false));
   }, [token, statusFilter]);

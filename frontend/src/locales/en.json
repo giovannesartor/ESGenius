@@ -995,6 +995,7 @@
       "title": "Discount Coupons",
       "subtitle": "Manage coupons for campaigns and partners",
       "addCoupon": "New Coupon",
+      "editCoupon": "Edit Coupon",
       "confirmDelete": "Are you sure you want to delete this coupon?",
       "noCoupons": "No coupons registered",
       "active": "Active",

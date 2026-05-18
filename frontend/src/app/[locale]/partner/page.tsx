@@ -16,7 +16,7 @@ import {
   ArrowRight,
   Loader2,
 } from "lucide-react";
-import { usePartnerAuth } from "../layout";
+import { usePartnerAuth } from "./layout";
 import { partnerApi } from "@/services/api";
 
 interface DashboardData {
@@ -58,7 +58,7 @@ export default function PartnerDashboardPage() {
   useEffect(() => {
     if (!token) return;
     partnerApi.getDashboard(token)
-      .then(setData)
+      .then((res) => setData(res as DashboardData))
       .catch(() => setData({ ...MOCK_DATA, ref_code: partner?.ref_code || MOCK_DATA.ref_code }))
       .finally(() => setLoading(false));
   }, [token, partner]);

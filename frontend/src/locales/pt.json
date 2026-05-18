@@ -1002,6 +1002,7 @@
       "title": "Cupons de Desconto",
       "subtitle": "Gerencie cupons para campanhas e parceiros",
       "addCoupon": "Novo Cupom",
+      "editCoupon": "Editar Cupom",
       "confirmDelete": "Tem certeza que deseja excluir este cupom?",
       "noCoupons": "Nenhum cupom cadastrado",
       "active": "Ativo",

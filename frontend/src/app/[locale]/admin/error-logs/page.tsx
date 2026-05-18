@@ -68,7 +68,7 @@ export default function AdminErrorLogsPage() {
   useEffect(() => {
     if (!token) return;
     adminExtApi.getErrorLogs(token)
-      .then((res) => setLogs(res.items || res))
+      .then((res) => { const r = res as { items?: ErrorLog[] }; setLogs(r.items ?? (res as unknown as ErrorLog[])); })
       .catch(() => setLogs(MOCK_ERRORS))
       .finally(() => setLoading(false));
   }, [token]);

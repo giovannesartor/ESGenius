@@ -61,7 +61,7 @@ export default function AdminPartnersPage() {
   const loadPartners = () => {
     if (!token) return;
     partnerAdminApi.listPartners(token, statusFilter || undefined)
-      .then((res) => setPartners(res.items || res))
+      .then((res) => { const r = res as { items?: Partner[] }; setPartners(r.items ?? (res as unknown as Partner[])); })
       .catch(() => setPartners(MOCK_PARTNERS))
       .finally(() => setLoading(false));
   };

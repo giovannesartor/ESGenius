@@ -68,7 +68,7 @@ export default function AdminCouponsPage() {
   const loadCoupons = () => {
     if (!token) return;
     adminExtApi.getCoupons(token)
-      .then((res) => setCoupons(res.items || res))
+      .then((res) => { const r = res as { items?: Coupon[] }; setCoupons(r.items ?? (res as unknown as Coupon[])); })
       .catch(() => setCoupons(MOCK_COUPONS))
       .finally(() => setLoading(false));
   };
@@ -90,7 +90,11 @@ export default function AdminCouponsPage() {
         description: form.description || undefined,
         expires_at: form.expires_at ? new Date(form.expires_at).toISOString() : undefined,
       };
-      await adminExtApi.createCoupon(token!, payload);
+      if (editCoupon) {
+        await adminExtApi.updateCoupon(token!, editCoupon.id, payload);
+      } else {
+        await adminExtApi.createCoupon(token!, payload);
+      }
       closeDialog();
       loadCoupons();
     } catch {
@@ -175,10 +179,13 @@ export default function AdminCouponsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" onClick={() => handleToggle(c)}>
+                          <Button variant="ghost" size="icon" onClick={() => openEdit(c)} aria-label="Edit coupon">
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleToggle(c)} aria-label={c.is_active ? "Deactivate" : "Activate"}>
                             <span className="text-xs">{c.is_active ? "✗" : "✓"}</span>
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDelete(c.id)}>
+                          <Button variant="ghost" size="icon" onClick={() => handleDelete(c.id)} aria-label="Delete coupon">
                             <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </Button>
                         </div>
@@ -196,7 +203,7 @@ export default function AdminCouponsPage() {
       <Dialog open={dialog} onOpenChange={(open) => !open && closeDialog()}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t("coupons.addCoupon")}</DialogTitle>
+            <DialogTitle>{editCoupon ? t("coupons.editCoupon") : t("coupons.addCoupon")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-1.5">

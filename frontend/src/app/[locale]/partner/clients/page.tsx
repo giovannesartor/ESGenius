@@ -81,7 +81,7 @@ export default function PartnerClientsPage() {
   const loadClients = () => {
     if (!token) return;
     partnerApi.getClients(token, stageFilter || undefined, search || undefined)
-      .then((res) => setClients(res.items || res))
+      .then((res) => { const r = res as { items?: Client[] }; setClients(r.items ?? (res as unknown as Client[])); })
       .catch(() => setClients(MOCK_CLIENTS))
       .finally(() => setLoading(false));
   };

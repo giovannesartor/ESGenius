@@ -22,7 +22,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, Loader2, Activity } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface AuditEntry {
   id: string;
@@ -53,7 +52,6 @@ const ACTION_COLORS: Record<string, string> = {
 
 export default function AdminAuditLogPage() {
   const t = useTranslations("admin");
-  const { token } = useAuth();
   const [entries, setEntries] = useState<AuditEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");

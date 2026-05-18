@@ -36,6 +36,10 @@ interface PartnerUser {
   ref_code: string;
   commission_rate: number;
   status: string;
+  pix_key_type?: string;
+  pix_key?: string;
+  brand_color?: string;
+  logo_url?: string;
 }
 
 interface PartnerAuthCtx {

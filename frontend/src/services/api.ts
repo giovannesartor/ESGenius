@@ -22,7 +22,7 @@ export class ApiError extends Error {
   }
 }
 
-async function apiClient<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
+export async function apiClient<T = unknown>(endpoint: string, options: ApiOptions = {}): Promise<T> {
   const { method = "GET", body, headers = {}, token } = options;
 
   const config: RequestInit = {
