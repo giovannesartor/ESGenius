@@ -117,14 +117,14 @@ export default function PricingPage() {
                         }`}
                       >
                         <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">
-                          {t("pricing.deliverables")}
+                          {t(`pricing.${tier.key}.deliverablesHeader`)}
                         </div>
                         <div className="space-y-2.5">
-                          {Array.from({ length: 8 }, (_, i) => (
+                          {Array.from({ length: isEnt ? 12 : 8 }, (_, i) => (
                             <div key={i} className="flex items-start gap-2.5">
                               <FileCheck className={`h-4 w-4 shrink-0 mt-0.5 ${isEnt ? "text-emerald-500" : "text-violet-500"}`} />
                               <span className="text-sm font-semibold text-foreground">
-                                {t(`pricing.deliverable${i + 1}`)}
+                                {t(`pricing.${tier.key}.deliverable${i + 1}`)}
                               </span>
                             </div>
                           ))}
