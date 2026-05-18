@@ -100,8 +100,8 @@
     "valueProp1Desc": "A IA extrai, classifica e mapeia seus data points automaticamente — o que levava semanas agora leva horas.",
     "valueProp2Title": "Conformidade por padrão",
     "valueProp2Desc": "Cada divulgação é mapeada para GRI, SASB, TCFD, CDP, ISSB e CSRD com trilha de auditoria completa.",
-    "valueProp3Title": "Transforme reporte em ação",
-    "valueProp3Desc": "Score em tempo real, análise de gaps e benchmarking transformam o reporte em um motor estratégico de melhoria ESG.",
+    "valueProp3Title": "De reporte para capital",
+    "valueProp3Desc": "Score ESG em tempo real traduzido em spread de crédito, delta de WACC e impacto no enterprise value — usando beta setorial real, dados Damodaran e taxa FRED ao vivo.",
     "showcaseLabel": "Tour do Produto",
     "showcaseTitle": "De evidências dispersas a um relatório ESG finalizado",
     "showcaseSub": "Veja como o ESG360 transforma seus documentos brutos em divulgações prontas para auditoria em quatro passos.",
@@ -113,8 +113,8 @@
     "showcase1Desc": "PDFs, planilhas, relatórios de sustentabilidade, faturas, contas de energia — envie ou conecte uma fonte de dados. Cuidamos do resto.",
     "showcase2Title": "A IA extrai cada data point",
     "showcase2Desc": "Nosso motor lê, classifica e mapeia cada métrica ao indicador correto do framework com evidência rastreável por número.",
-    "showcase3Title": "Score ESG ao vivo & análise de gaps",
-    "showcase3Desc": "Tenha um breakdown E, S, G transparente, benchmarks de pares e uma lista priorizada de gaps a fechar antes da publicação.",
+    "showcase3Title": "Financial Score + impacto no capital",
+    "showcase3Desc": "Score E, S, G com breakdown transparente, bps de spread de crédito calculados, delta de WACC setorial e variação percentual do enterprise value — prontos para apresentar a investidores.",
     "showcase4Title": "8 entregáveis — prontos para board, auditoria e stakeholders",
     "showcase4Desc": "Gere um Resumo Executivo e um Relatório Completo de Compliance — ambos prontos para auditores, reguladores e investidores.",
     "compareLabel": "Comparativo",
@@ -180,8 +180,8 @@
     "fiManifestoLink": "Leia o manifesto →"
   },
   "features": {
-    "title": "Tudo o que você precisa para gestão ESG",
-    "subtitle": "Um conjunto completo de ferramentas projetado para otimizar seus fluxos de relatórios de sustentabilidade e conformidade.",
+    "title": "Inteligência ESG que fala a língua do capital",
+    "subtitle": "Da extração de dados ao impacto no enterprise value — uma plataforma que transforma sustentabilidade em métricas que movem decisões de crédito, investimento e M&A.",
     "ai": {
       "title": "Extração com IA",
       "desc": "Extraia e classifique automaticamente pontos de dados ESG de documentos corporativos utilizando modelos avançados de processamento de linguagem natural.",
@@ -195,8 +195,8 @@
       "desc": "Reporte em GRI, SASB, TCFD, CDP, CSRD e outros grandes frameworks ESG a partir de uma única plataforma."
     },
     "scoring": {
-      "title": "Pontuação ESG em Tempo Real",
-      "desc": "Receba pontuações ESG contínuas e baseadas em dados, com metodologia transparente e detalhamento granular ambiental, social e de governança."
+      "title": "Financial Score & Spread de Crédito",
+      "desc": "Score composto 0–100 com spread em basis points, rating sombra, percentil de setor e drivers explicáveis. Cada ponto do score move um número real no custo de capital."
     },
     "reports": {
       "title": "Relatórios Prontos para Auditoria",
@@ -206,8 +206,8 @@
       "item3": "Formato regulatório"
     },
     "dashboard": {
-      "title": "Painéis Interativos",
-      "desc": "Visualize tendências de desempenho, compare com pares do setor e monitore o progresso em direção às metas de sustentabilidade em tempo real.",
+      "title": "Valuation Impact & Capital Intelligence",
+      "desc": "FCFE/DCF setorial com betas Damodaran, taxa livre de risco via FRED, Monte Carlo (2.000 simulações) e análise de múltiplos comparáveis — tudo ajustado pelo score ESG da empresa.",
       "eScore": "Pontuação A",
       "sScore": "Pontuação S",
       "gScore": "Pontuação G",

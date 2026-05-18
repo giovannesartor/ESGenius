@@ -100,8 +100,8 @@
     "valueProp1Desc": "AI extracts, classifies and maps your ESG data points automatically — what used to take weeks now takes hours.",
     "valueProp2Title": "Stay compliant by default",
     "valueProp2Desc": "Every disclosure is mapped to GRI, SASB, TCFD, CDP, ISSB and CSRD with a full audit trail and methodology references.",
-    "valueProp3Title": "Drive measurable action",
-    "valueProp3Desc": "Real-time scoring, gap analysis and benchmarking turn reporting into a strategic ESG improvement engine.",
+    "valueProp3Title": "From reporting to capital",
+    "valueProp3Desc": "Real-time ESG score translated into credit spread, WACC delta and enterprise value impact — using real sector beta, Damodaran data and a live FRED rate.",
     "showcaseLabel": "Product Tour",
     "showcaseTitle": "From scattered evidence to a finished ESG report",
     "showcaseSub": "See how ESG360 turns your raw documents into audit-ready disclosures in four steps.",
@@ -113,8 +113,8 @@
     "showcase1Desc": "PDFs, spreadsheets, sustainability reports, invoices, utility bills — drop them in or connect a data source. We handle the rest.",
     "showcase2Title": "AI extracts every data point",
     "showcase2Desc": "Our engine reads, classifies and maps each metric to the right framework indicator with traceable evidence per number.",
-    "showcase3Title": "Live ESG score & gap analysis",
-    "showcase3Desc": "Get a transparent E, S, G breakdown, peer benchmarks and a prioritized list of gaps to close before publication.",
+    "showcase3Title": "Financial Score + capital impact",
+    "showcase3Desc": "E, S, G breakdown with transparent methodology, credit spread in bps, sector WACC delta and enterprise value percentage change — ready to present to investors.",
     "showcase4Title": "8 deliverables — board-ready, audit-ready, stakeholder-ready",
     "showcase4Desc": "Generate an Executive Summary and a Full Compliance Report — both ready for auditors, regulators and investors.",
     "compareLabel": "How we compare",
@@ -180,8 +180,8 @@
     "fiManifestoLink": "Read the manifesto →"
   },
   "features": {
-    "title": "Everything you need for ESG management",
-    "subtitle": "A comprehensive suite of tools designed to streamline your sustainability reporting and compliance workflows.",
+    "title": "ESG intelligence that speaks the language of capital",
+    "subtitle": "From data extraction to enterprise value impact — one platform that turns sustainability into metrics that move credit, investment and M&A decisions.",
     "ai": {
       "title": "AI-Powered Extraction",
       "desc": "Automatically extract and classify ESG data points from corporate documents using advanced natural language processing models.",
@@ -195,8 +195,8 @@
       "desc": "Seamlessly report across GRI, SASB, TCFD, CDP, CSRD, and other major ESG frameworks from a single platform."
     },
     "scoring": {
-      "title": "Real-time ESG Scoring",
-      "desc": "Receive continuous, data-driven ESG scores with transparent methodology and granular environmental, social, and governance breakdowns."
+      "title": "Financial Score & Credit Spread",
+      "desc": "Composite 0–100 score with basis-point spread, shadow rating, sector percentile and explainable drivers. Every score point moves a real number in the cost of capital."
     },
     "reports": {
       "title": "Audit-Ready Reports",
@@ -206,8 +206,8 @@
       "item3": "Regulator format"
     },
     "dashboard": {
-      "title": "Interactive Dashboards",
-      "desc": "Visualize performance trends, benchmark against industry peers, and monitor progress toward sustainability targets in real time.",
+      "title": "Valuation Impact & Capital Intelligence",
+      "desc": "Sector-aware FCFE/DCF with Damodaran betas, live FRED risk-free rate, Monte Carlo (2,000 simulations) and comparable company multiples — all adjusted by the company's ESG score.",
       "eScore": "E Score",
       "sScore": "S Score",
       "gScore": "G Score",
