@@ -23,7 +23,6 @@ export default function AuthCallbackPage() {
       // Reload to trigger AuthContext to pick up the new tokens
       window.location.href = "/dashboard";
     } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError("Authentication failed. No tokens received.");
       setTimeout(() => {
         router.push("/login");

@@ -2,7 +2,7 @@
 
 from typing import Optional
 from pydantic_settings import BaseSettings
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 
 
 class Settings(BaseSettings):
@@ -113,6 +113,19 @@ class Settings(BaseSettings):
             origins.append(frontend)
 
         return origins
+
+    @model_validator(mode="after")
+    def validate_secret_key_in_production(self) -> "Settings":
+        """Prevent the default SECRET_KEY from being used in production."""
+        if (
+            self.ENVIRONMENT == "production"
+            and self.SECRET_KEY == "change-me-in-production-use-openssl-rand-hex-32"
+        ):
+            raise ValueError(
+                "SECRET_KEY must be changed from the default value in production. "
+                "Run: openssl rand -hex 32"
+            )
+        return self
 
     model_config = {
         "env_file": ".env",
