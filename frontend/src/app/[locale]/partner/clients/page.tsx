@@ -145,12 +145,12 @@ export default function PartnerClientsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input className="pl-9" placeholder={t("clients.searchPlaceholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
-        <Select value={stageFilter} onValueChange={setStageFilter}>
+        <Select value={stageFilter || "all"} onValueChange={(v) => setStageFilter(v === "all" ? "" : v)}>
           <SelectTrigger className="w-44">
             <SelectValue placeholder={t("clients.allStages")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{t("clients.allStages")}</SelectItem>
+            <SelectItem value="all">{t("clients.allStages")}</SelectItem>
             {STAGES.map((s) => (
               <SelectItem key={s} value={s}>{t(`dashboard.pipeline.${s}`)}</SelectItem>
             ))}

@@ -142,7 +142,7 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
     <div className="flex flex-col h-full">
       {/* Logo + Partner badge */}
       <div className="flex items-center justify-between px-4 py-5">
-        <Logo size="sm" />
+        <Logo size="md" showText={false} />
         <Badge variant="secondary" className="text-xs font-mono">
           <Handshake className="mr-1 h-3 w-3" />
           Partner

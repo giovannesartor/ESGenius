@@ -157,12 +157,12 @@ export default function PartnerCommissionsPage() {
 
       {/* Filters + Export */}
       <div className="flex gap-3 items-center">
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
+        <Select value={statusFilter || "all"} onValueChange={(v) => setStatusFilter(v === "all" ? "" : v)}>
           <SelectTrigger className="w-44">
             <SelectValue placeholder={t("commissions.allStatuses")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{t("commissions.allStatuses")}</SelectItem>
+            <SelectItem value="all">{t("commissions.allStatuses")}</SelectItem>
             {["pending", "approved", "paid"].map((s) => (
               <SelectItem key={s} value={s}>{t(`commissions.status.${s}`)}</SelectItem>
             ))}

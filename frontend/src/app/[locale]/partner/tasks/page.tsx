@@ -154,12 +154,12 @@ export default function PartnerTasksPage() {
       </div>
 
       {/* Filter */}
-      <Select value={statusFilter} onValueChange={setStatusFilter}>
+      <Select value={statusFilter || "all"} onValueChange={(v) => setStatusFilter(v === "all" ? "" : v)}>
         <SelectTrigger className="w-44">
           <SelectValue placeholder={t("tasks.allStatuses")} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="">{t("tasks.allStatuses")}</SelectItem>
+          <SelectItem value="all">{t("tasks.allStatuses")}</SelectItem>
           {["pending", "done", "cancelled"].map((s) => <SelectItem key={s} value={s}>{t(`tasks.status.${s}`)}</SelectItem>)}
         </SelectContent>
       </Select>
