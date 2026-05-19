@@ -92,7 +92,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "",
+    google: "OzzCA7sy7qFKmyvCfk4llwhyu5Q7EG0TsObaUem9yZo",
   },
   category: "technology",
 };
