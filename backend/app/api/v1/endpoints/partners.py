@@ -180,7 +180,7 @@ async def partner_login(data: PartnerLoginRequest, db: AsyncSession = Depends(ge
     if not partner.is_active:
         raise HTTPException(status_code=403, detail="Account pending approval or suspended")
 
-    token = create_access_token(data={"sub": str(partner.id), "role": "partner", "type": "access"})
+    token = create_access_token(subject=str(partner.id), extra_claims={"role": "partner"})
     return {"access_token": token, "token_type": "bearer", "partner_id": str(partner.id)}
 
 
