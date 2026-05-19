@@ -418,7 +418,13 @@
     "loginNow": "Iniciar sesión ahora",
     "verifyFailed": "Error de verificación. El enlace puede haber expirado.",
     "verifyExpiredDesc": "Solicita un nuevo correo de verificación.",
-    "checkYourEmail": "Revisa tu bandeja de entrada."
+    "checkYourEmail": "Revisa tu bandeja de entrada.",
+    "completingSignIn": "Completando el inicio de sesión...",
+    "googleCallbackFailed": "Error al completar el inicio de sesión. Inténtelo de nuevo.",
+    "hidePassword": "Ocultar contraseña",
+    "showPassword": "Mostrar contraseña",
+    "passwordLower": "Una letra minúscula",
+    "passwordSpecial": "Un carácter especial"
   },
   "dashboard": {
     "welcome": "Bienvenido de nuevo",

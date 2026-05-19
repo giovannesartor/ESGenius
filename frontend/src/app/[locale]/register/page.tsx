@@ -25,7 +25,9 @@ export default function RegisterPage() {
   const passwordChecks = [
     { key: "length", check: password.length >= 8, label: t("auth.passwordLength") },
     { key: "upper", check: /[A-Z]/.test(password), label: t("auth.passwordUpper") },
+    { key: "lower", check: /[a-z]/.test(password), label: t("auth.passwordLower") },
     { key: "number", check: /[0-9]/.test(password), label: t("auth.passwordNumber") },
+    { key: "special", check: /[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/`~\\]/.test(password), label: t("auth.passwordSpecial") },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,6 +141,7 @@ export default function RegisterPage() {
                     className="pl-10 h-11"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                    autoComplete="name"
                     required
                   />
                 </div>
@@ -155,6 +158,7 @@ export default function RegisterPage() {
                     className="pl-10 h-11"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -170,11 +174,13 @@ export default function RegisterPage() {
                     className="pr-10 h-11"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? t("auth.hidePassword") : t("auth.showPassword")}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

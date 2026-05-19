@@ -418,7 +418,13 @@
     "loginNow": "Entrar agora",
     "verifyFailed": "Falha na verificação. O link pode ter expirado.",
     "verifyExpiredDesc": "Solicite um novo e-mail de verificação na página de login.",
-    "checkYourEmail": "Verifique sua caixa de entrada."
+    "checkYourEmail": "Verifique sua caixa de entrada.",
+    "completingSignIn": "Concluindo o login...",
+    "googleCallbackFailed": "Falha ao concluir o login. Por favor, tente novamente.",
+    "hidePassword": "Ocultar senha",
+    "showPassword": "Mostrar senha",
+    "passwordLower": "Uma letra minúscula",
+    "passwordSpecial": "Um caractere especial"
   },
   "dashboard": {
     "welcome": "Bem-vindo de volta",

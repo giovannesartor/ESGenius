@@ -19,14 +19,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Swagger/ReDoc are only available in non-production environments.
+_docs_url = "/docs" if settings.ENVIRONMENT != "production" else None
+_redoc_url = "/redoc" if settings.ENVIRONMENT != "production" else None
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application startup and shutdown events."""
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"CORS origins: {settings.get_cors_origins()}")
     logger.info(f"FRONTEND_URL: {settings.FRONTEND_URL}")
-    # Import models to register them with SQLAlchemy
+    logger.info(f"API docs: {'enabled' if _docs_url else 'disabled (production)'}")
     from app.domain.models import __all__  # noqa: F401
     yield
     logger.info(f"Shutting down {settings.APP_NAME}")
@@ -35,27 +40,33 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="Production-grade ESG management platform with AI-powered data extraction, framework mapping, and audit-ready reporting.",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    description=(
+        "Production-grade ESG management platform with AI-powered data extraction, "
+        "framework mapping, and audit-ready reporting."
+    ),
+    docs_url=_docs_url,
+    redoc_url=_redoc_url,
     lifespan=lifespan,
 )
 
-# Rate limiting
+# ── Rate limiting ──────────────────────────────────────────────────────────────
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
 
-# CORS
+# ── CORS ───────────────────────────────────────────────────────────────────────
+# Restrict to the specific allowed HTTP methods and headers instead of wildcards.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.get_cors_origins(),
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "X-Request-ID"],
+    expose_headers=["X-Request-ID"],
+    max_age=600,
 )
 
-# Mount API router
+# ── API router ─────────────────────────────────────────────────────────────────
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 
 
@@ -72,8 +83,10 @@ async def health_check():
 @app.get("/", tags=["Root"])
 async def root():
     """Root endpoint."""
-    return {
+    payload: dict = {
         "app": settings.APP_NAME,
         "version": settings.APP_VERSION,
-        "docs": "/docs",
     }
+    if settings.ENVIRONMENT != "production":
+        payload["docs"] = "/docs"
+    return payload

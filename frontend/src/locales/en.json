@@ -418,7 +418,13 @@
     "loginNow": "Sign in now",
     "verifyFailed": "Verification failed. This link may have expired.",
     "verifyExpiredDesc": "Request a new verification email from the login page.",
-    "checkYourEmail": "Check your inbox for the verification email we sent you."
+    "checkYourEmail": "Check your inbox for the verification email we sent you.",
+    "completingSignIn": "Completing sign in...",
+    "googleCallbackFailed": "Failed to complete sign in. Please try again.",
+    "hidePassword": "Hide password",
+    "showPassword": "Show password",
+    "passwordLower": "One lowercase letter",
+    "passwordSpecial": "One special character"
   },
   "dashboard": {
     "welcome": "Welcome back",

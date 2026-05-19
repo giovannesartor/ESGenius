@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 
-from sqlalchemy import Boolean, DateTime, String, Text
+from sqlalchemy import Boolean, DateTime, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -25,7 +25,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(
         String(255), unique=True, index=True, nullable=False
     )
-    hashed_password: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    hashed_password: Mapped[str | None] = mapped_column(String(500), nullable=True)
     full_name: Mapped[str] = mapped_column(String(255), nullable=False)
     avatar_url: Mapped[str | None] = mapped_column(Text, nullable=True)
 
@@ -43,6 +43,15 @@ class User(Base):
     password_reset_token: Mapped[str | None] = mapped_column(
         String(500), nullable=True
     )
+
+    # Account lockout — brute-force protection
+    failed_login_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    locked_until: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+    # Preferred language for transactional emails (ISO 639-1: en | pt | es)
+    preferred_language: Mapped[str] = mapped_column(String(5), default="en", nullable=False)
 
     # Stripe
     stripe_customer_id: Mapped[str | None] = mapped_column(

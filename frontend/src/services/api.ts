@@ -27,6 +27,9 @@ export async function apiClient<T = unknown>(endpoint: string, options: ApiOptio
 
   const config: RequestInit = {
     method,
+    // credentials: "include" ensures httpOnly cookies are sent with every request.
+    // This enables both browser-session auth (cookie) and API-key auth (Bearer).
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...headers,
@@ -65,6 +68,16 @@ export const authApi = {
       "/auth/login",
       { method: "POST", body: data }
     ),
+
+  /** Restore session from httpOnly refresh_token cookie (called on page load). */
+  restoreSession: () =>
+    apiClient<{ access_token: string; refresh_token: string; token_type: string; expires_in: number }>(
+      "/auth/session"
+    ),
+
+  /** Call backend to clear httpOnly cookies. */
+  logout: () =>
+    apiClient("/auth/logout", { method: "POST" }),
 
   refresh: (refreshToken: string) =>
     apiClient<{ access_token: string; refresh_token: string }>("/auth/refresh", {

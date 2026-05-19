@@ -30,7 +30,7 @@ We patch the latest minor version of the platform (`main`). Self-hosted deployme
 
 ### Authentication
 
-- Email + password with **Argon2id** hashing
+- Email + password with **Argon2id** hashing (memory_cost=64 MB, time_cost=3, parallelism=4; legacy bcrypt hashes are re-hashed on next login)
 - Optional Google SSO (OAuth 2.0)
 - Optional SAML 2.0 / OIDC SSO on Enterprise plan
 - Per-user password policy (length, breach detection planned)

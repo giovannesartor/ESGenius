@@ -101,6 +101,7 @@ function ResetPasswordForm() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
                 required
                 minLength={8}
               />
@@ -117,6 +118,7 @@ function ResetPasswordForm() {
                 placeholder="••••••••"
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
+                autoComplete="new-password"
                 required
               />
             </div>

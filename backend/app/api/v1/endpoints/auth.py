@@ -2,7 +2,7 @@
 
 from urllib.parse import urlencode
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Cookie, Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import httpx
@@ -11,7 +11,7 @@ from slowapi.util import get_remote_address
 
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.exceptions import BadRequestException
+from app.core.exceptions import BadRequestException, CredentialsException
 from app.api.dependencies import get_current_user
 from app.domain.models.user import User
 from app.domain.schemas.auth import (
@@ -32,13 +32,45 @@ from app.services.auth_service import AuthService
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 limiter = Limiter(key_func=get_remote_address)
 
+_COOKIE_MAX_AGE_ACCESS = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+_COOKIE_MAX_AGE_REFRESH = settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400
+
+
+def _set_auth_cookies(response: Response, tokens: TokenResponse) -> None:
+    """Attach httpOnly auth cookies to a response."""
+    response.set_cookie(
+        key="access_token",
+        value=tokens.access_token,
+        max_age=_COOKIE_MAX_AGE_ACCESS,
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        path="/",
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=tokens.refresh_token,
+        max_age=_COOKIE_MAX_AGE_REFRESH,
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        path="/api/v1/auth",  # scoped: only sent to auth endpoints
+    )
+
+
+def _clear_auth_cookies(response: Response) -> None:
+    """Remove auth cookies."""
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("refresh_token", path="/api/v1/auth")
+
 
 @router.post("/register", response_model=UserResponse, status_code=201)
 @limiter.limit("5/minute")
 async def register(
     request: Request,
+    response: Response,
     data: UserRegister,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """Register a new user with email and password."""
     service = AuthService(db)
@@ -51,20 +83,56 @@ async def register(
 @limiter.limit("10/minute")
 async def login(
     request: Request,
+    response: Response,
     data: UserLogin,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
-    """Login with email and password."""
+    """Login with email and password. Sets httpOnly auth cookies."""
     service = AuthService(db)
-    return await service.login(email=data.email, password=data.password)
+    tokens = await service.login(email=data.email, password=data.password)
+    _set_auth_cookies(response, tokens)
+    return tokens
 
 
 @router.post("/refresh", response_model=TokenResponse)
 @limiter.limit("20/minute")
-async def refresh_token(request: Request, data: TokenRefresh, db: AsyncSession = Depends(get_db)):
-    """Refresh access token using refresh token."""
+async def refresh_token(
+    request: Request,
+    response: Response,
+    data: TokenRefresh | None = None,
+    refresh_token_cookie: str | None = Cookie(default=None, alias="refresh_token"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Refresh access token using body payload OR httpOnly refresh cookie."""
+    raw_token = (data.refresh_token if data else None) or refresh_token_cookie
+    if not raw_token:
+        raise CredentialsException("No refresh token provided")
     service = AuthService(db)
-    return await service.refresh_token(data.refresh_token)
+    tokens = await service.refresh_token(raw_token)
+    _set_auth_cookies(response, tokens)
+    return tokens
+
+
+@router.get("/session", response_model=TokenResponse)
+async def restore_session(
+    response: Response,
+    refresh_token_cookie: str | None = Cookie(default=None, alias="refresh_token"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Restore session from httpOnly refresh cookie (called on page load)."""
+    if not refresh_token_cookie:
+        raise CredentialsException("No session cookie found")
+    service = AuthService(db)
+    tokens = await service.refresh_token(refresh_token_cookie)
+    _set_auth_cookies(response, tokens)
+    return tokens
+
+
+@router.post("/logout", response_model=MessageResponse)
+async def logout(response: Response):
+    """Clear auth cookies and invalidate session."""
+    _clear_auth_cookies(response)
+    return MessageResponse(message="Logged out successfully")
 
 
 @router.post("/verify-email", response_model=UserResponse)
@@ -81,7 +149,7 @@ async def verify_email(
 async def request_password_reset(
     request: Request,
     data: PasswordResetRequest,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """Request a password reset email."""
     service = AuthService(db)
@@ -164,10 +232,9 @@ async def google_callback(
     code: str,
     db: AsyncSession = Depends(get_db),
 ):
-    """Handle Google OAuth callback — redirects to frontend with tokens."""
+    """Handle Google OAuth callback — sets httpOnly cookies and redirects to frontend."""
     frontend_base = settings.FRONTEND_URL.rstrip("/")
     try:
-        # Exchange code for tokens
         async with httpx.AsyncClient() as client:
             token_response = await client.post(
                 "https://oauth2.googleapis.com/token",
@@ -187,7 +254,6 @@ async def google_callback(
                     url=f"{frontend_base}/login?error={urlencode({'e': error_msg})}"
                 )
 
-            # Get user info
             userinfo_response = await client.get(
                 "https://www.googleapis.com/oauth2/v2/userinfo",
                 headers={"Authorization": f"Bearer {token_data['access_token']}"},
@@ -207,12 +273,10 @@ async def google_callback(
             avatar_url=userinfo.get("picture"),
         )
 
-        # Redirect to frontend callback page with tokens in hash fragment (not exposed to server logs)
-        params = urlencode({
-            "access_token": tokens.access_token,
-            "refresh_token": tokens.refresh_token,
-        })
-        return RedirectResponse(url=f"{frontend_base}/auth/callback#{params}")
+        # Set httpOnly cookies and redirect — tokens NOT exposed in URL or hash
+        redirect = RedirectResponse(url=f"{frontend_base}/auth/callback", status_code=302)
+        _set_auth_cookies(redirect, tokens)
+        return redirect
 
     except Exception:
         return RedirectResponse(url=f"{frontend_base}/login?error=google_auth_failed")

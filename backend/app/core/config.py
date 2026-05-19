@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # Cookie security (set Secure=True and SameSite=Lax in production)
+    COOKIE_SECURE: bool = True
+    COOKIE_SAMESITE: str = "lax"
+
     # Auth - Google OAuth
     GOOGLE_CLIENT_ID: Optional[str] = None
     GOOGLE_CLIENT_SECRET: Optional[str] = None

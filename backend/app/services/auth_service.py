@@ -1,6 +1,6 @@
 """Auth service — handles authentication, registration, and token management."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 from uuid import UUID
 
@@ -20,12 +20,17 @@ from app.core.security import (
     create_refresh_token,
     decode_token,
     get_password_hash,
+    needs_rehash,
     verify_password,
 )
 from app.domain.models.user import AuthProvider, User
 from app.domain.schemas.auth import TokenResponse, UserResponse
 from app.repositories.user_repository import UserRepository
 from app.services.email_service import EmailService
+
+# Account lockout settings
+_MAX_FAILED_ATTEMPTS = 5
+_LOCKOUT_DURATION_MINUTES = 15
 
 
 class AuthService:
@@ -35,6 +40,8 @@ class AuthService:
         self.db = db
         self.user_repo = UserRepository(db)
         self.email_service = EmailService()
+
+    # ── Registration ──────────────────────────────────────────────────────
 
     async def register(
         self, email: str, password: str, full_name: str
@@ -55,19 +62,22 @@ class AuthService:
         )
         user = await self.user_repo.create(user)
 
-        # Send verification email
         await self.email_service.send_verification_email(
             email=email,
             name=full_name,
             token=verification_token,
+            language=user.preferred_language,
         )
 
         return UserResponse.model_validate(user)
+
+    # ── Login ─────────────────────────────────────────────────────────────
 
     async def login(self, email: str, password: str) -> TokenResponse:
         """Authenticate user with email/password and return tokens."""
         user = await self.user_repo.get_by_email(email)
         if not user:
+            # Constant-time: don't reveal that the user doesn't exist.
             raise CredentialsException("Invalid email or password")
 
         if user.auth_provider != AuthProvider.LOCAL.value:
@@ -75,19 +85,29 @@ class AuthService:
                 f"This account uses {user.auth_provider} login"
             )
 
-        if not user.hashed_password or not verify_password(
-            password, user.hashed_password
-        ):
+        # Check account lockout
+        self._check_lockout(user)
+
+        if not user.hashed_password or not verify_password(password, user.hashed_password):
+            await self._record_failed_login(user)
             raise CredentialsException("Invalid email or password")
 
         if not user.is_active:
             raise CredentialsException("Account is deactivated")
 
-        # Update last login
+        # Successful login — reset lockout counters
+        user.failed_login_count = 0
+        user.locked_until = None
         user.last_login_at = datetime.now(timezone.utc)
-        await self.user_repo.update(user)
 
+        # Transparent Argon2id re-hash: upgrade bcrypt hashes on next login
+        if needs_rehash(user.hashed_password):
+            user.hashed_password = get_password_hash(password)
+
+        await self.user_repo.update(user)
         return self._create_token_response(user)
+
+    # ── Token management ──────────────────────────────────────────────────
 
     async def refresh_token(self, refresh_token: str) -> TokenResponse:
         """Generate new access token using refresh token."""
@@ -102,6 +122,8 @@ class AuthService:
 
         return self._create_token_response(user)
 
+    # ── Email verification ────────────────────────────────────────────────
+
     async def verify_email(self, token: str) -> UserResponse:
         """Verify user's email using the verification token."""
         payload = decode_token(token)
@@ -113,11 +135,17 @@ class AuthService:
         if not user:
             raise NotFoundException("User not found")
 
+        # Validate token matches what we stored (prevents token replay from stale links)
+        if user.email_verification_token != token:
+            raise BadRequestException("Verification link has already been used or is invalid")
+
         user.is_email_verified = True
         user.email_verification_token = None
         user = await self.user_repo.update(user)
 
         return UserResponse.model_validate(user)
+
+    # ── Password reset ────────────────────────────────────────────────────
 
     async def request_password_reset(self, email: str) -> None:
         """Send password reset email."""
@@ -133,10 +161,16 @@ class AuthService:
             email=email,
             name=user.full_name,
             token=token,
+            language=user.preferred_language,
         )
 
     async def reset_password(self, token: str, new_password: str) -> None:
-        """Reset password using the reset token."""
+        """Reset password using the reset token.
+
+        Validates that the token:
+          1. Is a valid JWT with type=password_reset (not expired)
+          2. Matches exactly the token stored in the DB (single-use)
+        """
         payload = decode_token(token)
         if not payload or payload.get("type") != "password_reset":
             raise BadRequestException("Invalid or expired reset token")
@@ -146,9 +180,18 @@ class AuthService:
         if not user:
             raise NotFoundException("User not found")
 
+        # Ensure single-use: compare stored token to prevent replay attacks
+        if user.password_reset_token != token:
+            raise BadRequestException("Reset link has already been used or is invalid")
+
         user.hashed_password = get_password_hash(new_password)
-        user.password_reset_token = None
+        user.password_reset_token = None  # Invalidate immediately after use
+        # Also reset lockout on successful password reset
+        user.failed_login_count = 0
+        user.locked_until = None
         await self.user_repo.update(user)
+
+    # ── Change password ───────────────────────────────────────────────────
 
     async def change_password(
         self, user_id: UUID, current_password: str, new_password: str
@@ -169,6 +212,8 @@ class AuthService:
         user.hashed_password = get_password_hash(new_password)
         await self.user_repo.update(user)
 
+    # ── Google OAuth ──────────────────────────────────────────────────────
+
     async def google_auth(
         self, google_id: str, email: str, full_name: str, avatar_url: Optional[str]
     ) -> TokenResponse:
@@ -180,10 +225,9 @@ class AuthService:
             await self.user_repo.update(user)
             return self._create_token_response(user)
 
-        # Check if user exists by email
+        # Check if user exists by email → link Google to existing account
         user = await self.user_repo.get_by_email(email)
         if user:
-            # Link Google account to existing user
             user.google_id = google_id
             user.auth_provider = AuthProvider.GOOGLE.value
             user.is_email_verified = True
@@ -192,7 +236,7 @@ class AuthService:
             await self.user_repo.update(user)
             return self._create_token_response(user)
 
-        # Create new user
+        # Create new Google user
         user = User(
             email=email,
             full_name=full_name,
@@ -207,12 +251,16 @@ class AuthService:
 
         return self._create_token_response(user)
 
+    # ── Profile ───────────────────────────────────────────────────────────
+
     async def get_current_user(self, user_id: UUID) -> UserResponse:
         """Get current authenticated user profile."""
         user = await self.user_repo.get_by_id(user_id)
         if not user:
             raise NotFoundException("User not found")
         return UserResponse.model_validate(user)
+
+    # ── Private helpers ───────────────────────────────────────────────────
 
     def _create_token_response(self, user: User) -> TokenResponse:
         """Create access and refresh tokens for a user."""
@@ -228,3 +276,22 @@ class AuthService:
             token_type="bearer",
             expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         )
+
+    @staticmethod
+    def _check_lockout(user: User) -> None:
+        """Raise CredentialsException if the account is currently locked."""
+        if user.locked_until and datetime.now(timezone.utc) < user.locked_until:
+            remaining = int((user.locked_until - datetime.now(timezone.utc)).total_seconds() / 60) + 1
+            raise CredentialsException(
+                f"Account temporarily locked due to too many failed attempts. "
+                f"Try again in {remaining} minute(s)."
+            )
+
+    async def _record_failed_login(self, user: User) -> None:
+        """Increment failed login counter and lock if threshold is reached."""
+        user.failed_login_count = (user.failed_login_count or 0) + 1
+        if user.failed_login_count >= _MAX_FAILED_ATTEMPTS:
+            user.locked_until = datetime.now(timezone.utc) + timedelta(
+                minutes=_LOCKOUT_DURATION_MINUTES
+            )
+        await self.user_repo.update(user)

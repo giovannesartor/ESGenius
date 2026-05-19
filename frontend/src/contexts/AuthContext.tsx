@@ -1,5 +1,17 @@
 "use client";
 
+/**
+ * AuthContext — token-in-memory strategy.
+ *
+ * Tokens are NEVER stored in localStorage or sessionStorage (XSS risk).
+ * Instead:
+ *   • The backend sets httpOnly cookies on login/refresh/OAuth.
+ *   • The access_token is also returned in the JSON response and kept in
+ *     React state (memory only) for the lifetime of the tab.
+ *   • On page reload, GET /auth/session exchanges the httpOnly refresh_token
+ *     cookie for a fresh access_token without exposing it to JS.
+ */
+
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { authApi, ApiError } from "@/services/api";
 
@@ -19,7 +31,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, fullName: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   googleLogin: () => Promise<void>;
 }
 
@@ -31,68 +43,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const refreshingRef = useRef(false);
 
+  /** Clear in-memory auth state (cookies are cleared by backend on /logout). */
   const clearAuth = useCallback(() => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
     setUser(null);
     setToken(null);
   }, []);
 
-  const tryRefreshToken = useCallback(async (): Promise<string | null> => {
-    if (refreshingRef.current) return null;
+  /** Load user profile using an access token already in memory. */
+  const loadUser = useCallback(
+    async (accessToken: string): Promise<boolean> => {
+      try {
+        const userData = (await authApi.getMe(accessToken)) as User;
+        setUser(userData);
+        setToken(accessToken);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    []
+  );
+
+  /**
+   * Restore session from the httpOnly refresh_token cookie.
+   * Called once on mount when there is no in-memory token.
+   * The cookie is sent automatically (credentials: "include").
+   */
+  const tryRestoreFromCookie = useCallback(async (): Promise<boolean> => {
+    if (refreshingRef.current) return false;
     refreshingRef.current = true;
     try {
-      const refreshToken = localStorage.getItem("refresh_token");
-      if (!refreshToken) return null;
-      const response = await authApi.refresh(refreshToken);
-      localStorage.setItem("access_token", response.access_token);
-      localStorage.setItem("refresh_token", response.refresh_token);
-      return response.access_token;
+      const response = await authApi.restoreSession();
+      if (response && response.access_token) {
+        return await loadUser(response.access_token);
+      }
+      return false;
     } catch {
-      clearAuth();
-      return null;
+      return false;
     } finally {
       refreshingRef.current = false;
     }
-  }, [clearAuth]);
-
-  const loadUser = useCallback(async (accessToken: string) => {
-    try {
-      const userData = await authApi.getMe(accessToken) as User;
-      setUser(userData);
-      setToken(accessToken);
-    } catch (err) {
-      // If 401, try refreshing the token
-      if (err instanceof ApiError && err.status === 401) {
-        const newToken = await tryRefreshToken();
-        if (newToken) {
-          try {
-            const userData = await authApi.getMe(newToken) as User;
-            setUser(userData);
-            setToken(newToken);
-            return;
-          } catch {
-            // refresh also failed
-          }
-        }
-      }
-      clearAuth();
-    }
-  }, [clearAuth, tryRefreshToken]);
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem("access_token");
-    if (savedToken) {
-      loadUser(savedToken).finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
-    }
   }, [loadUser]);
+
+  /** On mount: attempt to restore session from cookie. */
+  useEffect(() => {
+    tryRestoreFromCookie().finally(() => setIsLoading(false));
+  }, [tryRestoreFromCookie]);
 
   const login = async (email: string, password: string) => {
     const response = await authApi.login({ email, password });
-    localStorage.setItem("access_token", response.access_token);
-    localStorage.setItem("refresh_token", response.refresh_token);
+    // Cookie is set by backend; also store access_token in memory.
     await loadUser(response.access_token);
   };
 
@@ -100,17 +100,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await authApi.register({ email, password, full_name: fullName });
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // Best-effort: clear memory even if the network call fails.
+    }
     clearAuth();
   };
 
   const googleLogin = async () => {
     const data = await authApi.googleLogin();
-    window.location.href = data.authorization_url;
+    window.location.href = (data as { authorization_url: string }).authorization_url;
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, register, logout, googleLogin }}>
+    <AuthContext.Provider
+      value={{ user, token, isLoading, login, register, logout, googleLogin }}
+    >
       {children}
     </AuthContext.Provider>
   );

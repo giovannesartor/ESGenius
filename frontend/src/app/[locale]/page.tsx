@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Navbar } from "@/components/layout/navbar";
@@ -31,13 +31,10 @@ import {
   Leaf,
   Users,
   Building2,
-  Sparkles,
   Globe,
-  Star,
   ChevronRight,
   Activity,
   Target,
-  Quote,
   X,
   Check,
   Upload,
@@ -71,135 +68,24 @@ function FadeIn({
   );
 }
 
-/* ── Animated ESG Score Ring ──────────────────────────────────────── */
-function ScoreRing({
+/* ── Static ESG Score Column ─────────────────────────────────────── */
+function ScoreColumn({
   label,
   score,
   color,
-  delay = "0s",
 }: {
   label: string;
   score: number;
   color: string;
-  delay?: string;
 }) {
-  const circumference = 2 * Math.PI * 38;
-  const offset = circumference - (score / 100) * circumference;
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative h-[88px] w-[88px]">
-        <div
-          className="absolute inset-2 rounded-full opacity-25 blur-md"
-          style={{ backgroundColor: color }}
-        />
-        <svg className="h-[88px] w-[88px] -rotate-90" viewBox="0 0 88 88">
-          <circle cx="44" cy="44" r="38" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4.5" />
-          <circle
-            cx="44" cy="44" r="38" fill="none"
-            stroke={color} strokeWidth="4.5" strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            style={{
-              transition: "stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)",
-              transitionDelay: delay,
-              filter: `drop-shadow(0 0 6px ${color})`,
-            }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-lg font-black text-white tabular">{score}</span>
-        </div>
+    <div className="flex flex-col gap-1.5">
+      <div className="text-2xl font-black tabular" style={{ color }}>{score}</div>
+      <div className="h-1 w-full rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+        <div className="h-full rounded-full" style={{ width: `${score}%`, backgroundColor: color }} />
       </div>
-      <div className="flex items-center gap-1.5">
-        <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">{label}</span>
-      </div>
+      <div className="text-[9px] font-bold uppercase tracking-[0.14em] text-slate-500">{label}</div>
     </div>
-  );
-}
-
-/* ── Sparkline chart ────────────────────────────────────────────── */
-function Sparkline() {
-  const bars = [35, 52, 40, 68, 50, 82, 63, 88, 70, 94, 78, 91];
-  return (
-    <div className="flex items-end gap-[3px] h-10">
-      {bars.map((h, i) => (
-        <div
-          key={i}
-          className="w-[4px] rounded-sm"
-          style={{
-            height: `${h}%`,
-            backgroundColor: `rgba(16, 185, 129, ${0.25 + (h / 100) * 0.75})`,
-            animation: `fadeInUp 0.4s ease-out ${0.05 * i}s both`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ── Typewriter headline ─────────────────────────────────────────── */
-function TypewriterHeadline({
-  text,
-  className,
-  highlightLast = 2,
-  speed = 38,
-}: {
-  text: string;
-  className?: string;
-  highlightLast?: number;
-  speed?: number;
-}) {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    setDisplayed("");
-    setDone(false);
-    let i = 0;
-    const timer = setInterval(() => {
-      i++;
-      setDisplayed(text.slice(0, i));
-      if (i >= text.length) {
-        clearInterval(timer);
-        setDone(true);
-      }
-    }, speed);
-    return () => clearInterval(timer);
-  }, [text, speed]);
-
-  const words = text.split(" ");
-  const mainWords = words.slice(0, -highlightLast).join(" ");
-  const hlWords = words.slice(-highlightLast).join(" ");
-  const mainLen = mainWords.length;
-
-  if (done) {
-    return (
-      <h1 className={className}>
-        {mainWords}{" "}
-        <span className="text-gradient-emerald">{hlWords}</span>
-      </h1>
-    );
-  }
-
-  const visibleMain = displayed.slice(0, mainLen);
-  const visibleHl = displayed.length > mainLen + 1 ? displayed.slice(mainLen + 1) : "";
-
-  return (
-    <h1 className={className}>
-      {visibleMain}
-      {displayed.length <= mainLen ? (
-        <span className="animate-pulse text-emerald-500">|</span>
-      ) : (
-        <>
-          {" "}
-          <span className="text-gradient-emerald">
-            {visibleHl}
-            <span className="animate-pulse">|</span>
-          </span>
-        </>
-      )}
-    </h1>
   );
 }
 
@@ -309,7 +195,6 @@ function ProductShowcase() {
         <FadeIn className="mb-14 max-w-3xl">
           <div className="mb-4">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-violet-600 dark:text-violet-400">
-              <Sparkles className="h-3 w-3" />
               {t("home.showcaseLabel")}
             </span>
           </div>
@@ -542,45 +427,42 @@ export default function HomePage() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            HERO — Dark, Immersive, Editorial
+            HERO — Clean, Editorial, Data-Forward
         ════════════════════════════════════════════════════════════════ */}
         <section className="relative overflow-hidden hero-bg min-h-[calc(100vh-3.5rem)] flex items-center">
-          {/* Background layers — only visible in dark mode */}
-          <div className="absolute inset-0 dot-grid-dark hidden dark:block" />
-          <div className="absolute inset-0 line-grid-dark opacity-60 hidden dark:block" />
+          {/* Subtle top highlight — dark mode only */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px hidden dark:block"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent)" }} />
 
-          {/* Floating orbs — subtle in light mode, prominent in dark */}
-          <div className="pointer-events-none absolute -left-32 top-1/4 w-[500px] h-[500px] rounded-full opacity-40 dark:opacity-100"
-            style={{ background: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)" }} />
-          <div className="pointer-events-none absolute -right-20 top-1/3 w-[400px] h-[400px] rounded-full opacity-40 dark:opacity-100"
-            style={{ background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)" }} />
-          <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-40 dark:opacity-100"
-            style={{ background: "radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%)" }} />
-
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-16 lg:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-16 lg:py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
               {/* LEFT — Text */}
               <motion.div
-                initial={{ opacity: 0, y: 32 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 {/* Badge */}
-                <div className="mb-7">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 dark:border-emerald-500/20 bg-emerald-500/8 dark:bg-emerald-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+                <div className="mb-8">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/8 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                     {t("home.heroBadge")}
                   </span>
                 </div>
 
-                {/* Headline — typewriter */}
-                <TypewriterHeadline
-                  text={t("hero.title")}
-                  className="text-4xl font-black tracking-tight leading-[1.06] text-foreground dark:text-white sm:text-5xl lg:text-[3.6rem] mb-6"
-                  highlightLast={2}
-                  speed={38}
-                />
+                {/* Headline — static, confident */}
+                {(() => {
+                  const words = t("hero.title").split(" ");
+                  const main = words.slice(0, -2).join(" ");
+                  const highlight = words.slice(-2).join(" ");
+                  return (
+                    <h1 className="text-4xl font-black tracking-tight leading-[1.06] text-foreground dark:text-white sm:text-5xl lg:text-[3.6rem] mb-6">
+                      {main}{" "}
+                      <span className="text-gradient-emerald">{highlight}</span>
+                    </h1>
+                  );
+                })()}
 
                 <p className="text-lg text-muted-foreground dark:text-slate-400 leading-relaxed mb-10 max-w-[480px]">
                   {t("hero.subtitle")}
@@ -591,7 +473,7 @@ export default function HomePage() {
                   <Link href="/register">
                     <Button
                       size="lg"
-                      className="h-12 px-8 text-sm font-bold rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 hover:scale-[1.02] transition-all duration-200 border-0"
+                      className="h-12 px-8 text-sm font-bold rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white shadow-md hover:shadow-lg transition-all duration-200 border-0"
                     >
                       {t("hero.cta")}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -608,7 +490,7 @@ export default function HomePage() {
                   </Link>
                 </div>
 
-                {/* Trust — minimal, no empty social proof */}
+                {/* Trust pills */}
                 <div className="flex flex-wrap items-center gap-4">
                   {[
                     { icon: <Lock className="h-3.5 w-3.5" />, text: t("home.trustEncrypted") },
@@ -622,109 +504,82 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* RIGHT — Stats Panel */}
+              {/* RIGHT — Clean ESG Dashboard Panel */}
               <motion.div
-                className="hidden lg:flex flex-col gap-0"
-                initial={{ opacity: 0, x: 40, scale: 0.96 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.25 }}
+                className="hidden lg:block"
+                initial={{ opacity: 0, x: 32 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}
               >
-                {/* Main glassmorphic panel */}
-                <div className="glass-dark-card rounded-2xl p-7 glow-emerald-sm">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-7">
+                <div className="rounded-2xl border border-border/60 dark:border-white/8 bg-white dark:bg-[#0b1524] p-6 shadow-xl shadow-black/8 dark:shadow-black/40">
+                  {/* Panel header */}
+                  <div className="flex items-center justify-between mb-6 pb-5 border-b border-border/50 dark:border-white/6">
                     <div>
-                      <div className="text-sm font-bold text-white">{t("home.statsTitle")}</div>
-                      <div className="text-xs text-slate-500 mt-0.5">{t("home.statsSubtitle")}</div>
+                      <div className="text-sm font-bold text-foreground dark:text-white">{t("home.statsTitle")}</div>
+                      <div className="text-xs text-muted-foreground dark:text-slate-500 mt-0.5">{t("home.statsSubtitle")}</div>
                     </div>
-                    <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
-                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-[11px] font-bold text-emerald-400">{t("home.statsOnTrack")}</span>
+                    <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 px-2.5 py-1">
+                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{t("home.statsOnTrack")}</span>
                     </div>
                   </div>
 
-                  {/* Score Rings */}
-                  <div className="flex items-center justify-around mb-7 px-2">
-                    <ScoreRing label={t("home.environmental")} score={87} color="#10b981" delay="0.4s" />
-                    <ScoreRing label={t("home.social")} score={72} color="#3b82f6" delay="0.7s" />
-                    <ScoreRing label={t("home.governance")} score={91} color="#f59e0b" delay="1s" />
+                  {/* E / S / G scores */}
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <ScoreColumn label={t("home.environmental")} score={87} color="#10b981" />
+                    <ScoreColumn label={t("home.social")} score={72} color="#3b82f6" />
+                    <ScoreColumn label={t("home.governance")} score={91} color="#f59e0b" />
                   </div>
 
-                  {/* Overall score */}
-                  <div className="rounded-xl border border-white/6 bg-white/3 p-5 mb-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.14em]">{t("home.overallScore")}</span>
-                      <span className="text-2xl font-black text-white tabular">83.4</span>
+                  {/* Overall score row */}
+                  <div className="rounded-xl border border-border/50 dark:border-white/6 bg-muted/40 dark:bg-white/3 p-4 mb-4">
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.14em]">{t("home.overallScore")}</span>
+                      <span className="text-xl font-black text-foreground dark:text-white tabular">83.4</span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
+                    <div className="h-1.5 w-full rounded-full bg-border dark:bg-white/6 overflow-hidden">
                       <div
                         className="h-full rounded-full"
-                        style={{
-                          width: "83.4%",
-                          background: "linear-gradient(90deg, #10b981, #3b82f6, #f59e0b)",
-                          transition: "width 1.8s cubic-bezier(0.4, 0, 0.2, 1)",
-                          transitionDelay: "1.2s",
-                          boxShadow: "0 0 12px rgba(16,185,129,0.5)",
-                        }}
+                        style={{ width: "83.4%", background: "linear-gradient(90deg, #10b981, #3b82f6, #f59e0b)" }}
                       />
-                    </div>
-                    <div className="flex justify-between mt-1.5">
-                      <span className="text-[10px] text-slate-600">0</span>
-                      <span className="text-[10px] text-slate-600">100</span>
                     </div>
                   </div>
 
-                  {/* Mini metrics */}
-                  <div className="grid grid-cols-3 gap-2.5">
+                  {/* Metrics grid */}
+                  <div className="grid grid-cols-3 gap-2 mb-4">
                     {[
-                      { label: t("home.indicators"), value: "147/156", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/10" },
-                      { label: t("home.compliance"), value: "94%", color: "bg-blue-500/10 text-blue-400 border-blue-500/10" },
-                      { label: t("home.trend"), value: "+12%", color: "bg-amber-500/10 text-amber-400 border-amber-500/10" },
+                      { label: t("home.indicators"), value: "147/156" },
+                      { label: t("home.compliance"), value: "94%" },
+                      { label: t("home.trend"), value: "+12%" },
                     ].map((m) => (
-                      <div key={m.label} className={`rounded-lg border px-2 py-2.5 text-center ${m.color}`}>
-                        <div className="text-sm font-black tabular">{m.value}</div>
-                        <div className="text-[9px] font-bold uppercase tracking-wide opacity-60 mt-0.5">{m.label}</div>
+                      <div key={m.label} className="rounded-lg border border-border/50 dark:border-white/6 bg-muted/30 dark:bg-white/3 px-2 py-2.5 text-center">
+                        <div className="text-sm font-black text-foreground dark:text-white tabular">{m.value}</div>
+                        <div className="text-[9px] font-bold uppercase tracking-wide text-muted-foreground mt-0.5">{m.label}</div>
                       </div>
                     ))}
                   </div>
-                </div>
 
-                {/* Bottom card row — inline, no absolute overlaps */}
-                <motion.div
-                  className="mt-3 grid grid-cols-2 gap-3"
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.5 }}
-                >
-                  {/* GRI coverage */}
-                  <div className="glass-dark-card rounded-xl px-4 py-3 glow-blue-sm">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/15">
-                        <Globe className="h-3.5 w-3.5" />
-                      </div>
+                  {/* Bottom info rows */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2.5 rounded-lg border border-border/50 dark:border-white/6 bg-muted/20 dark:bg-white/2 px-3 py-2.5">
+                      <Globe className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400 shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-xs font-bold text-white truncate">{t("home.griCoverage")}</div>
-                        <div className="text-[10px] text-slate-500">{t("home.griComplete")}</div>
+                        <div className="text-xs font-semibold text-foreground dark:text-white truncate">{t("home.griCoverage")}</div>
+                        <div className="text-[10px] text-muted-foreground">{t("home.griComplete")}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2.5 rounded-lg border border-border/50 dark:border-white/6 bg-muted/20 dark:bg-white/2 px-3 py-2.5">
+                      <TrendingUp className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-foreground dark:text-white truncate">{t("home.quarterChange")}</div>
+                        <div className="text-[10px] text-muted-foreground">{t("home.vsLastQuarter")}</div>
                       </div>
                     </div>
                   </div>
-                  {/* Activity trend */}
-                  <div className="glass-dark-card rounded-xl px-4 py-3">
-                    <div className="flex items-center gap-2.5">
-                      <Sparkline />
-                      <div className="min-w-0">
-                        <div className="text-xs font-bold text-white truncate">{t("home.quarterChange")}</div>
-                        <div className="text-[10px] text-slate-500">{t("home.vsLastQuarter")}</div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                </div>
               </motion.div>
             </div>
           </div>
-
-          {/* Bottom fade to next section */}
-          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
@@ -778,7 +633,7 @@ export default function HomePage() {
             <FadeIn className="mb-16 max-w-3xl">
               <div className="mb-4">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
-                  <Sparkles className="h-3 w-3" />
+
                   {t("home.valuePropsLabel")}
                 </span>
               </div>
@@ -848,7 +703,7 @@ export default function HomePage() {
             <FadeIn className="mb-16">
               <div className="mb-4">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
-                  <Sparkles className="h-3 w-3" />
+
                   {t("home.capabilitiesLabel")}
                 </span>
               </div>
@@ -1039,7 +894,7 @@ export default function HomePage() {
             <FadeIn className="mb-16">
               <div className="mb-4">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400">
-                  <Sparkles className="h-3 w-3" />
+
                   {t("home.processLabel")}
                 </span>
               </div>
@@ -1097,11 +952,6 @@ export default function HomePage() {
         ════════════════════════════════════════════════════════════════ */}
         <FadeIn>
           <section className="relative overflow-hidden py-24" style={{ background: "#060c14" }}>
-            <div className="absolute inset-0 dot-grid-dark opacity-50" />
-            <div className="pointer-events-none absolute -left-40 top-0 w-[500px] h-full rounded-full"
-              style={{ background: "radial-gradient(ellipse, rgba(16,185,129,0.08) 0%, transparent 70%)" }} />
-            <div className="pointer-events-none absolute -right-40 top-0 w-[500px] h-full rounded-full"
-              style={{ background: "radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%)" }} />
 
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               {/* Section label */}
@@ -1122,8 +972,7 @@ export default function HomePage() {
                     <div className={`inline-flex items-center justify-center h-10 w-10 rounded-xl border ${stat.color} mb-5 mx-auto transition-transform group-hover:scale-110 duration-200`}>
                       {stat.icon}
                     </div>
-                    <div className="text-4xl sm:text-5xl font-black text-white mb-2 tabular"
-                      style={{ textShadow: "0 0 40px rgba(255,255,255,0.1)" }}>
+                    <div className="text-4xl sm:text-5xl font-black text-white mb-2 tabular">
                       {stat.value}
                     </div>
                     <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{stat.label}</div>
@@ -1144,7 +993,7 @@ export default function HomePage() {
               <FadeIn>
                 <div className="mb-4">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
-                    <Sparkles className="h-3 w-3" />
+  
                     {t("home.whyLabel")}
                   </span>
                 </div>
@@ -1198,7 +1047,6 @@ export default function HomePage() {
                             style={{
                               width: `${item.pct}%`,
                               backgroundColor: item.color,
-                              boxShadow: `0 0 8px ${item.color}60`,
                             }}
                           />
                         </div>
@@ -1219,7 +1067,7 @@ export default function HomePage() {
             <FadeIn className="mb-14 text-center max-w-3xl mx-auto">
               <div className="mb-4 flex justify-center">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-rose-600 dark:text-rose-400">
-                  <Sparkles className="h-3 w-3" />
+
                   {t("home.compareLabel")}
                 </span>
               </div>
@@ -1244,7 +1092,7 @@ export default function HomePage() {
                   </div>
                   <div className="col-span-3 px-4 py-5 text-center border-l border-emerald-500/20 bg-emerald-500/5 relative">
                     <div className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide flex items-center justify-center gap-1.5">
-                      <Sparkles className="h-3 w-3" />
+    
                       {t("home.compareCol3")}
                     </div>
                   </div>
@@ -1282,7 +1130,7 @@ export default function HomePage() {
             <FadeIn className="text-center mb-14">
               <div className="mb-4 flex justify-center">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
-                  <Sparkles className="h-3 w-3" />
+
                   {t("home.pricingLabel")}
                 </span>
               </div>
@@ -1322,15 +1170,20 @@ export default function HomePage() {
                       {t(`pricing.${p.tier}.desc`)}
                     </p>
                     <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-2.5">
-                      {t("pricing.deliverables")}
+                      {t(`pricing.${p.tier}.deliverablesHeader`)}
                     </div>
                     <div className="space-y-1.5">
-                      {Array.from({ length: 8 }, (_, i) => (
+                      {Array.from({ length: p.tier === "enterprise" ? 5 : 4 }, (_, i) => (
                         <div key={i} className="flex items-start gap-2 text-[12px] text-foreground/90">
                           <FileCheck className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${p.tier === "enterprise" ? "text-emerald-500" : "text-violet-500"}`} />
-                          <span className="leading-snug">{t(`pricing.deliverable${i + 1}`)}</span>
+                          <span className="leading-snug">{t(`pricing.${p.tier}.deliverable${i + 1}`)}</span>
                         </div>
                       ))}
+                      <div className="flex items-center gap-1.5 pt-1">
+                        <span className="text-[11px] text-muted-foreground">
+                          + {p.tier === "enterprise" ? 7 : 4} {p.tier === "enterprise" ? "entregáveis exclusivos →" : "mais entregáveis →"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1392,9 +1245,6 @@ export default function HomePage() {
             PARTNER PROGRAM
         ════════════════════════════════════════════════════════════════ */}
         <section id="parceiros" className="relative overflow-hidden py-24 sm:py-32 bg-white dark:bg-slate-950 border-y border-border/40">
-          <div className="absolute inset-0 dot-grid-dark opacity-[0.04] dark:opacity-[0.08]" />
-          <div className="pointer-events-none absolute top-0 right-0 w-[600px] h-[400px]"
-            style={{ background: "radial-gradient(ellipse at top right, rgba(16,185,129,0.06) 0%, transparent 70%)" }} />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             {/* Header */}
@@ -1511,21 +1361,15 @@ export default function HomePage() {
         ════════════════════════════════════════════════════════════════ */}
         <FadeIn>
           <section className="relative overflow-hidden py-28 sm:py-36 cta-gradient">
-            <div className="absolute inset-0 dot-grid-dark opacity-40" />
-            <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px]"
-              style={{ background: "radial-gradient(ellipse, rgba(16,185,129,0.12) 0%, transparent 65%)" }} />
-
             <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
               <div className="mb-6">
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   {t("home.ctaLabel")}
                 </span>
               </div>
 
               <h2 className="text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl text-white mb-6 leading-[1.05]">
-                {t("cta.title").split(" ").slice(0, -2).join(" ")}{" "}
-                <span className="text-gradient-emerald">{t("cta.title").split(" ").slice(-2).join(" ")}</span>
+                {t("cta.title")}
               </h2>
 
               <p className="text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">
@@ -1567,8 +1411,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Bottom fade out */}
-            <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
           </section>
         </FadeIn>
 

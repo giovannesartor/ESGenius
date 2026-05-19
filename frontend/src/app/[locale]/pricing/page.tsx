@@ -46,12 +46,10 @@ export default function PricingPage() {
 
               <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
-                  <Sparkles className="h-3 w-3" />
                   {t("pricing.oneTime")}
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-violet-600 dark:text-violet-400">
-                  <FileText className="h-3 w-3" />
-                  {t("pricing.deliverables")}
+                  8–12 entregáveis por relatório
                 </span>
               </div>
             </div>
