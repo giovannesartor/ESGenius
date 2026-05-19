@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,7 @@ import { apiClient } from "@/services/api";
 
 export default function PartnerLoginPage() {
   const t = useTranslations("partner");
-  const router = useRouter();
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -33,7 +34,8 @@ export default function PartnerLoginPage() {
       const profile = await apiClient<Record<string, unknown>>("/partners/me", { token: res.access_token });
       localStorage.setItem("partner_token", res.access_token);
       localStorage.setItem("partner_user", JSON.stringify(profile));
-      router.push("/partner");
+      // Hard navigation forces layout to remount and re-read localStorage
+      window.location.href = `/${locale}/partner`;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : t("login.invalidCredentials");
       setError(msg);
