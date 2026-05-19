@@ -56,13 +56,6 @@ const STAGE_COLORS: Record<string, string> = {
   entregue: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
 };
 
-const MOCK_CLIENTS: Client[] = [
-  { id: "1", client_name: "Acme Corp", client_email: "esg@acme.com", client_company: "Acme Corp", pipeline_stage: "lead", created_at: new Date().toISOString() },
-  { id: "2", client_name: "Natura ESG", client_email: "sustainability@natura.com", client_company: "Natura", pipeline_stage: "proposta", created_at: new Date().toISOString() },
-  { id: "3", client_name: "BRF Alimentos", client_email: "esg@brf.com", client_company: "BRF", pipeline_stage: "negociacao", created_at: new Date().toISOString() },
-  { id: "4", client_name: "Itaú BBA", client_email: "esg@itau.com", client_company: "Itaú", pipeline_stage: "fechado", created_at: new Date().toISOString() },
-];
-
 const emptyForm = { client_name: "", client_email: "", client_company: "", client_phone: "", notes: "", pipeline_stage: "lead" };
 
 export default function PartnerClientsPage() {
@@ -82,7 +75,7 @@ export default function PartnerClientsPage() {
     if (!token) return;
     partnerApi.getClients(token, stageFilter || undefined, search || undefined)
       .then((res) => { const r = res as { items?: Client[] }; setClients(r.items ?? (res as unknown as Client[])); })
-      .catch(() => setClients(MOCK_CLIENTS))
+      .catch(() => setClients([]))
       .finally(() => setLoading(false));
   };
 

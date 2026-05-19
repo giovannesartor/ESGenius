@@ -69,7 +69,7 @@ export default function AdminCouponsPage() {
     if (!token) return;
     adminExtApi.getCoupons(token)
       .then((res) => { const r = res as { items?: Coupon[] }; setCoupons(r.items ?? (res as unknown as Coupon[])); })
-      .catch(() => setCoupons(MOCK_COUPONS))
+      .catch(() => setCoupons([]))
       .finally(() => setLoading(false));
   };
 

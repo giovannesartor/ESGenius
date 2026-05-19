@@ -22,6 +22,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, Loader2, Activity } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { adminExtApi } from "@/services/api";
 
 interface AuditEntry {
   id: string;
@@ -34,14 +36,6 @@ interface AuditEntry {
   created_at: string;
 }
 
-const MOCK_ENTRIES: AuditEntry[] = [
-  { id: "1", user_email: "admin@esg360.digital", action: "user.suspend", resource_type: "User", resource_id: "abc123", ip_address: "192.168.1.1", created_at: new Date().toISOString() },
-  { id: "2", user_email: "admin@esg360.digital", action: "company.create", resource_type: "Company", resource_id: "def456", ip_address: "192.168.1.1", created_at: new Date(Date.now() - 3600000).toISOString() },
-  { id: "3", user_email: "admin@esg360.digital", action: "coupon.create", resource_type: "Coupon", resource_id: "ghi789", ip_address: "192.168.1.1", created_at: new Date(Date.now() - 7200000).toISOString() },
-  { id: "4", user_email: "user@natura.com", action: "report.generate", resource_type: "Report", resource_id: "jkl012", ip_address: "10.0.0.45", created_at: new Date(Date.now() - 14400000).toISOString() },
-  { id: "5", user_email: "admin@esg360.digital", action: "partner.approve", resource_type: "Partner", resource_id: "mno345", ip_address: "192.168.1.1", created_at: new Date(Date.now() - 86400000).toISOString() },
-];
-
 const ACTION_COLORS: Record<string, string> = {
   "user.suspend": "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
   "company.create": "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
@@ -52,10 +46,19 @@ const ACTION_COLORS: Record<string, string> = {
 
 export default function AdminAuditLogPage() {
   const t = useTranslations("admin");
-  const [entries, setEntries] = useState<AuditEntry[]>(MOCK_ENTRIES);
-  const [loading, setLoading] = useState(false);
+  const { token } = useAuth();
+  const [entries, setEntries] = useState<AuditEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("");
+
+  useEffect(() => {
+    if (!token) return;
+    adminExtApi.getAuditLogs(token, { limit: 200 })
+      .then((res) => { const r = res as { items?: AuditEntry[] }; setEntries(r.items ?? (res as unknown as AuditEntry[])); })
+      .catch(() => setEntries([]))
+      .finally(() => setLoading(false));
+  }, [token]);
 
   const filtered = entries.filter(
     (e) =>

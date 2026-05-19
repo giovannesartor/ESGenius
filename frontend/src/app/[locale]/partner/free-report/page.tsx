@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2, FileBarChart2, CheckCircle, Download, Share2 } from "lucide-react";
 import { usePartnerAuth } from "../layout";
+import { partnerApi } from "@/services/api";
 
 interface PreviewResult {
   company: string;
@@ -44,38 +45,35 @@ const SECTORS = [
 
 const COMPANY_SIZES = ["Micro (< R$360k)", "Pequena (R$360k - R$4.8M)", "Média (R$4.8M - R$300M)", "Grande (> R$300M)"];
 
-const MOCK_PREVIEW: PreviewResult = {
-  company: "Empresa Modelo",
-  sector: "Tecnologia",
-  esg_score: 62,
-  rating: "BB",
-  wacc_delta: -0.8,
-  risk_level: "Moderado",
-  top_gaps: [
-    "Ausência de política de gestão de emissões documentada",
-    "Falta de diversidade em cargos de liderança (< 30% mulheres)",
-    "Sem canal de denúncias estruturado",
-  ],
-  recommendation:
-    "Com melhorias nos 3 pilares identificados, o score pode atingir 75+ em 12 meses, reduzindo o WACC em até 1.5 p.p. e melhorando o acesso a linhas de crédito verde.",
-};
-
 export default function PartnerFreeReportPage() {
   const t = useTranslations("partner");
-  const { partner } = usePartnerAuth();
+  const { token, partner } = usePartnerAuth();
   const [form, setForm] = useState({ company: "", sector: "", size: "", employees: "" });
   const [result, setResult] = useState<PreviewResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!token) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1500)); // simulate API call
-    setResult({ ...MOCK_PREVIEW, company: form.company || MOCK_PREVIEW.company, sector: form.sector || MOCK_PREVIEW.sector });
-    setLoading(false);
+    setError("");
+    try {
+      const res = await partnerApi.generateFreeReport(token, {
+        company: form.company,
+        sector: form.sector,
+        size: form.size || undefined,
+        employees: form.employees ? parseInt(form.employees) : undefined,
+      });
+      setResult(res as PreviewResult);
+    } catch {
+      setError(t("freeReport.errorGenerating"));
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const resetForm = () => { setResult(null); setForm({ company: "", sector: "", size: "", employees: "" }); };
+  const resetForm = () => { setResult(null); setForm({ company: "", sector: "", size: "", employees: "" }); setError(""); };
 
   const shareLink = `${process.env.NEXT_PUBLIC_SITE_URL || "https://esg360.digital"}/ref/${partner?.ref_code || ""}`;
 
@@ -163,6 +161,7 @@ export default function PartnerFreeReportPage() {
                   <><FileBarChart2 className="h-4 w-4 mr-2" /> {t("freeReport.generate")}</>
                 )}
               </Button>
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
             </form>
           </CardContent>
         </Card>

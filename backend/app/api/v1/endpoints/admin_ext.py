@@ -259,3 +259,50 @@ async def payments_overview(
         "active_subscriptions": active_subs,
         "note": "Full payment history is available in Stripe Dashboard.",
     }
+
+
+# ─── Admin Audit Logs ─────────────────────────────────────────────────────────
+
+@router.get("/audit-logs")
+async def list_admin_audit_logs(
+    action: str | None = Query(None),
+    entity_type: str | None = Query(None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
+    admin: User = Depends(get_current_superadmin),
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, Any]:
+    """List all system-wide audit log entries (admin view, no company filter)."""
+    from app.domain.models.audit_log import AuditLog
+
+    stmt = select(AuditLog).order_by(AuditLog.created_at.desc())
+    if action:
+        stmt = stmt.where(AuditLog.action == action)
+    if entity_type:
+        stmt = stmt.where(AuditLog.entity_type == entity_type)
+
+    total_res = await db.execute(select(func.count()).select_from(AuditLog))
+    total = total_res.scalar() or 0
+
+    rows = await db.execute(stmt.offset(skip).limit(limit))
+    entries = rows.scalars().all()
+
+    items = []
+    for e in entries:
+        user_email = None
+        if e.user_id:
+            user_res = await db.get(User, e.user_id)
+            if user_res:
+                user_email = user_res.email
+        items.append({
+            "id": str(e.id),
+            "user_email": user_email,
+            "action": e.action,
+            "resource_type": e.entity_type,
+            "resource_id": str(e.entity_id) if e.entity_id else None,
+            "changes": e.after_state,
+            "ip_address": e.ip_address,
+            "created_at": e.created_at.isoformat(),
+        })
+
+    return {"items": items, "total": total}

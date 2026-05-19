@@ -42,12 +42,6 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400",
 };
 
-const MOCK_TASKS: Task[] = [
-  { id: "1", title: "Enviar proposta para Acme Corp", status: "pending", due_date: new Date(Date.now() + 86400000).toISOString(), created_at: new Date().toISOString() },
-  { id: "2", title: "Reunião de apresentação com BRF", status: "pending", due_date: new Date(Date.now() + 3 * 86400000).toISOString(), created_at: new Date().toISOString() },
-  { id: "3", title: "Follow-up pós-relatório Natura", status: "done", created_at: new Date().toISOString() },
-];
-
 const emptyForm = { title: "", description: "", due_date: "", status: "pending", client_id: "" };
 
 export default function PartnerTasksPage() {
@@ -65,7 +59,7 @@ export default function PartnerTasksPage() {
     if (!token) return;
     partnerApi.getTasks(token)
       .then((res) => { const r = res as { items?: Task[] }; setTasks(Array.isArray(res) ? (res as unknown as Task[]) : r.items ?? []); })
-      .catch(() => setTasks(MOCK_TASKS))
+      .catch(() => setTasks([]))
       .finally(() => setLoading(false));
   };
 

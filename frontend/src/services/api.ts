@@ -954,6 +954,8 @@ export const partnerApi = {
     apiClient("/partners/followup/rules", { token }),
   createFollowUpRule: (token: string, data: unknown) =>
     apiClient("/partners/followup/rules", { method: "POST", body: data, token }),
+  generateFreeReport: (token: string, data: { company: string; sector: string; size?: string; employees?: number }) =>
+    apiClient("/partners/free-report", { method: "POST", body: data, token }),
 };
 
 // --- Admin Extended API ---
@@ -974,6 +976,12 @@ export const adminExtApi = {
     apiClient(`/admin/ext/error-logs/${id}`, { method: "DELETE", token }),
   getPaymentsOverview: (token: string) =>
     apiClient("/admin/ext/payments/overview", { token }),
+  getAuditLogs: (token: string, params?: { action?: string; entity_type?: string; skip?: number; limit?: number }) => {
+    const q = params ? "?" + new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
+    ).toString() : "";
+    return apiClient(`/admin/ext/audit-logs${q}`, { token });
+  },
 };
 
 // --- Partner Admin API ---

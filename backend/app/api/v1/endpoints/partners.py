@@ -516,6 +516,89 @@ async def create_followup_rule(data: FollowUpRuleCreate, partner: Partner = Depe
     return {"id": str(rule.id), "trigger_type": rule.trigger_type, "days_threshold": rule.days_threshold, "message_template": rule.message_template, "is_active": rule.is_active}
 
 
+# ─── Free ESG Preview Report ──────────────────────────────────────────────────
+
+class FreeReportRequest(BaseModel):
+    company: str
+    sector: str
+    size: str | None = None
+    employees: int | None = None
+
+
+@router.post("/free-report")
+async def generate_free_report(
+    body: FreeReportRequest,
+    partner: Partner = Depends(get_current_partner),
+) -> dict[str, Any]:
+    """Generate a deterministic ESG preview for a prospect (no DB write)."""
+    SECTOR_BASE: dict[str, int] = {
+        "Agropecuária": 45, "Alimentos e Bebidas": 52, "Construção Civil": 48,
+        "Energia": 50, "Financeiro": 65, "Mineração": 38, "Petróleo e Gás": 35,
+        "Saúde": 60, "Tecnologia": 68, "Varejo": 55, "Outros": 50,
+    }
+    SECTOR_GAPS: dict[str, list[str]] = {
+        "Agropecuária": ["Desmatamento e uso da terra sem rastreamento", "Emissões de metano não mensuradas", "Ausência de política de gestão hídrica"],
+        "Alimentos e Bebidas": ["Cadeia de fornecimento sem auditoria ESG", "Desperdício alimentar não quantificado", "Embalagens não recicláveis"],
+        "Construção Civil": ["Emissões Escopo 3 de materiais não mapeadas", "Ausência de plano de gestão de resíduos", "Falta de política de saúde e segurança documentada"],
+        "Energia": ["Intensidade de carbono sem meta de redução", "Ausência de plano de transição energética", "Resíduos de geração não reportados"],
+        "Financeiro": ["Emissões financiadas (PCAF) não calculadas", "Sem política de exclusão de setores críticos", "Governança de risco climático incipiente"],
+        "Mineração": ["Gestão de barragens sem relatório público", "Impacto de biodiversidade não mensurado", "Emissões Escopo 1 de explosivos sem baseline"],
+        "Petróleo e Gás": ["Emissões de metano fugitivas sem monitoramento", "Sem plano de descomissionamento documentado", "Ausência de meta de redução de flaring"],
+        "Saúde": ["Resíduos hospitalares sem rastreamento completo", "Uso de produtos farmacêuticos sem descarte correto", "Falta de política de acessibilidade documentada"],
+        "Tecnologia": ["Consumo energético de data centers sem compensação", "E-waste sem política de descarte", "Diversidade em liderança abaixo de 30%"],
+        "Varejo": ["Rastreabilidade da cadeia de fornecimento incompleta", "Emissões Escopo 3 de logística não reportadas", "Ausência de triagem de fornecedores por ESG"],
+        "Outros": ["Ausência de política de gestão de emissões documentada", "Falta de diversidade em cargos de liderança", "Sem canal de denúncias estruturado"],
+    }
+
+    base = SECTOR_BASE.get(body.sector, 50)
+
+    # Adjust by company size
+    size_bonus = {"Micro (< R$360k)": -5, "Pequena (R$360k - R$4.8M)": 0, "Média (R$4.8M - R$300M)": 5, "Grande (> R$300M)": 10}
+    base += size_bonus.get(body.size or "", 0)
+
+    # Adjust by employee count
+    if body.employees:
+        if body.employees > 500:
+            base += 5
+        elif body.employees > 100:
+            base += 2
+
+    esg_score = max(20, min(85, base))
+
+    # Derive rating and WACC delta from score
+    if esg_score >= 75:
+        rating, wacc_delta, risk_level = "A", -1.5, "Baixo"
+    elif esg_score >= 65:
+        rating, wacc_delta, risk_level = "BBB", -0.8, "Moderado-Baixo"
+    elif esg_score >= 55:
+        rating, wacc_delta, risk_level = "BB", -0.3, "Moderado"
+    elif esg_score >= 45:
+        rating, wacc_delta, risk_level = "B", 0.2, "Moderado-Alto"
+    else:
+        rating, wacc_delta, risk_level = "CCC", 0.8, "Alto"
+
+    gaps = SECTOR_GAPS.get(body.sector, SECTOR_GAPS["Outros"])
+    improvement = 85 - esg_score
+    potential_months = 12 if improvement < 20 else 18
+
+    recommendation = (
+        f"Com melhorias nos {len(gaps)} pilares identificados, o score pode atingir "
+        f"{min(85, esg_score + improvement // 2)}+ em {potential_months} meses, "
+        f"reduzindo o WACC em até {abs(wacc_delta) + 0.5:.1f} p.p. e melhorando o acesso a linhas de crédito verde."
+    )
+
+    return {
+        "company": body.company,
+        "sector": body.sector,
+        "esg_score": esg_score,
+        "rating": rating,
+        "wacc_delta": wacc_delta,
+        "risk_level": risk_level,
+        "top_gaps": gaps,
+        "recommendation": recommendation,
+    }
+
+
 # ─── Admin: Partner Management ────────────────────────────────────────────────
 
 @router.get("/admin/list")

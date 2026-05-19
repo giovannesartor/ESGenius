@@ -52,12 +52,6 @@ const STATUS_COLORS: Record<string, string> = {
   paid: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
 };
 
-const MOCK_COMMISSIONS: Commission[] = [
-  { id: "1", product_type: "esg_report", gross_amount: 5000, commission_rate: 0.20, commission_amount: 1000, status: "paid", paid_at: new Date().toISOString(), created_at: new Date().toISOString() },
-  { id: "2", product_type: "esg_report", gross_amount: 5000, commission_rate: 0.20, commission_amount: 1000, status: "approved", created_at: new Date().toISOString() },
-  { id: "3", product_type: "esg_analysis", gross_amount: 3000, commission_rate: 0.20, commission_amount: 600, status: "pending", created_at: new Date().toISOString() },
-];
-
 const PIX_KEY_TYPES = ["cpf", "cnpj", "email", "phone", "random"];
 
 export default function PartnerCommissionsPage() {
@@ -78,7 +72,7 @@ export default function PartnerCommissionsPage() {
     if (!token) return;
     partnerApi.getCommissions(token, statusFilter || undefined)
       .then((res) => { const r = res as { items?: Commission[] }; setCommissions(r.items ?? (res as unknown as Commission[])); })
-      .catch(() => setCommissions(MOCK_COMMISSIONS))
+      .catch(() => setCommissions([]))
       .finally(() => setLoading(false));
   }, [token, statusFilter]);
 

@@ -39,16 +39,6 @@ const PIPELINE_STAGES = [
   { key: "entregue", color: "bg-emerald-500" },
 ];
 
-const MOCK_DATA: DashboardData = {
-  total_clients: 12,
-  total_deals: 5,
-  total_commissions: 4350,
-  pending_commissions: 1200,
-  tasks_pending: 3,
-  pipeline: { lead: 4, proposta: 3, negociacao: 2, fechado: 1, analise_feita: 1, entregue: 1 },
-  ref_code: "ESGP-XXXX",
-};
-
 export default function PartnerDashboardPage() {
   const t = useTranslations("partner");
   const { token, partner } = usePartnerAuth();
@@ -60,7 +50,7 @@ export default function PartnerDashboardPage() {
     if (!token) return;
     partnerApi.getDashboard(token)
       .then((res) => setData(res as DashboardData))
-      .catch(() => setData({ ...MOCK_DATA, ref_code: partner?.ref_code || MOCK_DATA.ref_code }))
+      .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [token, partner]);
 
@@ -80,7 +70,11 @@ export default function PartnerDashboardPage() {
     );
   }
 
-  const d = data || MOCK_DATA;
+  const d: DashboardData = data ?? {
+    total_clients: 0, total_deals: 0, total_commissions: 0,
+    pending_commissions: 0, tasks_pending: 0, pipeline: {},
+    ref_code: partner?.ref_code || "",
+  };
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">

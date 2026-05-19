@@ -43,13 +43,6 @@ interface ErrorLog {
   created_at: string;
 }
 
-const MOCK_ERRORS: ErrorLog[] = [
-  { id: "1", severity: "error", message: "Database connection timeout after 30s", endpoint: "/api/v1/reports", method: "POST", resolved: false, created_at: new Date().toISOString() },
-  { id: "2", severity: "critical", message: "Stripe webhook signature verification failed", endpoint: "/api/v1/stripe/webhook", method: "POST", resolved: false, created_at: new Date(Date.now() - 3600000).toISOString() },
-  { id: "3", severity: "warning", message: "Redis cache miss rate above 50% threshold", endpoint: "/api/v1/dashboard", method: "GET", resolved: true, resolved_at: new Date().toISOString(), created_at: new Date(Date.now() - 7200000).toISOString() },
-  { id: "4", severity: "error", message: "AI model rate limit exceeded (429)", endpoint: "/api/v1/esg-ai/analyze", method: "POST", resolved: false, created_at: new Date(Date.now() - 14400000).toISOString() },
-];
-
 const SEVERITY_COLORS: Record<string, string> = {
   warning: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
   error: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
@@ -69,7 +62,7 @@ export default function AdminErrorLogsPage() {
     if (!token) return;
     adminExtApi.getErrorLogs(token)
       .then((res) => { const r = res as { items?: ErrorLog[] }; setLogs(r.items ?? (res as unknown as ErrorLog[])); })
-      .catch(() => setLogs(MOCK_ERRORS))
+      .catch(() => setLogs([]))
       .finally(() => setLoading(false));
   }, [token]);
 

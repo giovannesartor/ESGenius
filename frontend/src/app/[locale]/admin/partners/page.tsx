@@ -37,13 +37,6 @@ interface Partner {
   created_at: string;
 }
 
-const MOCK_PARTNERS: Partner[] = [
-  { id: "1", email: "consultora@esgbrasil.com", full_name: "Ana Silva", company_name: "ESG Brasil Consultoria", ref_code: "ESG-ANA1", commission_rate: 0.20, status: "active", is_active: true, created_at: new Date().toISOString() },
-  { id: "2", email: "joao@green.io", full_name: "João Sustentável", company_name: "Green.io", ref_code: "ESG-JOAO", commission_rate: 0.20, status: "pending", is_active: false, created_at: new Date(Date.now() - 86400000).toISOString() },
-  { id: "3", email: "maria@auditoriaesg.com", full_name: "Maria Auditora", company_name: "Auditoria ESG Ltda", ref_code: "ESG-MARI", commission_rate: 0.25, status: "active", is_active: true, created_at: new Date(Date.now() - 7 * 86400000).toISOString() },
-  { id: "4", email: "pedro@consultant.io", full_name: "Pedro ESG", company_name: "Consultant.io", ref_code: "ESG-PEDR", commission_rate: 0.20, status: "suspended", is_active: false, created_at: new Date(Date.now() - 14 * 86400000).toISOString() },
-];
-
 const STATUS_COLORS: Record<string, string> = {
   active: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
   pending: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
@@ -62,7 +55,7 @@ export default function AdminPartnersPage() {
     if (!token) return;
     partnerAdminApi.listPartners(token, statusFilter || undefined)
       .then((res) => { const r = res as { items?: Partner[] }; setPartners(r.items ?? (res as unknown as Partner[])); })
-      .catch(() => setPartners(MOCK_PARTNERS))
+      .catch(() => setPartners([]))
       .finally(() => setLoading(false));
   };
 

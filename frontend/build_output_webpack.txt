@@ -1,0 +1,106 @@
+⚠ Attempted to load /Users/giovannesartor/Downloads/ESGenius-site/frontend/node_modules/next/next-swc-fallback/@next/swc-darwin-arm64/next-swc.darwin-arm64.node, but it was not installed
+⚠ Attempted to load @next/swc-darwin-arm64, but it was not installed
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/giovannesartor/package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /Users/giovannesartor/Downloads/ESGenius-site/frontend/package-lock.json
+
+  Skipping creating a lockfile at /Users/giovannesartor/Downloads/ESGenius-site/frontend/.next/lock because we're using WASM bindings
+▲ Next.js 16.2.2 (webpack)
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 12.0s
+  Running TypeScript ...
+⚠ Attempted to load /Users/giovannesartor/Downloads/ESGenius-site/frontend/node_modules/next/next-swc-fallback/@next/swc-darwin-arm64/next-swc.darwin-arm64.node, but it was not installed
+⚠ Attempted to load @next/swc-darwin-arm64, but it was not installed
+  Finished TypeScript in 3.9s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/5) ...
+⚠ Attempted to load /Users/giovannesartor/Downloads/ESGenius-site/frontend/node_modules/next/next-swc-fallback/@next/swc-darwin-arm64/next-swc.darwin-arm64.node, but it was not installed
+⚠ Attempted to load @next/swc-darwin-arm64, but it was not installed
+  Generating static pages using 9 workers (1/5) 
+  Generating static pages using 9 workers (2/5) 
+  Generating static pages using 9 workers (3/5) 
+✓ Generating static pages using 9 workers (5/5) in 260ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /_not-found
+├ ƒ /[locale]
+├ ƒ /[locale]/admin
+├ ƒ /[locale]/admin/ai-logs
+├ ƒ /[locale]/admin/audit-log
+├ ƒ /[locale]/admin/companies
+├ ƒ /[locale]/admin/coupons
+├ ƒ /[locale]/admin/error-logs
+├ ƒ /[locale]/admin/frameworks
+├ ƒ /[locale]/admin/intelligence
+├ ƒ /[locale]/admin/partners
+├ ƒ /[locale]/admin/payments
+├ ƒ /[locale]/admin/settings
+├ ƒ /[locale]/admin/users
+├ ƒ /[locale]/auth/callback
+├ ƒ /[locale]/dashboard
+├ ƒ /[locale]/dashboard/audit-log
+├ ƒ /[locale]/dashboard/chat
+├ ƒ /[locale]/dashboard/climate-risk
+├ ƒ /[locale]/dashboard/companies
+├ ƒ /[locale]/dashboard/companies/[id]
+├ ƒ /[locale]/dashboard/companies/new
+├ ƒ /[locale]/dashboard/credit-intelligence
+├ ƒ /[locale]/dashboard/data-points
+├ ƒ /[locale]/dashboard/documents
+├ ƒ /[locale]/dashboard/documents/[id]
+├ ƒ /[locale]/dashboard/emissions
+├ ƒ /[locale]/dashboard/esg-score
+├ ƒ /[locale]/dashboard/financial-score
+├ ƒ /[locale]/dashboard/frameworks
+├ ƒ /[locale]/dashboard/funding-readiness
+├ ƒ /[locale]/dashboard/insights
+├ ƒ /[locale]/dashboard/macc
+├ ƒ /[locale]/dashboard/portfolio
+├ ƒ /[locale]/dashboard/privacy
+├ ƒ /[locale]/dashboard/regulatory
+├ ƒ /[locale]/dashboard/reports
+├ ƒ /[locale]/dashboard/settings
+├ ƒ /[locale]/dashboard/settings/integrations
+├ ƒ /[locale]/dashboard/simulate
+├ ƒ /[locale]/dashboard/subscription
+├ ƒ /[locale]/dashboard/templates
+├ ƒ /[locale]/dashboard/upload
+├ ƒ /[locale]/dashboard/valuation
+├ ƒ /[locale]/developers
+├ ƒ /[locale]/forgot-password
+├ ƒ /[locale]/login
+├ ƒ /[locale]/manifesto
+├ ƒ /[locale]/partner
+├ ƒ /[locale]/partner/clients
+├ ƒ /[locale]/partner/commissions
+├ ƒ /[locale]/partner/follow-up
+├ ƒ /[locale]/partner/free-report
+├ ƒ /[locale]/partner/login
+├ ƒ /[locale]/partner/marketing
+├ ƒ /[locale]/partner/register
+├ ƒ /[locale]/partner/tasks
+├ ƒ /[locale]/pricing
+├ ƒ /[locale]/privacy
+├ ƒ /[locale]/register
+├ ƒ /[locale]/reset-password
+├ ƒ /[locale]/solutions/companies
+├ ƒ /[locale]/solutions/finance
+├ ƒ /[locale]/terms
+├ ƒ /[locale]/trust
+├ ƒ /[locale]/verify-email
+├ ○ /apple-icon.png
+└ ○ /icon.png
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

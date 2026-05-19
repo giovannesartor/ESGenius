@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Bell, Plus, Pencil, Loader2, AlertTriangle } from "lucide-react";
+import { Bell, Plus, Pencil, Loader2 } from "lucide-react";
 import { usePartnerAuth } from "../layout";
 import { partnerApi } from "@/services/api";
 
@@ -36,17 +36,6 @@ const TRIGGER_ICONS: Record<string, string> = {
   client_inactive: "😴",
 };
 
-const MOCK_RULES: FollowUpRule[] = [
-  { id: "1", trigger_type: "client_no_data", days_threshold: 7, message_template: "Olá! Vi que você ainda não enviou seus dados ESG. Posso ajudar?", is_active: true },
-  { id: "2", trigger_type: "proposal_no_response", days_threshold: 5, message_template: "Oi! Queria saber se teve chance de analisar a proposta que enviei.", is_active: true },
-  { id: "3", trigger_type: "post_report", days_threshold: 14, message_template: "Como está sendo a experiência com o relatório ESG? Tem alguma dúvida?", is_active: false },
-];
-
-const MOCK_ALERTS = [
-  { client: "Acme Corp", trigger: "client_no_data", days: 8 },
-  { client: "BRF Alimentos", trigger: "proposal_no_response", days: 6 },
-];
-
 const emptyForm = { trigger_type: "client_no_data", days_threshold: 7, message_template: "", is_active: true };
 
 export default function PartnerFollowUpPage() {
@@ -63,7 +52,7 @@ export default function PartnerFollowUpPage() {
     if (!token) return;
     partnerApi.getFollowUpRules(token)
       .then((res) => setRules(res as FollowUpRule[]))
-      .catch(() => setRules(MOCK_RULES))
+      .catch(() => setRules([]))
       .finally(() => setLoading(false));
   }, [token]);
 
@@ -98,36 +87,6 @@ export default function PartnerFollowUpPage() {
           {t("followUp.addRule")}
         </Button>
       </div>
-
-      {/* Alerts inbox */}
-      {MOCK_ALERTS.length > 0 && (
-        <Card className="border-orange-200 bg-orange-50 dark:bg-orange-900/10 dark:border-orange-800">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-orange-500" />
-              {t("followUp.alertsTitle")} ({MOCK_ALERTS.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {MOCK_ALERTS.map((a, i) => (
-                <div key={i} className="flex items-center justify-between p-2 bg-white dark:bg-background rounded-md border border-orange-100 dark:border-orange-900/30">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">{TRIGGER_ICONS[a.trigger] || "🔔"}</span>
-                    <div>
-                      <p className="text-sm font-medium">{a.client}</p>
-                      <p className="text-xs text-muted-foreground">{t(`followUp.trigger.${a.trigger}`)}</p>
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="text-orange-600 border-orange-300 text-xs">
-                    {a.days}d
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Rules list */}
       {loading ? (
