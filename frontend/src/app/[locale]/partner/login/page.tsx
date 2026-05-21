@@ -14,9 +14,9 @@ import { Loader2, Eye, EyeOff, CheckCircle2, Handshake, Zap, ArrowLeft } from "l
 import { apiClient } from "@/services/api";
 
 const BENEFITS = [
-  "50% de comissão fixa em cada venda",
+  "50% de comissão — calculada sobre o valor líquido pós-taxas Stripe",
   "Sem limite de clientes nem taxa de entrada",
-  "Pagamento via PIX aprovado em até 48h",
+  "Pagamento após liquidação Stripe (cartão nacional: 30 dias)",
   "Dashboard completo: pipeline, comissões e follow-up",
   "Material de vendas e scripts prontos para usar",
 ];
@@ -78,7 +78,7 @@ export default function PartnerLoginPage() {
               <span className="text-emerald-400">Ganhe 50% de comissão.</span>
             </h1>
             <p className="text-slate-400 leading-relaxed max-w-xs">
-              Parceiros ESG360 recebem exatamente metade do valor em cada relatório vendido — aprovado e pago via PIX.
+              Parceiros ESG360 recebem 50% do valor líquido em cada relatório vendido — comissão calculada após as taxas de processamento Stripe.
             </p>
           </div>
 

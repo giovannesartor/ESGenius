@@ -239,9 +239,30 @@ function CommissionCalculator() {
             <span className="text-sm text-slate-400 font-normal ml-1">/mês</span>
           </span>
         </div>
-        <p className="text-xs text-slate-500">
-          * Valores em USD. Comissão de 50% sobre preço de tabela. Paga via PIX em até 48h após confirmação do pagamento do cliente.
-        </p>
+        <div className="space-y-3 text-xs text-slate-500 border-t border-slate-700/50 pt-3">
+          <p>
+            * Comissão de <strong className="text-slate-400">50% sobre o valor líquido</strong> — calculada após dedução das taxas de processamento Stripe. Valores em USD.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <p className="font-medium text-slate-400 uppercase tracking-wide">Taxas Stripe (Brasil)</p>
+              <ul className="space-y-1 pl-2">
+                <li>Cartão nacional: 3,99% + R$ 0,39 / transação</li>
+                <li>Cartão internacional: +2% adicional</li>
+                <li>Boleto bancário: R$ 3,45 / boleto pago</li>
+              </ul>
+            </div>
+            <div className="space-y-1">
+              <p className="font-medium text-slate-400 uppercase tracking-wide">Liquidação Stripe → ESG360</p>
+              <ul className="space-y-1 pl-2">
+                <li>Cartão nacional: 30 dias</li>
+                <li>Cartão internacional: 5 dias</li>
+                <li>Boleto: 2 dias</li>
+              </ul>
+              <p className="mt-1">Pagamento ao parceiro após liquidação confirmada.</p>
+            </div>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
@@ -501,7 +522,7 @@ export default function CatalogoPage() {
         <div>
           <p className="font-semibold text-white">50% de comissão fixa em toda venda</p>
           <p className="text-sm text-slate-400 mt-0.5">
-            Sem limite de clientes · Sem taxa de entrada · Pagamento via PIX em até 48h
+            Sem limite de clientes · Sem taxa de entrada · Comissão calculada pós-taxas Stripe
           </p>
         </div>
         <div className="flex gap-4">
