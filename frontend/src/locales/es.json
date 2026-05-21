@@ -1244,7 +1244,7 @@
         "totalCommissions": "Total en Comisiones",
         "tasksPending": "Tareas Pendientes",
         "pendingCommissions": "Comisiones Pendientes",
-        "pendingNote": "esperando aprobación"
+        "pendingNote": "esperando aprobación · 50% tras tasas Stripe"
       },
       "pipeline": {
         "title": "Pipeline de Clientes",
@@ -1288,7 +1288,7 @@
     },
     "commissions": {
       "title": "Mis Comisiones",
-      "subtitle": "Sigue tus ganancias y configura tu pago",
+      "subtitle": "Sigue tus ganancias · Comisión del 50% sobre valor neto tras tasas Stripe",
       "managePix": "Mi PIX",
       "allStatuses": "Todos los Estados",
       "export": "Exportar CSV",

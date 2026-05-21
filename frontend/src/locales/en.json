@@ -1244,7 +1244,7 @@
         "totalCommissions": "Total Commissions",
         "tasksPending": "Pending Tasks",
         "pendingCommissions": "Pending Commissions",
-        "pendingNote": "awaiting approval"
+        "pendingNote": "awaiting approval · 50% after Stripe fees"
       },
       "pipeline": {
         "title": "Client Pipeline",
@@ -1288,7 +1288,7 @@
     },
     "commissions": {
       "title": "My Commissions",
-      "subtitle": "Track your earnings and configure your payout",
+      "subtitle": "Track your earnings · 50% commission on net amount after Stripe fees",
       "managePix": "My PIX",
       "allStatuses": "All Statuses",
       "export": "Export CSV",

@@ -29,7 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DollarSign, Wallet, Loader2, Download } from "lucide-react";
+import { DollarSign, Wallet, Loader2, Download, Info } from "lucide-react";
 import { usePartnerAuth } from "../layout";
 import { partnerApi } from "@/services/api";
 
@@ -147,6 +147,38 @@ export default function PartnerCommissionsPage() {
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* Stripe commission policy info */}
+      <div className="rounded-lg border border-border bg-muted/30 p-4">
+        <div className="flex items-start gap-3 text-xs text-muted-foreground">
+          <Info className="h-4 w-4 mt-0.5 shrink-0 text-slate-400" />
+          <div className="space-y-2.5 w-full">
+            <p>
+              <span className="font-medium text-foreground">Como sua comissão é calculada:</span>
+              {" "}50% sobre o valor líquido da venda, após dedução das taxas de processamento Stripe.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+              <div>
+                <p className="font-medium text-foreground mb-1">Taxas Stripe (Brasil):</p>
+                <ul className="space-y-0.5 pl-2">
+                  <li>Cartão nacional: 3,99% + R$ 0,39 / transação</li>
+                  <li>Cartão internacional: +2% adicional</li>
+                  <li>Boleto bancário: R$ 3,45 / boleto pago</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-medium text-foreground mb-1">Liquidação (Stripe → ESG360):</p>
+                <ul className="space-y-0.5 pl-2">
+                  <li>Cartão nacional: 30 dias</li>
+                  <li>Cartão internacional: 5 dias</li>
+                  <li>Boleto: 2 dias</li>
+                </ul>
+              </div>
+            </div>
+            <p>Pagamento ao parceiro efetuado após liquidação confirmada no prazo acima.</p>
+          </div>
+        </div>
       </div>
 
       {/* Filters + Export */}

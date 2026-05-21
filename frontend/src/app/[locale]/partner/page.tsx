@@ -177,6 +177,10 @@ export default function PartnerDashboardPage() {
                 R$ {d.pending_commissions.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
               </p>
               <p className="text-xs text-muted-foreground mt-1">{t("dashboard.kpi.pendingNote")}</p>
+              <p className="text-xs text-slate-400 mt-0.5">50% pós-taxas Stripe · prazo varia por método</p>
+              <Link href="/partner/commissions" className="text-xs text-primary underline-offset-2 hover:underline mt-1 inline-block">
+                Ver detalhes →
+              </Link>
             </CardContent>
           </Card>
 
