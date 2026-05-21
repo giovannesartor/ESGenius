@@ -893,7 +893,7 @@
     "helpButtonTitle": "Replay product tour",
     "user": {
       "welcome": {
-        "title": "Welcome to ESGenius 👋",
+        "title": "Welcome to ESG360 👋",
         "body": "Quick 60-second tour of your ESG workspace. You can replay it anytime from the green help button at the bottom-right."
       },
       "sidebar": {
@@ -940,7 +940,7 @@
     "admin": {
       "welcome": {
         "title": "Welcome, admin 🛡️",
-        "body": "This is the ESGenius admin console. Quick tour of every panel you control — frameworks, companies, users, AI logs and system settings."
+        "body": "This is the ESG360 admin console. Quick tour of every panel you control — frameworks, companies, users, AI logs and system settings."
       },
       "sidebar": {
         "title": "Admin navigation",
@@ -1110,7 +1110,7 @@
     },
     "partners": {
       "title": "Partner Management",
-      "subtitle": "Approve, monitor and manage ESGenius partners",
+      "subtitle": "Approve, monitor and manage ESG360 partners",
       "approve": "Approve",
       "suspend": "Suspend",
       "reactivate": "Reactivate",
@@ -1211,7 +1211,7 @@
     },
     "login": {
       "title": "Partner Portal",
-      "subtitle": "Access your ESGenius partner account",
+      "subtitle": "Access your ESG360 partner account",
       "emailLabel": "Email",
       "passwordLabel": "Password",
       "submit": "Sign In",

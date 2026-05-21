@@ -78,7 +78,7 @@ export default function PartnerLoginPage() {
               <span className="text-emerald-400">Ganhe 50% de comissão.</span>
             </h1>
             <p className="text-slate-400 leading-relaxed max-w-xs">
-              Parceiros ESGenius recebem exatamente metade do valor em cada relatório vendido — aprovado e pago via PIX.
+              Parceiros ESG360 recebem exatamente metade do valor em cada relatório vendido — aprovado e pago via PIX.
             </p>
           </div>
 

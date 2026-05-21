@@ -893,7 +893,7 @@
     "helpButtonTitle": "Repetir tour del producto",
     "user": {
       "welcome": {
-        "title": "Bienvenido a ESGenius 👋",
+        "title": "Bienvenido a ESG360 👋",
         "body": "Tour rápido de 60 segundos por tu workspace ESG. Puedes repetirlo en cualquier momento desde el botón verde de ayuda en la esquina inferior derecha."
       },
       "sidebar": {
@@ -940,7 +940,7 @@
     "admin": {
       "welcome": {
         "title": "Bienvenido, admin 🛡️",
-        "body": "Esta es la consola admin de ESGenius. Tour rápido por cada panel que controlas — frameworks, empresas, usuarios, logs de IA y configuración del sistema."
+        "body": "Esta es la consola admin de ESG360. Tour rápido por cada panel que controlas — frameworks, empresas, usuarios, logs de IA y configuración del sistema."
       },
       "sidebar": {
         "title": "Navegación admin",
@@ -1110,7 +1110,7 @@
     },
     "partners": {
       "title": "Gestión de Socios",
-      "subtitle": "Aprueba, monitorea y gestiona socios ESGenius",
+      "subtitle": "Aprueba, monitorea y gestiona socios ESG360",
       "approve": "Aprobar",
       "suspend": "Suspender",
       "reactivate": "Reactivar",
@@ -1211,7 +1211,7 @@
     },
     "login": {
       "title": "Portal de Socios",
-      "subtitle": "Accede a tu cuenta de socio ESGenius",
+      "subtitle": "Accede a tu cuenta de socio ESG360",
       "emailLabel": "Correo",
       "passwordLabel": "Contraseña",
       "submit": "Ingresar",
