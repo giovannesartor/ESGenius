@@ -17,7 +17,7 @@ import {
   Bell,
   Megaphone,
   CheckSquare,
-  FileBarChart2,
+  BookOpen,
   LogOut,
   ArrowLeft,
   Menu,
@@ -69,7 +69,7 @@ const partnerNavItems = [
   { key: "followUp", href: "/partner/follow-up", icon: Bell },
   { key: "marketing", href: "/partner/marketing", icon: Megaphone },
   { key: "tasks", href: "/partner/tasks", icon: CheckSquare },
-  { key: "freeReport", href: "/partner/free-report", icon: FileBarChart2 },
+  { key: "catalogo", href: "/partner/catalogo", icon: BookOpen },
 ];
 
 // ─── Layout ───────────────────────────────────────────────────────────────────
