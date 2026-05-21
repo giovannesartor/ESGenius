@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, CheckCircle, CheckCircle2, Handshake, TrendingUp, DollarSign, Users, BarChart3 } from "lucide-react";
+import { Loader2, CheckCircle, CheckCircle2, Handshake, TrendingUp, DollarSign, Users, BarChart3, ArrowLeft } from "lucide-react";
 import { apiClient } from "@/services/api";
 
 const BENEFITS = [
@@ -161,9 +161,16 @@ export default function PartnerRegisterPage() {
             </Badge>
           </div>
 
-          <div className="space-y-1">
+          <div>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Voltar ao início
+            </Link>
             <h2 className="text-2xl font-bold">{t("register.title")}</h2>
-            <p className="text-sm text-muted-foreground">{t("register.subtitle")}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t("register.subtitle")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">

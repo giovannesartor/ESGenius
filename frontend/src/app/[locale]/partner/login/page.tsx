@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, Eye, EyeOff, CheckCircle2, Handshake, Zap } from "lucide-react";
+import { Loader2, Eye, EyeOff, CheckCircle2, Handshake, Zap, ArrowLeft } from "lucide-react";
 import { apiClient } from "@/services/api";
 
 const BENEFITS = [
@@ -124,9 +124,16 @@ export default function PartnerLoginPage() {
             <Logo size="xl" showText={false} />
           </div>
 
-          <div className="space-y-1">
+          <div>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Voltar ao início
+            </Link>
             <h2 className="text-2xl font-bold">{t("login.title")}</h2>
-            <p className="text-sm text-muted-foreground">{t("login.subtitle")}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t("login.subtitle")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
